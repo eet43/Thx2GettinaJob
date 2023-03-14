@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${db.url}
+    username: ${db.username}
+    password: ${db.password}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+        show_sql: true
+  main:
+    allow-bean-definition-overriding: true
+
+secure:
+  jwt:
+    secretKey: ${secure.jwt.secretKey}
+    issuer: ${secure.jwt.issuer}
