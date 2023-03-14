@@ -1,5 +1,8 @@
 package KHOneTop.Thx2GettinaJob.common.response;
 
+import lombok.Getter;
+
+@Getter
 public class CustomException extends RuntimeException{
     private Codeset code;
     private String message;
