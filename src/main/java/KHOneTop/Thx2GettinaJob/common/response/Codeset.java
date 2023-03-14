@@ -3,12 +3,12 @@ import lombok.Getter;
 /**
  * [ 1000단위 ] - 오류의 범위
  *  0000 : 요청 성공
- *  2 : Request 오류
- *  3 : Reponse 오류
- *  4 : DB, Server 오류
+ *  1 : Request 오류
+ *  2 : Reponse 오류
+ *  3 : DB, Server 오류
  *
  * [ 100단위 ] - 오류 도메인
- *  0 : 공통 오류
+ *  100 : 인증 오류
  *
  * [10단위] - 오류 HTTP Method
  *  0~19 : Common
@@ -24,7 +24,9 @@ import lombok.Getter;
 @Getter
 public enum Codeset {
     OK("0000", "OK"),
-    BAD_REQUEST("1000", "BAD_REQUEST");
+    BAD_REQUEST("1000", "BAD_REQUEST"),
+
+    VERIFY_EMAIL_FAIL("1100", "인증에 실패했습니다. 인증번호를 확인 후 재입력해주세요.");
 
     private final String code;
     private final String message;

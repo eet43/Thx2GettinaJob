@@ -14,3 +14,19 @@ spring:
         show_sql: true
   main:
     allow-bean-definition-overriding: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: dreamseeker7777@gmail.com
+    password: kzdmzluqvmwnpmra
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+logging:
+  level:
+    org.hibernate.SQL: debug
