@@ -1,5 +1,7 @@
 package KHOneTop.Thx2GettinaJob.common.config;
 
+import KHOneTop.Thx2GettinaJob.auth.JwtProvider;
+import KHOneTop.Thx2GettinaJob.auth.filter.JwtAuthenticationFilter;
 import KHOneTop.Thx2GettinaJob.auth.service.AuthService;
 import KHOneTop.Thx2GettinaJob.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,20 +26,33 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @Configuration
 public class SecurityConfig {
 
-    private final AuthenticationConfiguration authenticationConfiguration;
-    private final AuthenticationEntryPoint authenticationEntryPoint;
-    private final AccessDeniedHandler accessDeniedHandler;
-    private final AuthService authService;
-    private final UserRepository userRepository;
-
     @Bean
     public PasswordEncoder getPasswordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
+    JwtAuthenticationFilter jwtAuthenticationFilter(JwtProvider jwtProvider) {
+        return new JwtAuthenticationFilter(jwtProvider);
+    }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
+    }
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtProvider jwtProvider) throws Exception {
+        return http
+                .httpBasic().disable()
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeHttpRequests()
+                .requestMatchers("/email/**").permitAll()
+                .requestMatchers("/auth/**").permitAll()
+                .and()
+                .addFilterBefore(jwtAuthenticationFilter(jwtProvider),
+                        UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 
 }
