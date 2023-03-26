@@ -1,6 +1,7 @@
 package KHOneTop.Thx2GettinaJob.auth.controller;
 
 import KHOneTop.Thx2GettinaJob.auth.dto.LoginRequest;
+import KHOneTop.Thx2GettinaJob.auth.dto.LoginToken;
 import KHOneTop.Thx2GettinaJob.auth.dto.SignUpRequest;
 import KHOneTop.Thx2GettinaJob.auth.service.AuthService;
 import KHOneTop.Thx2GettinaJob.common.EndPoint;
@@ -29,8 +30,8 @@ public class AuthController {
 
     @PostMapping("login")
     public CustomResponse login(@Valid @RequestBody LoginRequest request) {
-        authService.login(request);
-        return CustomResponse.success();
+        LoginToken SuccessToken = authService.login(request);
+        return CustomResponse.success(SuccessToken);
     }
 
 }

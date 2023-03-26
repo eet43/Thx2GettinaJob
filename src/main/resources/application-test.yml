@@ -11,7 +11,6 @@ spring:
       hibernate:
         format_sql: true
         highlight_sql: true
-        show_sql: true
   main:
     allow-bean-definition-overriding: true
   mail:
@@ -30,6 +29,7 @@ spring:
 logging:
   level:
     org.hibernate.SQL: debug
+
 secure:
   jwt:
     secretKey: 2c0215c5b9c51091a1d200be0cd544bd6a4dbf7846f1b90827200ebae14ef941fc1a6d1b6a6ed5b0623c92ae9bfb390aaf582ad093cb200b7d5dc547e0e0c491
