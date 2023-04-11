@@ -1,10 +1,13 @@
 package KHOneTop.Thx2GettinaJob.auth.service;
 
+import KHOneTop.Thx2GettinaJob.auth.TempAuthGenerator;
 import KHOneTop.Thx2GettinaJob.auth.dto.SendToEmailRequest;
 import KHOneTop.Thx2GettinaJob.auth.dto.VerifyCodeRequest;
 import KHOneTop.Thx2GettinaJob.common.response.Codeset;
 import KHOneTop.Thx2GettinaJob.common.response.CustomException;
 import KHOneTop.Thx2GettinaJob.common.util.RedisUtil;
+import KHOneTop.Thx2GettinaJob.user.entity.User;
+import KHOneTop.Thx2GettinaJob.user.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -23,20 +26,33 @@ public class EmailServiceImpl implements EmailService{
 
     private final JavaMailSender javaMailSender;
     private final RedisUtil redisUtil;
+    private final TempAuthGenerator tempPwGenerator;
+    private final UserRepository userRepository;
 
     @Override
     @Transactional
     public void authEmail(SendToEmailRequest request) {
-        sendToEmailNumber(request.getEmail(), createRandomNumber());
-    }
-
-    private String createRandomNumber() {
-        Random random = new Random();
-        return String.valueOf(random.nextInt(888888) + 111111);
-    }
-
-    private void sendToEmailNumber(String email, String authKey) {
         String subject = "회원가입 이메일 인증 코드입니다.";
+        sendToEmail(subject, request.getEmail(), tempPwGenerator.generateRandomNum());
+    }
+
+    @Override
+    @Transactional
+    public void authTempPw(SendToEmailRequest request) {
+        User findUser = checkEmail(request.getEmail());
+        String tempPw = tempPwGenerator.generateTempPw();
+
+        String subject = "회원 임시 비밀번호입니다.";
+        sendToEmail(subject, request.getEmail(), tempPw);
+        findUser.setPassword(tempPw);
+    }
+
+    private User checkEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(Codeset.INVALID_USER, "해당 이메일의 사용자를 찾을 수 없습니다."));
+    }
+
+    private void sendToEmail(String subject, String email, String authKey) {
         String text = "";
         text+="<div>";
         text+="CODE: <strong>";
@@ -56,6 +72,7 @@ public class EmailServiceImpl implements EmailService{
 
         redisUtil.setDataExpire(email, authKey, 60*5L);
     }
+
 
     @Override
     public boolean verifyCode(VerifyCodeRequest request) {

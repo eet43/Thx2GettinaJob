@@ -27,6 +27,12 @@ public class EmailController {
         return CustomResponse.success();
     }
 
+    @PostMapping("")
+    public CustomResponse authTempPw(@RequestBody @Valid SendToEmailRequest request) {
+        emailService.authTempPw(request);
+        return CustomResponse.success();
+    }
+
     @PostMapping("/certification")
     public CustomResponse verifyCode(@RequestBody @Valid VerifyCodeRequest request) {
         if(emailService.verifyCode(request)) {
