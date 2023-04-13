@@ -29,7 +29,8 @@ public enum Codeset {
     VERIFY_EMAIL_FAIL("1100", "인증에 실패했습니다. 인증번호를 확인 후 재입력해주세요."),
     ALREADY_NICKNAME("1101", "이미 존재하는 닉네임입니다."),
     INVALID_USER("1102", "해당 이메일에 해당하는 ID가 존재하지 않습니다."),
-    INVALID_PASSWORD("1103", "비밀번호가 일치하지 않습니다.");
+    INVALID_PASSWORD("1103", "비밀번호가 일치하지 않습니다."),
+    INVALID_PASSWORD_TYPE("1104", "비밀번호가 8자 이하이거나, 특수문자를 포함하지 않습니다.");
 
     private final String code;
     private final String message;
