@@ -25,4 +25,7 @@ public class ExamTimeStamp {
 
     @Column(name = "addRegEndDate", nullable = false)
     private LocalDateTime addRegEndDate;
+
+    @Column(name = "resultDate", nullable = false)
+    private LocalDateTime resultDate;
 }

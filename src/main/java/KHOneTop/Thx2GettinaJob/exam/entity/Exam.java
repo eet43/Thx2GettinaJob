@@ -25,12 +25,14 @@ public class Exam {
     private String agency;
 
     @Enumerated(value = EnumType.STRING)
+    @Column(name = "category", nullable = false)
     private Category category;
+
+    @Column(name = "homepage", nullable = false)
+    private String homepage;
 
     @Embedded
     private ExamTimeStamp examTimeStamp;
 
-    @Enumerated(value = EnumType.STRING)
-    private ExamStatus examStatus;
 
 }
