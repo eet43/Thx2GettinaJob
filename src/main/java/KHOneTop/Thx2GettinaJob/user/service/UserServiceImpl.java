@@ -2,7 +2,9 @@ package KHOneTop.Thx2GettinaJob.user.service;
 
 import KHOneTop.Thx2GettinaJob.common.response.Codeset;
 import KHOneTop.Thx2GettinaJob.common.response.CustomException;
+import KHOneTop.Thx2GettinaJob.common.util.UserPasswordUtil;
 import KHOneTop.Thx2GettinaJob.user.dto.ChangeNicknameRequest;
+import KHOneTop.Thx2GettinaJob.user.dto.ChangePasswordRequest;
 import KHOneTop.Thx2GettinaJob.user.entity.User;
 import KHOneTop.Thx2GettinaJob.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,16 @@ public class UserServiceImpl implements UserService{
 
     private boolean checkNickname(String nickname) {
         return userRepository.findByNickname(nickname).isEmpty();
+    }
+
+    @Override
+    public void changePassword(ChangePasswordRequest request) {
+        User findUser = checkEmail(request.getEmail());
+        if(UserPasswordUtil.pwIsValid(request.getPassword())) {
+            findUser.changePassword(passwordEncoder, request.getPassword());
+        } else {
+            throw new CustomException(Codeset.INVALID_PASSWORD_TYPE, "비밀번호 타입이 맞지 않습니다.");
+        }
     }
 
     private User checkEmail(String email) {

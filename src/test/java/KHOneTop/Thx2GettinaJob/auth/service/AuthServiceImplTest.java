@@ -62,12 +62,6 @@ class AuthServiceImplTest {
     }
 
     @Test
-    @DisplayName("비밀번호 검증 테스트")
-    void checkPasswordValid() throws Exception {
-        assertThat(authService.pwIsValid(invalidPassword2)).isFalse();
-    }
-
-    @Test
     @DisplayName("유효하지 않은 로그인 검증 테스트")
     void InvalidLogin() throws Exception {
         //given

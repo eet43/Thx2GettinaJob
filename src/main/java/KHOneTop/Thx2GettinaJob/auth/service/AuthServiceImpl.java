@@ -8,6 +8,7 @@ import KHOneTop.Thx2GettinaJob.auth.dto.RefeshAccessTokenRequest;
 import KHOneTop.Thx2GettinaJob.auth.dto.SignUpRequest;
 import KHOneTop.Thx2GettinaJob.common.response.Codeset;
 import KHOneTop.Thx2GettinaJob.common.response.CustomException;
+import KHOneTop.Thx2GettinaJob.common.util.UserPasswordUtil;
 import KHOneTop.Thx2GettinaJob.user.entity.User;
 import KHOneTop.Thx2GettinaJob.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,19 +35,12 @@ public class AuthServiceImpl implements AuthService{
     public void SignUp(SignUpRequest request) {
         if(userRepository.findByNickname(request.getNickname()).isPresent()) {
             throw new CustomException(Codeset.ALREADY_NICKNAME, "이미 존재하는 닉네임");
-        } else if (!pwIsValid(request.getPassword())) {
+        } else if (!UserPasswordUtil.pwIsValid(request.getPassword())) {
             throw new CustomException(Codeset.INVALID_PASSWORD_TYPE, "비밀번호 타입 에러");
         } else {
             User user = userRepository.save(request.toEntity());
             user.encodePassword(passwordEncoder);
         }
-    }
-    
-    public boolean pwIsValid(String password) {
-        if(password == null || password.length() < 8) {
-            return false;
-        }
-        return password.matches(".*[^a-zA-Z0-9].*");
     }
 
     @Override

@@ -5,6 +5,7 @@ import KHOneTop.Thx2GettinaJob.auth.service.AuthServiceImpl;
 import KHOneTop.Thx2GettinaJob.common.response.Codeset;
 import KHOneTop.Thx2GettinaJob.common.response.CustomException;
 import KHOneTop.Thx2GettinaJob.user.dto.ChangeNicknameRequest;
+import KHOneTop.Thx2GettinaJob.user.dto.ChangePasswordRequest;
 import KHOneTop.Thx2GettinaJob.user.entity.User;
 import KHOneTop.Thx2GettinaJob.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,8 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.result.StatusResultMatchersExtensionsKt.isEqualTo;
+
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
 
@@ -69,5 +72,25 @@ class UserServiceImplTest {
 
         // then
         assertThat(user.getNickname()).isEqualTo(changeNickname);
+    }
+
+    @Test
+    void changePwByValidPw() throws Exception {
+        //given
+        ChangePasswordRequest request = new ChangePasswordRequest(email, validPassword);
+        User user = User.builder()
+                .email(email)
+                .password(invalidPassword1)
+                .name(name)
+                .nickname(nickname)
+                .build();
+        given(userRepository.findByEmail(email)).willReturn(Optional.of(user));
+        given(passwordEncoder.encode(validPassword)).willReturn(encodePassword);
+
+        //when
+        userService.changePassword(request);
+
+        //then
+        assertThat(user.getPassword()).isEqualTo(encodePassword);
     }
 }

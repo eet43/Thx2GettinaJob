@@ -38,4 +38,10 @@ public class User {
     public void changePassword(PasswordEncoder passwordEncoder, String password) {
         this.password = passwordEncoder.encode(password);
     }
+    public boolean pwIsValid(String password) {
+        if(password == null || password.length() < 8) {
+            return false;
+        }
+        return password.matches(".*[^a-zA-Z0-9].*");
+    }
 }
