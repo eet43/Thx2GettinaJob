@@ -21,15 +21,9 @@ public class Exam {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "agency", nullable = false)
-    private String agency;
-
     @Enumerated(value = EnumType.STRING)
     @Column(name = "category", nullable = false)
     private Category category;
-
-    @Column(name = "homepage", nullable = false)
-    private String homepage;
 
     @Embedded
     private ExamTimeStamp examTimeStamp;
