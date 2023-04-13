@@ -27,7 +27,7 @@ public class EmailController {
         return CustomResponse.success();
     }
 
-    @PostMapping("")
+    @PostMapping("/password")
     public CustomResponse authTempPw(@RequestBody @Valid SendToEmailRequest request) {
         emailService.authTempPw(request);
         return CustomResponse.success();

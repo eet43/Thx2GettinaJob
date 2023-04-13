@@ -2,6 +2,7 @@ package KHOneTop.Thx2GettinaJob.auth.controller;
 
 import KHOneTop.Thx2GettinaJob.auth.dto.LoginRequest;
 import KHOneTop.Thx2GettinaJob.auth.dto.LoginToken;
+import KHOneTop.Thx2GettinaJob.auth.dto.RefeshAccessTokenRequest;
 import KHOneTop.Thx2GettinaJob.auth.dto.SignUpRequest;
 import KHOneTop.Thx2GettinaJob.auth.service.AuthService;
 import KHOneTop.Thx2GettinaJob.common.EndPoint;
@@ -28,10 +29,14 @@ public class AuthController {
         return CustomResponse.success();
     }
 
-    @PostMapping("login")
+    @PostMapping("/login")
     public CustomResponse login(@Valid @RequestBody LoginRequest request) {
         LoginToken SuccessToken = authService.login(request);
         return CustomResponse.success(SuccessToken);
     }
 
+    @PostMapping("/refesh")
+    public CustomResponse refeshAccessToken(@RequestBody RefeshAccessTokenRequest request) {
+
+    }
 }

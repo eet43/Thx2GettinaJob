@@ -4,6 +4,7 @@ import KHOneTop.Thx2GettinaJob.auth.CustomUserDetails;
 import KHOneTop.Thx2GettinaJob.auth.JwtProvider;
 import KHOneTop.Thx2GettinaJob.auth.dto.LoginRequest;
 import KHOneTop.Thx2GettinaJob.auth.dto.LoginToken;
+import KHOneTop.Thx2GettinaJob.auth.dto.RefeshAccessTokenRequest;
 import KHOneTop.Thx2GettinaJob.auth.dto.SignUpRequest;
 import KHOneTop.Thx2GettinaJob.common.response.Codeset;
 import KHOneTop.Thx2GettinaJob.common.response.CustomException;
@@ -58,7 +59,6 @@ public class AuthServiceImpl implements AuthService{
 
         return createTokens(findUser);
     }
-
     private LoginToken createTokens(User findUser) {
         Map<String, String> userInfo = new HashMap<>();
         userInfo.put("email", findUser.getEmail());
@@ -69,6 +69,13 @@ public class AuthServiceImpl implements AuthService{
         String refreshToken = jwtProvider.generateRefreshToken(userInfo);
 
         return new LoginToken(accessToken, refreshToken);
+    }
+    @Override
+    public LoginToken refreshAccessToken(RefeshAccessTokenRequest request) {
+        if(!jwtProvider.isTokenExpired(request.getRefeshToken())) {
+
+        }
+        return null;
     }
 
 

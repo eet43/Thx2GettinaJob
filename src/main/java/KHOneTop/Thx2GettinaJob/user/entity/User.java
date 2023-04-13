@@ -31,4 +31,11 @@ public class User {
         this.password = passwordEncoder.encode(password);
     }
 
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void changePassword(PasswordEncoder passwordEncoder, String password) {
+        this.password = passwordEncoder.encode(password);
+    }
 }
