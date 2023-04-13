@@ -35,8 +35,8 @@ public class AuthController {
         return CustomResponse.success(SuccessToken);
     }
 
-    @PostMapping("/refesh")
-    public CustomResponse refeshAccessToken(@RequestBody RefeshAccessTokenRequest request) {
-
-    }
+//    @PostMapping("/refesh")
+//    public CustomResponse refeshAccessToken(@RequestBody RefeshAccessTokenRequest request) {
+//
+//    }
 }
