@@ -19,4 +19,10 @@ public class ExamAddController {
         addService.addToeicExam();
         return CustomResponse.success();
     }
+
+    @PostMapping("/afpk")
+    public CustomResponse addAfpkExam() {
+        addService.addAfpkExam();
+        return CustomResponse.success();
+    }
 }

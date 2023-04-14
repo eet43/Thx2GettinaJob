@@ -131,4 +131,47 @@ class ExamCrawlerTest {
         System.out.println(resultDate);
     }
 
+    @Test
+    void koreanCrawler() throws Exception {
+        //given
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일(E) H:mm", Locale.ENGLISH);
+        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy년 M월 d일(E)", Locale.ENGLISH);
+
+
+
+        //when
+        Document doc = Jsoup.connect("https://www.historyexam.go.kr/pageLink.do?link=examSchedule&netfunnel_key=8D5649CEF7116C29195BCF7E3334993C25C5E6FEB802CBA5F3021DFCC1A813528892C27C94799D0FE17CB8B45161D4464BFF3E2B9BA24F07978D55454B547C4F538248990C1EF8EF0EBCD0B243EBE61B4B16061CE3A7838A42C123D251D01EACA6473F2826BD6E38AB7A4693F370CC97302C382C312C302C30").get();
+        Elements rows = doc.select("table tbody tr");
+
+        Element row = rows.get(1);
+        String examName = row.select("td").get(0).text();
+        String regDate = row.select("td").get(1).text();
+        String addregDate = row.select("td").get(2).text();
+        String examDate = row.select("td").get(3).text();
+        String resultDate = row.select("td").get(4).text();
+        examDate += " 00:00";
+        resultDate += " 00:00"; //default 값 처리
+
+
+        String[] splitInput = regDate.split(" ~ ");
+        LocalDateTime dateTime1 = LocalDateTime.parse(splitInput[0], formatter);
+        LocalDateTime dateTime2 = LocalDateTime.parse(splitInput[1], formatter);
+//
+        String[] splitInput2 = addregDate.split(" ~ ");
+        LocalDateTime dateTime3 = LocalDateTime.parse(splitInput2[0], formatter);
+        LocalDateTime dateTime4 = LocalDateTime.parse(splitInput2[1], formatter);
+//
+        LocalDateTime examDateTime = LocalDateTime.parse(examDate, formatter);
+        LocalDateTime resultDateTime = LocalDateTime.parse(resultDate, formatter);
+
+
+        System.out.println(examName);
+        System.out.println(dateTime1);
+        System.out.println(dateTime2);
+        System.out.println(dateTime3);
+        System.out.println(dateTime4);
+        System.out.println(examDateTime);
+        System.out.println(resultDateTime);
+    }
+
 }
