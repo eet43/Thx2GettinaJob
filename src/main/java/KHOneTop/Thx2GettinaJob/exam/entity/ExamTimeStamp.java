@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Embeddable
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ExamTimeStamp {
 
     @Column(name = "examDate", nullable = false)
@@ -24,10 +26,10 @@ public class ExamTimeStamp {
     @Column(name = "regEndDate", nullable = false)
     private LocalDateTime regEndDate;
 
-    @Column(name = "addRegStartDate", nullable = false)
+    @Column(name = "addRegStartDate")
     private LocalDateTime addRegStartDate;
 
-    @Column(name = "addRegEndDate", nullable = false)
+    @Column(name = "addRegEndDate")
     private LocalDateTime addRegEndDate;
 
     @Column(name = "resultDate", nullable = false)

@@ -7,8 +7,13 @@ import org.jsoup.select.Elements;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -60,6 +65,70 @@ class ExamCrawlerTest {
         System.out.println(dateTime2);
         System.out.println(dateTime3);
         System.out.println(dateTime4);
+    }
+
+    @Test
+    void afpkCrawler() throws Exception {
+        //given
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일 (E) a h:mm", Locale.KOREA);
+        DateTimeFormatter formatter2 = new DateTimeFormatterBuilder()
+                .appendPattern("M월 d일 (E) a h:mm")
+                .parseDefaulting(ChronoField.YEAR_OF_ERA, Year.now().getValue())
+                .toFormatter(Locale.KOREA);
+
+
+        //when
+        Document doc = Jsoup.connect("https://www.fpsbkorea.org/?mnu_usn=27").get();
+        Elements titles = doc.select("dl dt");
+        Elements dates = doc.select("dl dd");
+
+        Pattern pattern = Pattern.compile("\\d+회");
+
+        int count = 0;
+        String result = null;
+        String examDate = null;
+        LocalDateTime examDateTime = null;
+        Element date = null;
+        LocalDateTime startDateTime = null;
+        LocalDateTime endDateTime = null;
+        String[] parts = new String[0];
+        String text1 = null;
+        String text2 = null;
+        LocalDateTime resultDate = null;
+        String result2 = null;
+        for (Element title : titles) {
+            date = dates.get(count);
+            String examName = title.select("dt").get(0).text();
+            examDate = date.select("strong").get(0).text();
+            text1 = date.select("li").get(0).text();
+            text2 = date.select("li").get(4).text();
+
+
+            Matcher matcher = pattern.matcher(examName);
+            if (matcher.find()) {
+                result = "제" + matcher.group();
+            }
+            int startIndex = examDate.indexOf(":") + 1;
+            int endIndex = examDate.indexOf("~");
+            examDate = examDate.substring(startIndex, endIndex).trim();
+            examDateTime = LocalDateTime.parse(examDate, formatter);
+
+            parts = text1.split("부터|까지");
+            startDateTime = LocalDateTime.parse(parts[0].substring(parts[0].indexOf("2")).trim(), formatter2);
+            endDateTime = LocalDateTime.parse(parts[1].trim(), formatter2);
+            startIndex = text2.indexOf("발표");
+            result2 = text2.substring(startIndex + 2).trim();
+            resultDate = LocalDateTime.parse(result2, formatter2);
+
+        }
+
+
+        //then
+        System.out.println(result);
+        System.out.println(examDateTime);
+        System.out.println(startDateTime);
+        System.out.println(endDateTime);
+        System.out.println(resultDate);
     }
 
 }

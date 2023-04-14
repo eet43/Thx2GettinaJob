@@ -15,8 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -59,8 +64,15 @@ public class NewExamAddService {
                 LocalDateTime addRegStartDateTime = LocalDateTime.parse(addRegDateInput[0].substring(addRegDateInput[0].indexOf(":") + 2), timeformatter);
                 LocalDateTime addRegEndDateTime = LocalDateTime.parse(addRegDateInput[1], timeformatter);
 
-                ExamTimeStamp examTimeStamp = new ExamTimeStamp(examDateTime, regStartDateTime, regEndDateTime,
-                        addRegStartDateTime, addRegEndDateTime, resultDateTime);
+                ExamTimeStamp examTimeStamp = ExamTimeStamp.builder()
+                        .examDate(examDateTime)
+                        .regStartDate(regStartDateTime)
+                        .regEndDate(regEndDateTime)
+                        .addRegStartDate(addRegStartDateTime)
+                        .addRegEndDate(addRegEndDateTime)
+                        .resultDate(resultDateTime)
+                        .build();
+
                 Exam toeicExam = Exam.builder()
                         .name(examName)
                         .category(Category.TOEIC)
@@ -70,6 +82,68 @@ public class NewExamAddService {
                 examRepository.save(toeicExam);
             }
 
+        } catch (IOException e) {
+            log.debug(e.getMessage());
+        }
+    }
+
+    @Transactional
+    public void addAfpkExam() {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일 (E) a h:mm", Locale.KOREA);
+            DateTimeFormatter formatter2 = new DateTimeFormatterBuilder()
+                    .appendPattern("M월 d일 (E) a h:mm")
+                    .parseDefaulting(ChronoField.YEAR_OF_ERA, Year.now().getValue())
+                    .toFormatter(Locale.KOREA);
+
+
+            Document doc = Jsoup.connect("https://www.fpsbkorea.org/?mnu_usn=27").get();
+            Elements titles = doc.select("dl dt");
+            Elements dates = doc.select("dl dd");
+            Pattern pattern = Pattern.compile("\\d+회");
+
+            int count = 0;
+            for (Element title : titles) {
+                Element date = dates.get(count);
+                String examName = title.select("dt").get(0).text();
+                String examDate = date.select("strong").get(0).text();
+                String regDate = date.select("li").get(0).text();
+                String resultDate = date.select("li").get(4).text();
+
+
+                Matcher matcher = pattern.matcher(examName);
+                if (matcher.find()) {
+                    examName = "제" + matcher.group();
+                }
+
+                int regStartIndex = examDate.indexOf(":") + 1;
+                int regEndIndex = examDate.indexOf("~");
+                examDate = examDate.substring(regStartIndex, regEndIndex).trim();
+                String[] parts = regDate.split("부터|까지");
+                int startResultIndex = resultDate.indexOf("발표");
+                resultDate = resultDate.substring(startResultIndex + 2).trim();
+
+                LocalDateTime examDateTime = LocalDateTime.parse(examDate, formatter);
+                LocalDateTime regStartDateTime = LocalDateTime.parse(parts[0].substring(parts[0].indexOf("2")).trim(), formatter2);
+                LocalDateTime regEndDateTime = LocalDateTime.parse(parts[1].trim(), formatter2);
+                LocalDateTime resultDateTime = LocalDateTime.parse(resultDate, formatter2);
+
+                ExamTimeStamp examTimeStamp = ExamTimeStamp.builder()
+                        .examDate(examDateTime)
+                        .regStartDate(regStartDateTime)
+                        .regEndDate(regEndDateTime)
+                        .resultDate(resultDateTime)
+                        .build();
+
+                Exam afpkExam = Exam.builder()
+                        .name(examName)
+                        .category(Category.AFPK)
+                        .examTimeStamp(examTimeStamp)
+                        .build();
+
+                examRepository.save(afpkExam);
+
+            }
         } catch (IOException e) {
             log.debug(e.getMessage());
         }
