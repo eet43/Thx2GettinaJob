@@ -42,7 +42,7 @@ public class NewExamAddService {
                 String regDate = Jsoup.parse(splitText[0]).text();
                 String addRegDate = Jsoup.parse(splitText[1]).text(); // 태그 가공해서 문자열 가져오기
 
-                examName = changeDateFormat(examName, "* ", "");
+                examName = changeDateFormat(examName, "★ ", "");
                 resultDate = changeDateFormat(resultDate, "낮", "오후");
                 regDate = changeDateFormat(regDate, "낮", "오후");
                 addRegDate = changeDateFormat(addRegDate, "낮", "오후"); // format 에 필요없는 내용들 제거

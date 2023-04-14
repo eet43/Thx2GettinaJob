@@ -1,8 +1,11 @@
 package KHOneTop.Thx2GettinaJob.auth;
 
+import org.springframework.stereotype.Component;
+
 import java.security.SecureRandom;
 import java.util.Random;
 
+@Component
 public class TempAuthGenerator {
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static final int NUMBER_LENGTH = 6;

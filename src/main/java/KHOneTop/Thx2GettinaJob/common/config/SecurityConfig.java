@@ -73,6 +73,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/email/**").permitAll()
                 .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/exam/add/*").permitAll()
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter(jwtProvider),
                         UsernamePasswordAuthenticationFilter.class)
