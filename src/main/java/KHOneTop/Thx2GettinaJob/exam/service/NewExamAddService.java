@@ -29,12 +29,14 @@ import java.util.regex.Pattern;
 public class NewExamAddService {
 
     private final ExamRepository examRepository;
-    private static final DateTimeFormatter timeMinformatter = DateTimeFormatter.ofPattern("yyyy.MM.dd (E) a h시m분", Locale.KOREA);
-    private static final DateTimeFormatter timeformatter = DateTimeFormatter.ofPattern("yyyy.MM.dd (E) a h시", Locale.KOREA);
 
     @Transactional
     public void addToeicExam() {
+
+        DateTimeFormatter timeMinformatter = DateTimeFormatter.ofPattern("yyyy.MM.dd (E) a h시m분", Locale.KOREA);
+        DateTimeFormatter timeformatter = DateTimeFormatter.ofPattern("yyyy.MM.dd (E) a h시", Locale.KOREA);
         try {
+
             Document doc = Jsoup.connect("https://exam.toeic.co.kr/receipt/examSchList.php").get();
             Elements rows = doc.select("table tbody tr");
 
@@ -89,14 +91,13 @@ public class NewExamAddService {
 
     @Transactional
     public void addAfpkExam() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일 (E) a h:mm", Locale.KOREA);
+        DateTimeFormatter formatter2 = new DateTimeFormatterBuilder()
+                .appendPattern("M월 d일 (E) a h:mm")
+                .parseDefaulting(ChronoField.YEAR_OF_ERA, Year.now().getValue())
+                .toFormatter(Locale.KOREA);
+
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일 (E) a h:mm", Locale.KOREA);
-            DateTimeFormatter formatter2 = new DateTimeFormatterBuilder()
-                    .appendPattern("M월 d일 (E) a h:mm")
-                    .parseDefaulting(ChronoField.YEAR_OF_ERA, Year.now().getValue())
-                    .toFormatter(Locale.KOREA);
-
-
             Document doc = Jsoup.connect("https://www.fpsbkorea.org/?mnu_usn=27").get();
             Elements titles = doc.select("dl dt");
             Elements dates = doc.select("dl dd");
@@ -144,6 +145,57 @@ public class NewExamAddService {
                 examRepository.save(afpkExam);
 
             }
+        } catch (IOException e) {
+            log.debug(e.getMessage());
+        }
+    }
+
+    @Transactional
+    public void addKoreanExam() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일(E) H:mm", Locale.ENGLISH);
+        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy년 M월 d일(E)", Locale.ENGLISH);
+
+        try {
+            Document doc = Jsoup.connect("https://www.historyexam.go.kr/pageLink.do?link=examSchedule&netfunnel_key=8D5649CEF7116C29195BCF7E3334993C25C5E6FEB802CBA5F3021DFCC1A813528892C27C94799D0FE17CB8B45161D4464BFF3E2B9BA24F07978D55454B547C4F538248990C1EF8EF0EBCD0B243EBE61B4B16061CE3A7838A42C123D251D01EACA6473F2826BD6E38AB7A4693F370CC97302C382C312C302C30").get();
+            Elements rows = doc.select("table tbody tr");
+
+            Element row = rows.get(1);
+            String examName = row.select("td").get(0).text();
+            String regDate = row.select("td").get(1).text();
+            String addregDate = row.select("td").get(2).text();
+            String examDate = row.select("td").get(3).text();
+            String resultDate = row.select("td").get(4).text();
+            examDate += " 00:00";
+            resultDate += " 00:00"; //default 값 처리
+
+
+            String[] splitInput = regDate.split(" ~ ");
+            LocalDateTime regStartDateTime = LocalDateTime.parse(splitInput[0], formatter);
+            LocalDateTime regEndDateTime = LocalDateTime.parse(splitInput[1], formatter);
+//
+            String[] splitInput2 = addregDate.split(" ~ ");
+            LocalDateTime addRegStartDateTime = LocalDateTime.parse(splitInput2[0], formatter);
+            LocalDateTime addRegEndDateTime = LocalDateTime.parse(splitInput2[1], formatter);
+//
+            LocalDateTime examDateTime = LocalDateTime.parse(examDate, formatter);
+            LocalDateTime resultDateTime = LocalDateTime.parse(resultDate, formatter);
+
+            ExamTimeStamp examTimeStamp = ExamTimeStamp.builder()
+                    .examDate(examDateTime)
+                    .regStartDate(regStartDateTime)
+                    .regEndDate(regEndDateTime)
+                    .addRegStartDate(addRegStartDateTime)
+                    .addRegEndDate(addRegEndDateTime)
+                    .resultDate(resultDateTime)
+                    .build();
+
+            Exam koreanExam = Exam.builder()
+                    .name(examName)
+                    .category(Category.KOREAN)
+                    .examTimeStamp(examTimeStamp)
+                    .build();
+
+            examRepository.save(koreanExam);
         } catch (IOException e) {
             log.debug(e.getMessage());
         }
