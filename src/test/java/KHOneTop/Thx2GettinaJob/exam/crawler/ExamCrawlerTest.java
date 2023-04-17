@@ -28,7 +28,7 @@ class ExamCrawlerTest {
 
 
         //when
-        Document doc = Jsoup.connect("https://exam.toeic.co.kr/receipt/examSchList.php").get();
+        Document doc = Jsoup.connect("https://www.toeicswt.co.kr/receipt/examSchList.php").get();
         Elements rows = doc.select("table tbody tr");
 
         Element row = rows.get(0);
@@ -172,6 +172,41 @@ class ExamCrawlerTest {
         System.out.println(dateTime4);
         System.out.println(examDateTime);
         System.out.println(resultDateTime);
+    }
+
+    @Test
+    void toeicSpeackingCrawler() throws Exception {
+
+        //given
+        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy.MM.dd (E) a h시", Locale.KOREA);
+
+
+        //when
+        Document doc = Jsoup.connect("https://www.toeicswt.co.kr/receipt/examSchList.php").get();
+        Elements rows = doc.select("table tbody tr");
+
+        Element row = rows.get(0);
+        String examDate = row.select("td").get(0).text();
+        String resultDate = row.select("td").get(1).text();
+        String regDate = row.select("td").get(2).text();
+
+        examDate += " 오전 0시";
+        resultDate = resultDate.replace("낮", "오후");
+
+        String[] splitInput = regDate.split("~");
+        LocalDateTime examDateTime = LocalDateTime.parse(examDate, formatter1);
+        LocalDateTime resultDateTime = LocalDateTime.parse(resultDate, formatter1);
+        LocalDateTime dateTime1 = LocalDateTime.parse(splitInput[0], formatter1);
+        LocalDateTime dateTime2 = LocalDateTime.parse(splitInput[1], formatter1);
+
+
+
+
+        //then
+        System.out.println(examDateTime);
+        System.out.println(resultDateTime);
+        System.out.println(dateTime1);
+        System.out.println(dateTime2);
     }
 
 }

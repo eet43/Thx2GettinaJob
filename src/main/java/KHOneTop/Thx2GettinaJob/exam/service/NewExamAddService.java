@@ -31,6 +31,16 @@ public class NewExamAddService {
     private final ExamRepository examRepository;
 
     @Transactional
+    public void addAllTimesExam(Category category) {
+        Exam exam = Exam.builder()
+                .name("상시접수")
+                .category(category)
+                .build();
+
+        examRepository.save(exam);
+    }
+
+    @Transactional
     public void addToeicExam() {
 
         DateTimeFormatter timeMinformatter = DateTimeFormatter.ofPattern("yyyy.MM.dd (E) a h시m분", Locale.KOREA);
@@ -153,7 +163,6 @@ public class NewExamAddService {
     @Transactional
     public void addKoreanExam() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일(E) H:mm", Locale.ENGLISH);
-        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy년 M월 d일(E)", Locale.ENGLISH);
 
         try {
             Document doc = Jsoup.connect("https://www.historyexam.go.kr/pageLink.do?link=examSchedule&netfunnel_key=8D5649CEF7116C29195BCF7E3334993C25C5E6FEB802CBA5F3021DFCC1A813528892C27C94799D0FE17CB8B45161D4464BFF3E2B9BA24F07978D55454B547C4F538248990C1EF8EF0EBCD0B243EBE61B4B16061CE3A7838A42C123D251D01EACA6473F2826BD6E38AB7A4693F370CC97302C382C312C302C30").get();
