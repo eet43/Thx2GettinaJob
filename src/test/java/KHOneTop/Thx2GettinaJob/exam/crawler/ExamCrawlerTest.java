@@ -209,4 +209,45 @@ class ExamCrawlerTest {
         System.out.println(dateTime2);
     }
 
+    @Test
+    void hskCrawler() throws Exception {
+
+        //given
+        DateTimeFormatter formatter1 = new DateTimeFormatterBuilder()
+                .appendPattern("M월 d일 (E) a h시")
+                .parseDefaulting(ChronoField.YEAR_OF_ERA, Year.now().getValue())
+                .toFormatter(Locale.KOREA);
+
+
+        //when
+        Document doc = Jsoup.connect("https://www.hsk-korea.co.kr/about/schedule_hsk_ibt.aspx").get();
+        Elements rows = doc.select("div.board-wrap.type_accordion ul li");
+
+        Element row = rows.get(0);
+        String examDate = row.select("span").get(2).text();
+        Elements dl = row.select("dl");
+        String regDate = dl.get(1).select("dd").text();
+        String resultDate = dl.get(2).select("dd").text();
+
+        examDate += " 오전 0시";
+        resultDate = " 오전 0시";
+
+        String[] splitInput = regDate.split(" ~ ");
+        splitInput[0] += " 오전 0시";
+        splitInput[1] += " 오전 0시";
+        LocalDateTime examDateTime = LocalDateTime.parse(examDate, formatter1);
+        LocalDateTime resultDateTime = LocalDateTime.parse(resultDate, formatter1);
+        LocalDateTime dateTime1 = LocalDateTime.parse(splitInput[0], formatter1);
+        LocalDateTime dateTime2 = LocalDateTime.parse(splitInput[1], formatter1);
+
+
+
+
+        //then
+        System.out.println(examDateTime);
+        System.out.println(resultDateTime);
+        System.out.println(dateTime1);
+        System.out.println(dateTime2);
+    }
+
 }
