@@ -21,7 +21,7 @@ public enum Category {
 
 
 
-    private final String value;
+    private final String name;
     private final String issuer;
     private final String url;
 }

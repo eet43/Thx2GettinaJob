@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(EndPoint.EXAM_ADD)
-public class ExamAddController {
+public class AddPublicExamController {
     private final NewExamAddService addService;
 
     @PostMapping("/all-times")
