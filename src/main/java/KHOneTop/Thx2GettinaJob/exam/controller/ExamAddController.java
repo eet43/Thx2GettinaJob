@@ -30,4 +30,23 @@ public class ExamAddController {
         addService.addAfpkExam();
         return CustomResponse.success();
     }
+
+    @PostMapping("/korean")
+    public CustomResponse addKoreanExam() {
+        addService.addKoreanExam();
+        return CustomResponse.success();
+    }
+
+    @PostMapping("/toeic-speaking")
+    public CustomResponse addToeicSpeackingExam() {
+        addService.addToeicSpeackingExam();
+        return CustomResponse.success();
+    }
+
+    @PostMapping("/hsk")
+    public CustomResponse addHskExam() {
+        addService.addHskExam();
+        return CustomResponse.success();
+    }
+
 }
