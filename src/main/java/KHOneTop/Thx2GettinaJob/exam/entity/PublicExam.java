@@ -6,20 +6,18 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Entity
-@Table(name = "exam")
+@Table(name = "publicExam")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Exam {
+public class PublicExam {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "turn", nullable = false)
+    private String turn;
 
     @Enumerated(value = EnumType.STRING)
     @Column(name = "category", nullable = false)

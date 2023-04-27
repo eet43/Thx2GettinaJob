@@ -1,9 +1,9 @@
 package KHOneTop.Thx2GettinaJob.exam.service;
 
 import KHOneTop.Thx2GettinaJob.exam.entity.Category;
-import KHOneTop.Thx2GettinaJob.exam.entity.Exam;
+import KHOneTop.Thx2GettinaJob.exam.entity.PublicExam;
 import KHOneTop.Thx2GettinaJob.exam.entity.ExamTimeStamp;
-import KHOneTop.Thx2GettinaJob.exam.repository.ExamRepository;
+import KHOneTop.Thx2GettinaJob.exam.repository.PublicExamRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -28,16 +28,16 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class NewExamAddService {
 
-    private final ExamRepository examRepository;
+    private final PublicExamRepository publicExamRepository;
 
     @Transactional
     public void addAllTimesExam(Category category) {
-        Exam exam = Exam.builder()
-                .name("상시접수")
+        PublicExam publicExam = PublicExam.builder()
+                .turn("상시접수")
                 .category(category)
                 .build();
 
-        examRepository.save(exam);
+        publicExamRepository.save(publicExam);
     }
 
     @Transactional
@@ -85,13 +85,13 @@ public class NewExamAddService {
                         .resultDate(resultDateTime)
                         .build();
 
-                Exam toeicExam = Exam.builder()
-                        .name(examName)
+                PublicExam toeicPublicExam = PublicExam.builder()
+                        .turn(examName)
                         .category(Category.TOEIC)
                         .examTimeStamp(examTimeStamp)
                         .build();
 
-                examRepository.save(toeicExam);
+                publicExamRepository.save(toeicPublicExam);
             }
 
         } catch (IOException e) {
@@ -146,13 +146,13 @@ public class NewExamAddService {
                         .resultDate(resultDateTime)
                         .build();
 
-                Exam afpkExam = Exam.builder()
-                        .name(examName)
+                PublicExam afpkPublicExam = PublicExam.builder()
+                        .turn(examName)
                         .category(Category.AFPK)
                         .examTimeStamp(examTimeStamp)
                         .build();
 
-                examRepository.save(afpkExam);
+                publicExamRepository.save(afpkPublicExam);
 
             }
         } catch (IOException e) {
@@ -199,13 +199,13 @@ public class NewExamAddService {
                         .resultDate(resultDateTime)
                         .build();
 
-                Exam koreanExam = Exam.builder()
-                        .name(examName)
+                PublicExam koreanPublicExam = PublicExam.builder()
+                        .turn(examName)
                         .category(Category.KOREAN)
                         .examTimeStamp(examTimeStamp)
                         .build();
 
-                examRepository.save(koreanExam);
+                publicExamRepository.save(koreanPublicExam);
             }
         } catch (IOException e) {
             log.debug(e.getMessage());
@@ -243,13 +243,13 @@ public class NewExamAddService {
                         .resultDate(resultDateTime)
                         .build();
 
-                Exam koreanExam = Exam.builder()
-                        .name(examName)
+                PublicExam koreanPublicExam = PublicExam.builder()
+                        .turn(examName)
                         .category(Category.TOEIC_SPEAKING)
                         .examTimeStamp(examTimeStamp)
                         .build();
 
-                examRepository.save(koreanExam);
+                publicExamRepository.save(koreanPublicExam);
                 count ++;
             }
         } catch (IOException e) {
@@ -295,13 +295,13 @@ public class NewExamAddService {
                         .resultDate(resultDateTime)
                         .build();
 
-                Exam koreanExam = Exam.builder()
-                        .name(examName)
+                PublicExam koreanPublicExam = PublicExam.builder()
+                        .turn(examName)
                         .category(Category.KOREAN)
                         .examTimeStamp(examTimeStamp)
                         .build();
 
-                examRepository.save(koreanExam);
+                publicExamRepository.save(koreanPublicExam);
             }
         } catch (IOException e) {
             log.debug(e.getMessage());

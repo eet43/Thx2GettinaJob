@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class ExamCrawlerTest {
+class PublicExamCrawlerTest {
 
     @Test
     void toeicCrawler() throws Exception {
