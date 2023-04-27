@@ -257,6 +257,57 @@ public class NewExamAddService {
         }
     }
 
+    @Transactional
+    public void addHskExam() {
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                .appendPattern("M월 d일 (E) a h시")
+                .parseDefaulting(ChronoField.YEAR_OF_ERA, Year.now().getValue())
+                .toFormatter(Locale.KOREA);
+
+        try {
+            Document doc = Jsoup.connect("https://www.hsk-korea.co.kr/about/schedule_hsk_ibt.aspx").get();
+            Elements rows = doc.select("div.board-wrap.type_accordion ul li");
+
+            for (int i = 1; i < rows.size(); i++) {
+                String examName = "제" + i + "회";
+                Element row = rows.get(i);
+                String examDate = row.select("span").get(2).text();
+                Elements dl = row.select("dl");
+                String regDate = dl.get(1).select("dd").text();
+                String resultDate = dl.get(2).select("dd").text();
+
+                examDate += " 오전 0시";
+                resultDate += " 오전 0시";
+
+                String[] splitInput = regDate.split(" ~ ");
+                splitInput[0] += " 오전 0시";
+                splitInput[1] += " 오전 0시";
+
+                LocalDateTime examDateTime = LocalDateTime.parse(examDate, formatter);
+                LocalDateTime resultDateTime = LocalDateTime.parse(resultDate, formatter);
+                LocalDateTime regStartDateTime = LocalDateTime.parse(splitInput[0], formatter);
+                LocalDateTime regEndDateTime = LocalDateTime.parse(splitInput[1], formatter);
+
+                ExamTimeStamp examTimeStamp = ExamTimeStamp.builder()
+                        .examDate(examDateTime)
+                        .regStartDate(regStartDateTime)
+                        .regEndDate(regEndDateTime)
+                        .resultDate(resultDateTime)
+                        .build();
+
+                Exam koreanExam = Exam.builder()
+                        .name(examName)
+                        .category(Category.KOREAN)
+                        .examTimeStamp(examTimeStamp)
+                        .build();
+
+                examRepository.save(koreanExam);
+            }
+        } catch (IOException e) {
+            log.debug(e.getMessage());
+        }
+    }
+
     private String changeDateFormat(String text, String target, String value) {
         return text.contains(target) ? text.replace(target, value) : text;
     }
