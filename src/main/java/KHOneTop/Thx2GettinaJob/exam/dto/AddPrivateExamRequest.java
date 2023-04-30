@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Data
 public record AddPrivateExamRequest(
+        Long userId,
         String name,
         String issuer,
         String url,
@@ -37,6 +38,7 @@ public record AddPrivateExamRequest(
                         .build();
 
                 return PrivateExam.builder()
+                        .userId(this.userId)
                         .name(this.name)
                         .issuer(this.issuer)
                         .url(this.url)
