@@ -2,6 +2,7 @@ package KHOneTop.Thx2GettinaJob.exam.controller;
 
 import KHOneTop.Thx2GettinaJob.common.EndPoint;
 import KHOneTop.Thx2GettinaJob.common.response.CustomResponse;
+import KHOneTop.Thx2GettinaJob.exam.dto.AddAlwaysPublicExamRequest;
 import KHOneTop.Thx2GettinaJob.exam.entity.Category;
 import KHOneTop.Thx2GettinaJob.exam.service.NewExamAddService;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +15,8 @@ public class AddPublicExamController {
     private final NewExamAddService addService;
 
     @PostMapping("/all-times")
-    public CustomResponse addAllTimesExam(@RequestParam("category") Category category) {
-        addService.addAllTimesExam(category);
+    public CustomResponse addAllTimesExam(@RequestBody AddAlwaysPublicExamRequest request) {
+        addService.addAllTimesExam(request);
         return CustomResponse.success();
     }
 

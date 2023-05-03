@@ -4,6 +4,7 @@ import KHOneTop.Thx2GettinaJob.exam.dto.AddAlwaysPublicExamRequest;
 import KHOneTop.Thx2GettinaJob.exam.entity.Category;
 import KHOneTop.Thx2GettinaJob.exam.entity.PublicExam;
 import KHOneTop.Thx2GettinaJob.exam.entity.ExamTimeStamp;
+import KHOneTop.Thx2GettinaJob.exam.repository.ExamRepository;
 import KHOneTop.Thx2GettinaJob.exam.repository.PublicExamRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +30,7 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class NewExamAddService {
 
-    private final PublicExamRepository publicExamRepository;
+    private final ExamRepository examRepository;
 
     @Transactional
     public void addAllTimesExam(AddAlwaysPublicExamRequest request) {
@@ -39,7 +40,7 @@ public class NewExamAddService {
                 .url(request.url())
                 .turn("상시접수")
                 .build();
-        publicExamRepository.save(publicExam);
+        examRepository.save(publicExam);
     }
 
     @Transactional
@@ -95,7 +96,7 @@ public class NewExamAddService {
                         .examTimeStamp(examTimeStamp)
                         .build();
 
-                publicExamRepository.save(toeicPublicExam);
+                examRepository.save(toeicPublicExam);
             }
 
         } catch (IOException e) {
@@ -158,7 +159,7 @@ public class NewExamAddService {
                         .examTimeStamp(examTimeStamp)
                         .build();
 
-                publicExamRepository.save(afpkPublicExam);
+                examRepository.save(afpkPublicExam);
 
             }
         } catch (IOException e) {
@@ -213,7 +214,7 @@ public class NewExamAddService {
                         .examTimeStamp(examTimeStamp)
                         .build();
 
-                publicExamRepository.save(koreanPublicExam);
+                examRepository.save(koreanPublicExam);
             }
         } catch (IOException e) {
             log.debug(e.getMessage());
@@ -259,7 +260,7 @@ public class NewExamAddService {
                         .examTimeStamp(examTimeStamp)
                         .build();
 
-                publicExamRepository.save(toeicSpeakingPublicExam);
+                examRepository.save(toeicSpeakingPublicExam);
                 count ++;
             }
         } catch (IOException e) {
@@ -313,7 +314,7 @@ public class NewExamAddService {
                         .examTimeStamp(examTimeStamp)
                         .build();
 
-                publicExamRepository.save(hskPublicExam);
+                examRepository.save(hskPublicExam);
             }
         } catch (IOException e) {
             log.debug(e.getMessage());
