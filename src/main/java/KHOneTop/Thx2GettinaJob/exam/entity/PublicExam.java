@@ -1,30 +1,15 @@
 package KHOneTop.Thx2GettinaJob.exam.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
-@Table(name = "publicExam")
-@Getter
+@DiscriminatorValue("public")
+@Getter @Setter
+@SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class PublicExam {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class PublicExam extends Exam{
     @Column(name = "turn", nullable = false)
     private String turn;
-
-    @Enumerated(value = EnumType.STRING)
-    @Column(name = "category", nullable = false)
-    private Category category;
-
-    @Embedded
-    private ExamTimeStamp examTimeStamp;
-
-
 }

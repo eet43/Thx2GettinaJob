@@ -27,6 +27,8 @@ public abstract class Exam {
     @Column(name = "url")
     private String url;
 
+    private Boolean isPublic;
+
     @Embedded
     private ExamTimeStamp examTimeStamp;
 }

@@ -1,5 +1,6 @@
 package KHOneTop.Thx2GettinaJob.exam.service;
 
+import KHOneTop.Thx2GettinaJob.exam.dto.AddAlwaysPublicExamRequest;
 import KHOneTop.Thx2GettinaJob.exam.entity.Category;
 import KHOneTop.Thx2GettinaJob.exam.entity.PublicExam;
 import KHOneTop.Thx2GettinaJob.exam.entity.ExamTimeStamp;
@@ -31,12 +32,13 @@ public class NewExamAddService {
     private final PublicExamRepository publicExamRepository;
 
     @Transactional
-    public void addAllTimesExam(Category category) {
+    public void addAllTimesExam(AddAlwaysPublicExamRequest request) {
         PublicExam publicExam = PublicExam.builder()
+                .name(request.name())
+                .issuer(request.issuer())
+                .url(request.url())
                 .turn("상시접수")
-                .category(category)
                 .build();
-
         publicExamRepository.save(publicExam);
     }
 
@@ -86,8 +88,10 @@ public class NewExamAddService {
                         .build();
 
                 PublicExam toeicPublicExam = PublicExam.builder()
+                        .name("토익")
+                        .issuer("한국 TOEIC 위원회")
+                        .url("https://exam.toeic.co.kr/")
                         .turn(examName)
-                        .category(Category.TOEIC)
                         .examTimeStamp(examTimeStamp)
                         .build();
 
@@ -147,8 +151,10 @@ public class NewExamAddService {
                         .build();
 
                 PublicExam afpkPublicExam = PublicExam.builder()
+                        .name("AFPK")
+                        .issuer("사단법인한국에프피에스비")
+                        .url("https://www.fpsbkorea.org/?mnu_usn=29")
                         .turn(examName)
-                        .category(Category.AFPK)
                         .examTimeStamp(examTimeStamp)
                         .build();
 
@@ -200,8 +206,10 @@ public class NewExamAddService {
                         .build();
 
                 PublicExam koreanPublicExam = PublicExam.builder()
+                        .name("한국사능력검정시험")
+                        .issuer("국사편찬위원회")
+                        .url("https://www.historyexam.go.kr/")
                         .turn(examName)
-                        .category(Category.KOREAN)
                         .examTimeStamp(examTimeStamp)
                         .build();
 
@@ -243,13 +251,15 @@ public class NewExamAddService {
                         .resultDate(resultDateTime)
                         .build();
 
-                PublicExam koreanPublicExam = PublicExam.builder()
+                PublicExam toeicSpeakingPublicExam = PublicExam.builder()
+                        .name("토익 스피킹")
+                        .issuer("ETS")
+                        .url("https://www.toeicswt.co.kr/")
                         .turn(examName)
-                        .category(Category.TOEIC_SPEAKING)
                         .examTimeStamp(examTimeStamp)
                         .build();
 
-                publicExamRepository.save(koreanPublicExam);
+                publicExamRepository.save(toeicSpeakingPublicExam);
                 count ++;
             }
         } catch (IOException e) {
@@ -295,13 +305,15 @@ public class NewExamAddService {
                         .resultDate(resultDateTime)
                         .build();
 
-                PublicExam koreanPublicExam = PublicExam.builder()
+                PublicExam hskPublicExam = PublicExam.builder()
+                        .name("HSK")
+                        .issuer("HSK한국사무국")
+                        .url("https://www.hsk-korea.co.kr/main/main.aspx")
                         .turn(examName)
-                        .category(Category.KOREAN)
                         .examTimeStamp(examTimeStamp)
                         .build();
 
-                publicExamRepository.save(koreanPublicExam);
+                publicExamRepository.save(hskPublicExam);
             }
         } catch (IOException e) {
             log.debug(e.getMessage());
