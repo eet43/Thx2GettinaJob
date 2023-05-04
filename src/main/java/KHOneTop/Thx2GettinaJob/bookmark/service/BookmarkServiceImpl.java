@@ -1,6 +1,7 @@
 package KHOneTop.Thx2GettinaJob.bookmark.service;
 
 import KHOneTop.Thx2GettinaJob.bookmark.dto.AddBookmarkPrivateExamRequest;
+import KHOneTop.Thx2GettinaJob.bookmark.dto.AddBookmarkPubExamRequest;
 import KHOneTop.Thx2GettinaJob.bookmark.entity.Bookmark;
 import KHOneTop.Thx2GettinaJob.bookmark.repository.BookmarkRepository;
 import KHOneTop.Thx2GettinaJob.common.response.Codeset;
@@ -30,16 +31,29 @@ public class BookmarkServiceImpl implements BookmarkService{
         PrivateExam newExam = request.toEntity();
         examRepository.save(newExam);
 
-        Bookmark newBookmark = Bookmark.builder()
-                .userId(request.userId())
-                .examName(request.name())
-                .build();
+        Bookmark newBookmark = Bookmark.create(request.userId(), request.name());
+        bookmarkRepository.save(newBookmark);
+    }
+
+    @Override
+    @Transactional
+    public void addBookmarkPubExam(AddBookmarkPubExamRequest request) {
+        checkValidUserId(request.userId());
+        checkValidExamName(request.examName());
+
+        Bookmark newBookmark = Bookmark.create(request.userId(), request.examName());
         bookmarkRepository.save(newBookmark);
     }
 
     private void checkValidUserId(Long userId) {
         if(!userRepository.existsById(userId)) {
             throw new CustomException(Codeset.INVALID_USER, "해당 유저를 찾을 수 없습니다.");
+        }
+    }
+
+    private void checkValidExamName(String examName) {
+        if(!examRepository.existsByName(examName)) {
+            throw new CustomException(Codeset.INVALID_EXAM, "해당 시험을 찾을 수 없습니다.");
         }
     }
 }

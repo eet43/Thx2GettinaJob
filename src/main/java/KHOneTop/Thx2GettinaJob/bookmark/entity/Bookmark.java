@@ -22,4 +22,10 @@ public class Bookmark {
     @Column(nullable = false)
     private String examName;
 
+    public static Bookmark create(Long userId, String examName) {
+        return Bookmark.builder()
+                .userId(userId)
+                .examName(examName)
+                .build();
+    }
 }
