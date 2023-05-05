@@ -35,7 +35,7 @@ public class NewExamAddService {
     @Transactional
     public void addAllTimesExam(AddAlwaysPublicExamRequest request) {
         PublicExam publicExam = PublicExam.builder()
-                .name(request.name())
+                .name(request.name() + "(상시접수)")
                 .issuer(request.issuer())
                 .url(request.url())
                 .turn("상시접수")

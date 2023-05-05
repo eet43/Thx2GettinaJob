@@ -1,16 +1,14 @@
 package KHOneTop.Thx2GettinaJob.exam.entity;
 
+import KHOneTop.Thx2GettinaJob.bookmark.entity.Bookmark;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "exam_type")
-@Getter
+@Getter @Setter
 @SuperBuilder
 @NoArgsConstructor
 public abstract class Exam {

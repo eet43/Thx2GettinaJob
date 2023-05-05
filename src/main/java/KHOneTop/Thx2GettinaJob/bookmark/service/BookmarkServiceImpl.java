@@ -1,7 +1,6 @@
 package KHOneTop.Thx2GettinaJob.bookmark.service;
 
-import KHOneTop.Thx2GettinaJob.bookmark.dto.AddBookmarkPrivateExamRequest;
-import KHOneTop.Thx2GettinaJob.bookmark.dto.AddBookmarkPubExamRequest;
+import KHOneTop.Thx2GettinaJob.bookmark.dto.*;
 import KHOneTop.Thx2GettinaJob.bookmark.entity.Bookmark;
 import KHOneTop.Thx2GettinaJob.bookmark.repository.BookmarkRepository;
 import KHOneTop.Thx2GettinaJob.common.response.Codeset;
@@ -14,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,6 +43,17 @@ public class BookmarkServiceImpl implements BookmarkService{
 
         Bookmark newBookmark = Bookmark.create(request.userId(), request.examName());
         bookmarkRepository.save(newBookmark);
+    }
+
+    @Override
+    public BookmarkInfo getBookmarkInfo(GetBookmarkListRequest request) {
+        checkValidUserId(request.userId());
+
+        List<String> findExamNames = bookmarkRepository.findExamNamesByUserId(request.userId());
+        List<PrivateExamInfo> privateDto = examRepository.findPrivateExamsByExamNames(findExamNames);
+        List<PublicExamInfo> publicDto = examRepository.findPublicExamsByExamNames(findExamNames);
+
+        return new BookmarkInfo(privateDto, publicDto);
     }
 
     private void checkValidUserId(Long userId) {
