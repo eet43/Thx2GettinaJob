@@ -8,7 +8,6 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Data
 public record AddPrivateExamRequest(
         Long userId,
         String name,

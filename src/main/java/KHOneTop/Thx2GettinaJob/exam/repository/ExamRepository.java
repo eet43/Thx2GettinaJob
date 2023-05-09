@@ -19,4 +19,7 @@ public interface ExamRepository extends JpaRepository<Exam, Long> {
 
         @Query("SELECT new KHOneTop.Thx2GettinaJob.bookmark.dto.PrivateExamInfo(e.name, e.examTimeStamp) FROM PrivateExam e WHERE e.name IN :examNames")
         List<PrivateExamInfo> findPrivateExamsByExamNames(@Param("examNames") List<String> examNames);
+
+        @Query("SELECT e FROM Exam e WHERE e.name IN :examNames")
+        Optional<List<Exam>> findAllByExamNames(@Param("examNames") List<String> examNames);
 }

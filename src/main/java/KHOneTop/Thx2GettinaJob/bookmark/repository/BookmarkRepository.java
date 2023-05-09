@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface BookmarkRepository extends JpaRepository<Bookmark, Long>, BookmarkRepositoryCustom {
+public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
     @Query("SELECT b.examName FROM Bookmark b WHERE b.userId = :userId")
     List<String> findExamNamesByUserId(@Param("userId") Long userId);
 }
