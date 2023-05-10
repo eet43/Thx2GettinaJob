@@ -23,13 +23,13 @@ public class Bookmark {
     private Long userId;
 
     @Column(nullable = false)
-    private String examName;
+    private Long examId;
 
 
-    public static Bookmark create(Long userId, String examName) {
+    public static Bookmark create(Long userId, Long examId) {
         return Bookmark.builder()
                 .userId(userId)
-                .examName(examName)
+                .examId(examId)
                 .build();
     }
 

@@ -33,9 +33,9 @@ public class BookmarkServiceImpl implements BookmarkService{
         checkValidUserId(request.userId());
 
         PrivateExam newExam = request.toEntity();
-        examRepository.save(newExam);
+        Long examId = saveAndReturnId(newExam);
 
-        Bookmark newBookmark = Bookmark.create(request.userId(), request.name());
+        Bookmark newBookmark = Bookmark.create(request.userId(), examId);
         bookmarkRepository.save(newBookmark);
     }
 
@@ -43,9 +43,9 @@ public class BookmarkServiceImpl implements BookmarkService{
     @Transactional
     public void addBookmarkPubExam(AddBookmarkPubExamRequest request) {
         checkValidUserId(request.userId());
-        checkValidExamName(request.examName());
+        checkValidExam(request.examId());
 
-        Bookmark newBookmark = Bookmark.create(request.userId(), request.examName());
+        Bookmark newBookmark = Bookmark.create(request.userId(), request.examId());
         bookmarkRepository.save(newBookmark);
     }
 
@@ -86,7 +86,7 @@ public class BookmarkServiceImpl implements BookmarkService{
     @Override
     public List<Top5PopBookmark> getTop5PopBookmarks() {
         List<BookmarkCount> findTop5PopBookmarkNames = bookmarkRepository.findTop5PopBookmarkCount();
-        
+
     }
 
     private void checkValidUserId(Long userId) {
@@ -95,9 +95,14 @@ public class BookmarkServiceImpl implements BookmarkService{
         }
     }
 
-    private void checkValidExamName(String examName) {
-        if(!examRepository.existsByName(examName)) {
+    private void checkValidExam(Long examId) {
+        if(!examRepository.existsById(examId)) {
             throw new CustomException(Codeset.INVALID_EXAM, "해당 시험을 찾을 수 없습니다.");
         }
+    }
+
+    private Long saveAndReturnId(Exam exam) {
+        Exam saveExam = examRepository.save(exam);
+        return saveExam.getId();
     }
 }

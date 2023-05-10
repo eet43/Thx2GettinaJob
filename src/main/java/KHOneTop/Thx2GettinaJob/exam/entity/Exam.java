@@ -5,8 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "exam_type")
 @Getter @Setter
 @SuperBuilder
@@ -27,6 +28,11 @@ public abstract class Exam {
 
     private Boolean isPublic;
 
-    @Embedded
-    private ExamTimeStamp examTimeStamp;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "exam", cascade = CascadeType.ALL)
+    private List<ExamTimeStamp> examTimeStamp;
+
+    public void addExamTime(ExamTimeStamp examTime) {
+        this.examTimeStamp.add(examTime);
+        examTime.setExam(this);
+    }
 }

@@ -1,21 +1,21 @@
 package KHOneTop.Thx2GettinaJob.exam.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
-@Embeddable
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class ExamTimeStamp {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String turn;
 
     @Column(name = "examDate", nullable = false)
     private LocalDateTime examDate;
@@ -34,4 +34,12 @@ public class ExamTimeStamp {
 
     @Column(name = "resultDate", nullable = false)
     private LocalDateTime resultDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "exam_id")
+    private Exam exam;
+
+    public void setExam(Exam exam) {
+        this.exam = exam;
+    }
 }

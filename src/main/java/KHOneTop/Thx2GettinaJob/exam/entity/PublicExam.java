@@ -10,6 +10,5 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 public class PublicExam extends Exam{
-    @Column(name = "turn", nullable = false)
-    private String turn;
+
 }

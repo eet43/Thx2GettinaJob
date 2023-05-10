@@ -26,6 +26,14 @@ public record AddBookmarkPrivateExamRequest(
         LocalDateTime resultDate
 ) {
         public PrivateExam toEntity() {
+                PrivateExam newExam = PrivateExam.builder()
+                        .userId(this.userId)
+                        .name(this.name)
+                        .issuer(this.issuer)
+                        .url(this.url)
+                        .isPublic(false)
+                        .build();
+
                 ExamTimeStamp timeStamp = ExamTimeStamp.builder()
                         .examDate(this.examDate)
                         .regStartDate(this.regStartDate)
@@ -35,12 +43,8 @@ public record AddBookmarkPrivateExamRequest(
                         .resultDate(this.resultDate)
                         .build();
 
-                return PrivateExam.builder()
-                        .userId(this.userId)
-                        .name(this.name)
-                        .issuer(this.issuer)
-                        .url(this.url)
-                        .examTimeStamp(timeStamp)
-                        .build();
+                newExam.addExamTime(timeStamp);
+
+                return newExam;
         }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ExamRepository extends JpaRepository<Exam, Long> {
-        boolean existsByName(String name);
+        boolean existsById(Long Id);
         Optional<Exam> findByName(String name);
 
         @Query("SELECT new KHOneTop.Thx2GettinaJob.bookmark.dto.PublicExamInfo(e.name, e.turn) FROM PublicExam e WHERE e.name IN :examNames")

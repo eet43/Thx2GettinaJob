@@ -4,7 +4,7 @@ import lombok.Data;
 
 public record AddBookmarkPubExamRequest (
         Long userId,
-        String examName
+        Long examId
 ) {
 
 }

@@ -38,7 +38,7 @@ public class NewExamAddService {
                 .name(request.name() + "(상시접수)")
                 .issuer(request.issuer())
                 .url(request.url())
-                .turn("상시접수")
+                .isPublic(true)
                 .build();
         examRepository.save(publicExam);
     }
@@ -49,6 +49,13 @@ public class NewExamAddService {
         DateTimeFormatter timeMinformatter = DateTimeFormatter.ofPattern("yyyy.MM.dd (E) a h시m분", Locale.KOREA);
         DateTimeFormatter timeformatter = DateTimeFormatter.ofPattern("yyyy.MM.dd (E) a h시", Locale.KOREA);
         try {
+
+            PublicExam toeicPublicExam = PublicExam.builder()
+                    .name("토익")
+                    .issuer("한국 TOEIC 위원회")
+                    .url("https://exam.toeic.co.kr/")
+                    .isPublic(true)
+                    .build();
 
             Document doc = Jsoup.connect("https://exam.toeic.co.kr/receipt/examSchList.php").get();
             Elements rows = doc.select("table tbody tr");
@@ -80,6 +87,7 @@ public class NewExamAddService {
                 LocalDateTime addRegEndDateTime = LocalDateTime.parse(addRegDateInput[1], timeformatter);
 
                 ExamTimeStamp examTimeStamp = ExamTimeStamp.builder()
+                        .turn(examName)
                         .examDate(examDateTime)
                         .regStartDate(regStartDateTime)
                         .regEndDate(regEndDateTime)
@@ -88,16 +96,10 @@ public class NewExamAddService {
                         .resultDate(resultDateTime)
                         .build();
 
-                PublicExam toeicPublicExam = PublicExam.builder()
-                        .name("토익")
-                        .issuer("한국 TOEIC 위원회")
-                        .url("https://exam.toeic.co.kr/")
-                        .turn(examName)
-                        .examTimeStamp(examTimeStamp)
-                        .build();
-
-                examRepository.save(toeicPublicExam);
+                toeicPublicExam.addExamTime(examTimeStamp);
             }
+
+            examRepository.save(toeicPublicExam);
 
         } catch (IOException e) {
             log.debug(e.getMessage());
@@ -113,6 +115,14 @@ public class NewExamAddService {
                 .toFormatter(Locale.KOREA);
 
         try {
+
+            PublicExam afpkPublicExam = PublicExam.builder()
+                    .name("AFPK")
+                    .issuer("사단법인한국에프피에스비")
+                    .url("https://www.fpsbkorea.org/?mnu_usn=29")
+                    .isPublic(true)
+                    .build();
+
             Document doc = Jsoup.connect("https://www.fpsbkorea.org/?mnu_usn=27").get();
             Elements titles = doc.select("dl dt");
             Elements dates = doc.select("dl dd");
@@ -145,23 +155,18 @@ public class NewExamAddService {
                 LocalDateTime resultDateTime = LocalDateTime.parse(resultDate, formatter2);
 
                 ExamTimeStamp examTimeStamp = ExamTimeStamp.builder()
+                        .turn(examName)
                         .examDate(examDateTime)
                         .regStartDate(regStartDateTime)
                         .regEndDate(regEndDateTime)
                         .resultDate(resultDateTime)
                         .build();
 
-                PublicExam afpkPublicExam = PublicExam.builder()
-                        .name("AFPK")
-                        .issuer("사단법인한국에프피에스비")
-                        .url("https://www.fpsbkorea.org/?mnu_usn=29")
-                        .turn(examName)
-                        .examTimeStamp(examTimeStamp)
-                        .build();
-
-                examRepository.save(afpkPublicExam);
-
+                afpkPublicExam.addExamTime(examTimeStamp);
             }
+
+            examRepository.save(afpkPublicExam);
+
         } catch (IOException e) {
             log.debug(e.getMessage());
         }
@@ -172,6 +177,14 @@ public class NewExamAddService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일(E) H:mm", Locale.ENGLISH);
 
         try {
+
+            PublicExam koreanPublicExam = PublicExam.builder()
+                    .name("한국사능력검정시험")
+                    .issuer("국사편찬위원회")
+                    .url("https://www.historyexam.go.kr/")
+                    .isPublic(true)
+                    .build();
+
             Document doc = Jsoup.connect("https://www.historyexam.go.kr/pageLink.do?link=examSchedule&netfunnel_key=8D5649CEF7116C29195BCF7E3334993C25C5E6FEB802CBA5F3021DFCC1A813528892C27C94799D0FE17CB8B45161D4464BFF3E2B9BA24F07978D55454B547C4F538248990C1EF8EF0EBCD0B243EBE61B4B16061CE3A7838A42C123D251D01EACA6473F2826BD6E38AB7A4693F370CC97302C382C312C302C30").get();
             Elements rows = doc.select("table tbody tr");
 
@@ -198,6 +211,7 @@ public class NewExamAddService {
                 LocalDateTime resultDateTime = LocalDateTime.parse(resultDate, formatter);
 
                 ExamTimeStamp examTimeStamp = ExamTimeStamp.builder()
+                        .turn(examName)
                         .examDate(examDateTime)
                         .regStartDate(regStartDateTime)
                         .regEndDate(regEndDateTime)
@@ -206,16 +220,11 @@ public class NewExamAddService {
                         .resultDate(resultDateTime)
                         .build();
 
-                PublicExam koreanPublicExam = PublicExam.builder()
-                        .name("한국사능력검정시험")
-                        .issuer("국사편찬위원회")
-                        .url("https://www.historyexam.go.kr/")
-                        .turn(examName)
-                        .examTimeStamp(examTimeStamp)
-                        .build();
-
-                examRepository.save(koreanPublicExam);
+                koreanPublicExam.addExamTime(examTimeStamp);
             }
+
+            examRepository.save(koreanPublicExam);
+
         } catch (IOException e) {
             log.debug(e.getMessage());
         }
@@ -226,6 +235,13 @@ public class NewExamAddService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd (E) a h시", Locale.KOREA);
 
         try {
+            PublicExam toeicSpeakingPublicExam = PublicExam.builder()
+                    .name("토익 스피킹")
+                    .issuer("ETS")
+                    .url("https://www.toeicswt.co.kr/")
+                    .isPublic(true)
+                    .build();
+
             Document doc = Jsoup.connect("https://www.toeicswt.co.kr/receipt/examSchList.php").get();
             Elements rows = doc.select("table tbody tr");
 
@@ -246,23 +262,19 @@ public class NewExamAddService {
                 LocalDateTime regEndDateTime = LocalDateTime.parse(splitInput[1], formatter);
 
                 ExamTimeStamp examTimeStamp = ExamTimeStamp.builder()
+                        .turn(examName)
                         .examDate(examDateTime)
                         .regStartDate(regStartDateTime)
                         .regEndDate(regEndDateTime)
                         .resultDate(resultDateTime)
                         .build();
 
-                PublicExam toeicSpeakingPublicExam = PublicExam.builder()
-                        .name("토익 스피킹")
-                        .issuer("ETS")
-                        .url("https://www.toeicswt.co.kr/")
-                        .turn(examName)
-                        .examTimeStamp(examTimeStamp)
-                        .build();
-
-                examRepository.save(toeicSpeakingPublicExam);
+                toeicSpeakingPublicExam.addExamTime(examTimeStamp);
                 count ++;
             }
+
+            examRepository.save(toeicSpeakingPublicExam);
+
         } catch (IOException e) {
             log.debug(e.getMessage());
         }
@@ -276,6 +288,13 @@ public class NewExamAddService {
                 .toFormatter(Locale.KOREA);
 
         try {
+            PublicExam hskPublicExam = PublicExam.builder()
+                    .name("HSK")
+                    .issuer("HSK한국사무국")
+                    .url("https://www.hsk-korea.co.kr/main/main.aspx")
+                    .isPublic(true)
+                    .build();
+
             Document doc = Jsoup.connect("https://www.hsk-korea.co.kr/about/schedule_hsk_ibt.aspx").get();
             Elements rows = doc.select("div.board-wrap.type_accordion ul li");
 
@@ -300,22 +319,17 @@ public class NewExamAddService {
                 LocalDateTime regEndDateTime = LocalDateTime.parse(splitInput[1], formatter);
 
                 ExamTimeStamp examTimeStamp = ExamTimeStamp.builder()
+                        .turn(examName)
                         .examDate(examDateTime)
                         .regStartDate(regStartDateTime)
                         .regEndDate(regEndDateTime)
                         .resultDate(resultDateTime)
                         .build();
 
-                PublicExam hskPublicExam = PublicExam.builder()
-                        .name("HSK")
-                        .issuer("HSK한국사무국")
-                        .url("https://www.hsk-korea.co.kr/main/main.aspx")
-                        .turn(examName)
-                        .examTimeStamp(examTimeStamp)
-                        .build();
-
-                examRepository.save(hskPublicExam);
+                hskPublicExam.addExamTime(examTimeStamp);
             }
+            examRepository.save(hskPublicExam);
+
         } catch (IOException e) {
             log.debug(e.getMessage());
         }
