@@ -6,19 +6,18 @@ import KHOneTop.Thx2GettinaJob.bookmark.repository.BookmarkRepository;
 import KHOneTop.Thx2GettinaJob.common.response.Codeset;
 import KHOneTop.Thx2GettinaJob.common.response.CustomException;
 import KHOneTop.Thx2GettinaJob.exam.entity.Exam;
+import KHOneTop.Thx2GettinaJob.exam.entity.ExamTimeStamp;
 import KHOneTop.Thx2GettinaJob.exam.entity.PrivateExam;
-import KHOneTop.Thx2GettinaJob.exam.entity.PublicExam;
 import KHOneTop.Thx2GettinaJob.exam.repository.ExamRepository;
-import KHOneTop.Thx2GettinaJob.user.entity.User;
 import KHOneTop.Thx2GettinaJob.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -50,37 +49,89 @@ public class BookmarkServiceImpl implements BookmarkService{
     }
 
     @Override
-    public BookmarkInfo getBookmarkInfo(GetBookmarkListRequest request) {
+    public List<BookmarkInfo> getBookmarkInfo(GetBookmarkListRequest request) {
         checkValidUserId(request.userId());
 
-        List<String> findExamNames = bookmarkRepository.findExamNamesByUserId(request.userId());
-        List<PrivateExamInfo> privateDto = examRepository.findPrivateExamsByExamNames(findExamNames);
-        List<PublicExamInfo> publicDto = examRepository.findPublicExamsByExamNames(findExamNames);
+        List<Long> findExamIds = bookmarkRepository.findExamIdByUserId(request.userId());
+        List<Exam> findExams = examRepository.findByIdIn(findExamIds);
+        List<BookmarkInfo> bookmarkDtos = new ArrayList<>();
 
-        return new BookmarkInfo(privateDto, publicDto);
+        for (Exam exam : findExams) {
+            if (Boolean.TRUE.equals(exam.getIsPublic())) {
+                boolean flag = false;
+                for(ExamTimeStamp timeStamp : exam.getExamTimeStamp()) {
+                    LocalDateTime regEndDate = timeStamp.getRegEndDate();
+                    LocalDateTime addRegEndDate = timeStamp.getAddRegEndDate();
+                    if (regEndDate == null) {
+                        bookmarkDtos.add(BookmarkInfo.fromEntity(exam, "상시접수", null));
+                        flag = true;
+                        break;
+                    } else if (regEndDate.isAfter(LocalDateTime.now())) {
+                        Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), regEndDate.toLocalDate());
+                        bookmarkDtos.add(BookmarkInfo.fromEntity(exam, "정기접수중", day));
+                        flag = true;
+                        break;
+                    } else if (addRegEndDate != null && addRegEndDate.isAfter(LocalDateTime.now())) {
+                        Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), addRegEndDate.toLocalDate());
+                        bookmarkDtos.add(BookmarkInfo.fromEntity(exam, "추가접수중", day));
+                        flag = true;
+                        break;
+                    }
+                }
+                if(!flag) {
+                    bookmarkDtos.add(BookmarkInfo.fromEntity(exam, "접수마감", null));
+                }
+            } else {
+                ExamTimeStamp timeStamp = exam.getExamTimeStamp().get(0);
+                LocalDateTime regEndDate = timeStamp.getRegEndDate();
+                LocalDateTime addRegEndDate = timeStamp.getAddRegEndDate();
+                if (regEndDate == null && addRegEndDate == null) {
+                    bookmarkDtos.add(BookmarkInfo.fromEntity(exam, "기간미입력", null));
+                } else if (regEndDate != null && regEndDate.isAfter(LocalDateTime.now())) {
+                    Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), regEndDate.toLocalDate());
+                    bookmarkDtos.add(BookmarkInfo.fromEntity(exam, "정기접수중", day));
+                } else if (addRegEndDate != null && addRegEndDate.isAfter(LocalDateTime.now())) {
+                    Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), addRegEndDate.toLocalDate());
+                    bookmarkDtos.add(BookmarkInfo.fromEntity(exam, "추가접수중", day));
+                } else {
+                    bookmarkDtos.add(BookmarkInfo.fromEntity(exam, "접수마감", null));
+                }
+            }
+        }
+
+        return bookmarkDtos;
+
     }
 
     @Override
-    public List<BookmarkDetail> getBookmarkDetail(GetBookmarkListRequest request) {
-        checkValidUserId(request.userId());
+    public List<BookmarkDetailOfTurn> getBookmarkDetailOfTurn(Long examId) {
+        Exam exam = examRepository.findById(examId).
+                orElseThrow(() -> new CustomException(Codeset.INVALID_EXAM ,"해당하는 시험이 존재하지 않습니다."));
+        List<BookmarkDetailOfTurn> bookmarkDtos = new ArrayList<>();
 
-        List<String> findExamNames = bookmarkRepository.findExamNamesByUserId(request.userId());
-        Optional<List<Exam>> findExams = examRepository.findAllByExamNames(findExamNames);
+        for(ExamTimeStamp timeStamp : exam.getExamTimeStamp()) {
+            LocalDateTime regStartDate = timeStamp.getRegStartDate();
+            LocalDateTime regEndDate = timeStamp.getRegEndDate();
+            LocalDateTime addRegEndDate = timeStamp.getAddRegEndDate();
+            if (!regStartDate.isAfter(LocalDateTime.now())) {
+                bookmarkDtos.add(BookmarkDetailOfTurn.fromEntity(timeStamp, "접수예정", null));
+                break;
+            }
+            else if (regEndDate.isAfter(LocalDateTime.now())) {
+                Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), regEndDate.toLocalDate());
+                bookmarkDtos.add(BookmarkDetailOfTurn.fromEntity(timeStamp, "정기접수중", day));
+                break;
+            } else if (addRegEndDate != null && addRegEndDate.isAfter(LocalDateTime.now())) {
+                Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), addRegEndDate.toLocalDate());
+                bookmarkDtos.add(BookmarkDetailOfTurn.fromEntity(timeStamp, "추가접수중", day));
+                break;
+            }
+            else {
+                bookmarkDtos.add(BookmarkDetailOfTurn.fromEntity(timeStamp, "접수마감", null));
+            }
+        }
 
-        return findExams.map(exams -> exams.stream()
-                        .map(exam -> {
-                            if (exam instanceof PublicExam) {
-                                PublicExam publicExam = (PublicExam) exam;
-                                return new BookmarkDetail(publicExam.getId(), publicExam.getName(), publicExam.getIssuer(),
-                                        publicExam.getUrl(), publicExam.getTurn(), publicExam.getIsPublic(), publicExam.getExamTimeStamp());
-                            } else {
-                                PrivateExam privateExam = (PrivateExam) exam;
-                                return new BookmarkDetail(privateExam.getId(), privateExam.getName(), privateExam.getIssuer(),
-                                        privateExam.getUrl(), null, privateExam.getIsPublic(), privateExam.getExamTimeStamp());
-                            }
-                        })
-                        .collect(Collectors.toList()))
-                .orElse(Collections.emptyList());
+        return bookmarkDtos;
     }
 
     @Override

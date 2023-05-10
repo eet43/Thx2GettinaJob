@@ -1,6 +1,6 @@
 package KHOneTop.Thx2GettinaJob.exam.crawler;
 
-import KHOneTop.Thx2GettinaJob.exam.repository.PublicExamRepository;
+import KHOneTop.Thx2GettinaJob.exam.repository.ExamRepository;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -15,7 +15,7 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class ExamCrawler {
-    private final PublicExamRepository publicExamRepository;
+    private final ExamRepository publicExamRepository;
 
     @Scheduled(cron = "0 0 12 * * ?")
     @Transactional

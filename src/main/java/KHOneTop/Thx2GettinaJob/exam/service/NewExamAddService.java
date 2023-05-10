@@ -1,11 +1,9 @@
 package KHOneTop.Thx2GettinaJob.exam.service;
 
 import KHOneTop.Thx2GettinaJob.exam.dto.AddAlwaysPublicExamRequest;
-import KHOneTop.Thx2GettinaJob.exam.entity.Category;
 import KHOneTop.Thx2GettinaJob.exam.entity.PublicExam;
 import KHOneTop.Thx2GettinaJob.exam.entity.ExamTimeStamp;
 import KHOneTop.Thx2GettinaJob.exam.repository.ExamRepository;
-import KHOneTop.Thx2GettinaJob.exam.repository.PublicExamRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;

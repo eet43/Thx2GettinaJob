@@ -9,8 +9,9 @@ public interface BookmarkService {
 
     void addBookmarkPubExam(AddBookmarkPubExamRequest request);
 
-    BookmarkInfo getBookmarkInfo(GetBookmarkListRequest request);
+    List<BookmarkInfo> getBookmarkInfo(GetBookmarkListRequest request);
 
-    List<BookmarkDetail> getBookmarkDetail(GetBookmarkListRequest request);
+    List<BookmarkDetailOfTurn> getBookmarkDetailOfTurn(Long examId);
+
     List<Top5PopBookmark> getTop5PopBookmarks();
 }

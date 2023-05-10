@@ -1,16 +1,15 @@
 package KHOneTop.Thx2GettinaJob.bookmark.controller;
 
 import KHOneTop.Thx2GettinaJob.auth.dto.SendToEmailRequest;
-import KHOneTop.Thx2GettinaJob.bookmark.dto.AddBookmarkPrivateExamRequest;
-import KHOneTop.Thx2GettinaJob.bookmark.dto.AddBookmarkPubExamRequest;
-import KHOneTop.Thx2GettinaJob.bookmark.dto.BookmarkInfo;
-import KHOneTop.Thx2GettinaJob.bookmark.dto.GetBookmarkListRequest;
+import KHOneTop.Thx2GettinaJob.bookmark.dto.*;
 import KHOneTop.Thx2GettinaJob.bookmark.service.BookmarkService;
 import KHOneTop.Thx2GettinaJob.common.EndPoint;
 import KHOneTop.Thx2GettinaJob.common.response.CustomResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,7 +31,13 @@ public class BookmarkController {
 
     @GetMapping("/info")
     public CustomResponse getBookmarkInfo(@RequestBody GetBookmarkListRequest request) {
-        BookmarkInfo data = bookmarkService.getBookmarkInfo(request);
+        List<BookmarkInfo> data = bookmarkService.getBookmarkInfo(request);
+        return CustomResponse.success(data);
+    }
+
+    @GetMapping("/details/turns/{examId}")
+    public CustomResponse getBookmarkDetailOfTurn(@PathVariable Long examId) {
+        List<BookmarkDetailOfTurn> data = bookmarkService.getBookmarkDetailOfTurn(examId);
         return CustomResponse.success(data);
     }
 }
