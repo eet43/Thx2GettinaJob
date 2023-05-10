@@ -53,7 +53,7 @@ public class BookmarkServiceImpl implements BookmarkService{
         checkValidUserId(request.userId());
 
         List<Long> findExamIds = bookmarkRepository.findExamIdByUserId(request.userId());
-        List<Exam> findExams = examRepository.findByIdIn(findExamIds);
+        List<Exam> findExams = examRepository.findByIdInFetchJoin(findExamIds);
         List<BookmarkInfo> bookmarkDtos = new ArrayList<>();
 
         for (Exam exam : findExams) {
@@ -105,7 +105,7 @@ public class BookmarkServiceImpl implements BookmarkService{
 
     @Override
     public List<BookmarkDetailOfTurn> getBookmarkDetailOfTurn(Long examId) {
-        Exam exam = examRepository.findById(examId).
+        Exam exam = examRepository.findByIdFetchJoin(examId).
                 orElseThrow(() -> new CustomException(Codeset.INVALID_EXAM ,"해당하는 시험이 존재하지 않습니다."));
         List<BookmarkDetailOfTurn> bookmarkDtos = new ArrayList<>();
 
@@ -137,7 +137,7 @@ public class BookmarkServiceImpl implements BookmarkService{
     @Override
     public List<Top5PopBookmark> getTop5PopBookmarks() {
         List<BookmarkCount> findTop5PopBookmarkNames = bookmarkRepository.findTop5PopBookmarkCount();
-
+        return null;
     }
 
     private void checkValidUserId(Long userId) {
