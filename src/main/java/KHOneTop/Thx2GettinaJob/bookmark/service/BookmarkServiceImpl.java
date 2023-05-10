@@ -83,6 +83,12 @@ public class BookmarkServiceImpl implements BookmarkService{
                 .orElse(Collections.emptyList());
     }
 
+    @Override
+    public List<Top5PopBookmark> getTop5PopBookmarks() {
+        List<BookmarkCount> findTop5PopBookmarkNames = bookmarkRepository.findTop5PopBookmarkCount();
+        
+    }
+
     private void checkValidUserId(Long userId) {
         if(!userRepository.existsById(userId)) {
             throw new CustomException(Codeset.INVALID_USER, "해당 유저를 찾을 수 없습니다.");

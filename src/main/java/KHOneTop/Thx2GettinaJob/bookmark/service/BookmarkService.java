@@ -12,4 +12,5 @@ public interface BookmarkService {
     BookmarkInfo getBookmarkInfo(GetBookmarkListRequest request);
 
     List<BookmarkDetail> getBookmarkDetail(GetBookmarkListRequest request);
+    List<Top5PopBookmark> getTop5PopBookmarks();
 }
