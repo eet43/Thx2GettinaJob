@@ -1,7 +1,7 @@
 package KHOneTop.Thx2GettinaJob.exam.repository;
 
 import KHOneTop.Thx2GettinaJob.bookmark.dto.PrivateExamInfo;
-import KHOneTop.Thx2GettinaJob.bookmark.dto.PublicExamInfo;
+import KHOneTop.Thx2GettinaJob.exam.dto.PublicExamInfo;
 import KHOneTop.Thx2GettinaJob.exam.entity.Exam;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,4 +22,7 @@ public interface ExamRepository extends JpaRepository<Exam, Long> {
 
         @Query("SELECT e FROM Exam e WHERE e.name IN :examNames")
         Optional<List<Exam>> findAllByExamNames(@Param("examNames") List<String> examNames);
+
+        @Query("SELECT new KHOneTop.Thx2GettinaJob.exam.dto.PublicExamInfo(e.id, e.name, e.issuer) FROM Exam e WHERE e.isPublic = true")
+        List<PublicExamInfo> findPublicExam();
 }
