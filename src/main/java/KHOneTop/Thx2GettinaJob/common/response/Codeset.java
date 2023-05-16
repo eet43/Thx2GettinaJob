@@ -34,6 +34,7 @@ public enum Codeset {
     INVALID_EXAM("1202", "해당하는 시험 데이터가 존재하지 않습니다."),
     INVALID_SCORE("1302", "해당하는 자격증 점수 데이터가 존재하지 않습니다.");
 
+
     private final String code;
     private final String message;
 

@@ -2,6 +2,11 @@ package KHOneTop.Thx2GettinaJob.score.repository;
 
 import KHOneTop.Thx2GettinaJob.score.entity.Score;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface ScoreRepository extends JpaRepository<Score, Long> {
+    Optional<List<Score>> findAllByUserId(@Param("userId") Long userId);
 }
