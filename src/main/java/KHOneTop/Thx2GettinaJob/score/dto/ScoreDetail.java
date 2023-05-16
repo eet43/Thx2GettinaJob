@@ -14,6 +14,7 @@ public class ScoreDetail {
     private Long score;
     private String studentCode;
     private String issuer;
+    private Boolean isEffective;
     private Long day;
     private LocalDate acquisitionDate;
     private LocalDate expirationDate;

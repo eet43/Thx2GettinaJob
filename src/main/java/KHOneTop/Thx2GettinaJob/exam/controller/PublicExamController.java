@@ -9,5 +9,4 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping(EndPoint.PUB_EXAM)
 public class PublicExamController {
-    private final
 }

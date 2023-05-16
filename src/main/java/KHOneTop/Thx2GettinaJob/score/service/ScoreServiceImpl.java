@@ -51,7 +51,9 @@ public class ScoreServiceImpl implements ScoreService{
             List<Score> getScores = findScores.get();
             for(Score score : getScores) {
                 ScoreDetail dto = modelMapper.map(score, ScoreDetail.class);
-                dto.setDay(ChronoUnit.DAYS.between(LocalDate.now(), score.getExpirationDate()));
+                if(score.getExpirationDate() != null) {
+                    dto.setDay(ChronoUnit.DAYS.between(LocalDate.now(), score.getExpirationDate()));
+                }
                 result.add(dto);
             }
             return result;
