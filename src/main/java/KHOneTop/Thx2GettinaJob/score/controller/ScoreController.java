@@ -32,7 +32,7 @@ public class ScoreController {
         return CustomResponse.success();
     }
 
-    @GetMapping()
+    @GetMapping("")
     public CustomResponse getScoreDetails(@RequestBody GetScoreRequest request) {
         List<ScoreDetail> data = scoreService.getScoreDetails(request.userId());
         return CustomResponse.success(data);

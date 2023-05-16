@@ -38,4 +38,8 @@ public class Score {
         this.acquisitionDate = acquisitionDate;
         this.expirationDate = expirationDate;
     }
+
+    public void expire() {
+        this.isEffective = false;
+    }
 }
