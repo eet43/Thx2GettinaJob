@@ -3,6 +3,7 @@ package KHOneTop.Thx2GettinaJob.exam.repository;
 import KHOneTop.Thx2GettinaJob.bookmark.dto.PrivateExamInfo;
 import KHOneTop.Thx2GettinaJob.exam.dto.PublicExamInfo;
 import KHOneTop.Thx2GettinaJob.exam.entity.Exam;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -25,4 +26,7 @@ public interface ExamRepository extends JpaRepository<Exam, Long> {
 
         @Query("SELECT new KHOneTop.Thx2GettinaJob.exam.dto.PublicExamInfo(e.id, e.name, e.issuer) FROM Exam e WHERE e.isPublic = true")
         List<PublicExamInfo> findPublicExam();
+
+        @Query("SELECT e FROM Exam e JOIN e.examTimeStamp ets WHERE ets.regEndDate > CURRENT_TIMESTAMP OR ets.addRegEndDate > CURRENT_TIMESTAMP ORDER BY ets.addRegEndDate ASC, ets.addRegEndDate ASC")
+        List<Exam> findTop3ByOrderByDateAsc(Pageable pageable);
 }

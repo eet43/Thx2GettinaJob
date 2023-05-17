@@ -14,4 +14,6 @@ public interface BookmarkService {
     List<BookmarkDetailOfTurn> getBookmarkDetailOfTurn(Long examId);
 
     List<Top5PopBookmark> getTop5PopBookmarks();
+
+    List<Top3NearBookmark> getTop3NearBookmarks();
 }

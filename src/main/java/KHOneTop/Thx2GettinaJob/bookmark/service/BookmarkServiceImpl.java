@@ -111,7 +111,7 @@ public class BookmarkServiceImpl implements BookmarkService {
                 orElseThrow(() -> new CustomException(Codeset.INVALID_EXAM, "해당하는 시험이 존재하지 않습니다."));
         List<BookmarkDetailOfTurn> bookmarkDtos = new ArrayList<>();
 
-        for (ExamTimeStamp timeStamp : exam.getExamTimeStamp()) {
+        for (ExamTimeStamp timeStamp : exam.getExamTimeStamp()) { //캐시 필
             LocalDateTime regStartDate = timeStamp.getRegStartDate();
             LocalDateTime regEndDate = timeStamp.getRegEndDate();
             LocalDateTime addRegEndDate = timeStamp.getAddRegEndDate();
@@ -164,6 +164,29 @@ public class BookmarkServiceImpl implements BookmarkService {
             }
             if (!flag) {
                 result.add(Top5PopBookmark.fromEntity(findExam, "접수마감", null, findTop5PopBookmark.getCount()));
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<Top3NearBookmark> getTop3NearBookmarks() {
+        List<Top3NearBookmark> result = new ArrayList<>();
+        List<Exam> findExams = examRepository.findTop3ByOrderByDateAsc(PageRequest.of(0, 3)); //fetch 조인으로 바꿔야함
+
+        for(Exam exam : findExams) {
+            for (ExamTimeStamp timeStamp : exam.getExamTimeStamp()) {
+                LocalDateTime regEndDate = timeStamp.getRegEndDate();
+                LocalDateTime addRegEndDate = timeStamp.getAddRegEndDate();
+                if (regEndDate != null && regEndDate.isAfter(LocalDateTime.now())) {
+                    Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), regEndDate.toLocalDate());
+                    result.add(Top3NearBookmark.fromEntity(exam, "정기접수중", day));
+                    break;
+                } else if (addRegEndDate != null && addRegEndDate.isAfter(LocalDateTime.now())) {
+                    Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), addRegEndDate.toLocalDate());
+                    result.add(Top3NearBookmark.fromEntity(exam, "추가접수중", day));
+                    break;
+                }
             }
         }
         return result;
