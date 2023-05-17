@@ -8,11 +8,12 @@ public record BookmarkInfo(
         String issuer,
         String url,
         Boolean isPublic,
+        Boolean isTurn,
         String status,
         Long day
 ) {
-    public static BookmarkInfo fromEntity(Exam exam, String status, Long day) {
-        return new BookmarkInfo(exam.getId(), exam.getName(), exam.getIssuer(), exam.getUrl(), exam.getIsPublic(), status, day);
+    public static BookmarkInfo fromEntity(Exam exam, Boolean isTurn, String status, Long day) {
+        return new BookmarkInfo(exam.getId(), exam.getName(), exam.getIssuer(), exam.getUrl(), exam.getIsPublic(), isTurn, status, day);
     }
 
 }

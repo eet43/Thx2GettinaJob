@@ -18,6 +18,9 @@ public interface ExamRepository extends JpaRepository<Exam, Long> {
         @Query("SELECT e FROM Exam e JOIN FETCH e.examTimeStamp WHERE e.id IN :examIds")
         List<Exam> findByIdInFetchJoin(@Param("examIds") List<Long> examIds);
 
+        @Query("SELECT e FROM Exam e JOIN e.examTimeStamp WHERE e.id IN :examIds")
+        List<Exam> findAllByIdIn(@Param("examIds") List<Long> examIds);
+
         @Query("SELECT e FROM Exam e JOIN FETCH e.examTimeStamp WHERE e.id = :id")
         Optional<Exam> findByIdFetchJoin(@Param("id") Long id);
 

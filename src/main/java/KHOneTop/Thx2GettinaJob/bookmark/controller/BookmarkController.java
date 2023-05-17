@@ -11,6 +11,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * 1. 사적 시험 즐겨찾기 등록
+ * 2. 공적 시험 즐겨찾기 등록
+ * 3. 즐겨찾기 등록한 시험 조회
+ * 4. 회차있는 시험에 대해 일정 리스트 조회
+ *
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(EndPoint.BOOKMARK)
