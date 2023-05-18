@@ -2,11 +2,15 @@ package KHOneTop.Thx2GettinaJob.score.controller;
 
 import KHOneTop.Thx2GettinaJob.common.EndPoint;
 import KHOneTop.Thx2GettinaJob.common.response.CustomResponse;
+import KHOneTop.Thx2GettinaJob.exam.dto.PublicExamInfo;
 import KHOneTop.Thx2GettinaJob.score.dto.CreateScoreRequest;
 import KHOneTop.Thx2GettinaJob.score.dto.GetScoreRequest;
 import KHOneTop.Thx2GettinaJob.score.dto.ModifyScoreRequest;
 import KHOneTop.Thx2GettinaJob.score.dto.ScoreDetail;
 import KHOneTop.Thx2GettinaJob.score.service.ScoreService;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +36,7 @@ public class ScoreController {
         return CustomResponse.success();
     }
 
+    @ApiResponse(responseCode = "200", description = "자격증 조회", content = @Content(schema = @Schema(implementation = ScoreDetail.class)))
     @GetMapping("")
     public CustomResponse getScoreDetails(@RequestBody GetScoreRequest request) {
         List<ScoreDetail> data = scoreService.getScoreDetails(request.userId());

@@ -6,7 +6,7 @@ public class EndPoint {
     public static final String AUTH = "/auth";
     public static final String USER = "/users";
     public static final String EXAM = "/exams";
-    public static final String EXAM_ADD = "/exams/add";
+    public static final String EXAM_ADD = EXAM + "/add";
     public static final String PRI_EXAM = "/pri-exam";
     public static final String PUB_EXAM = "/pub-exam";
 

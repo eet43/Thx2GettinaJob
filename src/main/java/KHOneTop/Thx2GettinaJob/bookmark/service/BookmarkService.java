@@ -9,6 +9,8 @@ public interface BookmarkService {
 
     void addBookmarkPubExam(AddBookmarkPubExamRequest request);
 
+    void deleteBookmarkPubExam(DeleteBookmarkPubExamRequest request);
+
     List<BookmarkSummary> getBookmarkSummary(GetBookmarkListRequest request);
 
     List<BookmarkInfo> getBookmarkInfo(GetBookmarkListRequest request);

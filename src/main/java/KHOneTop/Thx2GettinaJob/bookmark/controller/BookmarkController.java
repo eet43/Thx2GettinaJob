@@ -1,10 +1,14 @@
 package KHOneTop.Thx2GettinaJob.bookmark.controller;
 
+import KHOneTop.Thx2GettinaJob.auth.dto.LoginToken;
 import KHOneTop.Thx2GettinaJob.auth.dto.SendToEmailRequest;
 import KHOneTop.Thx2GettinaJob.bookmark.dto.*;
 import KHOneTop.Thx2GettinaJob.bookmark.service.BookmarkService;
 import KHOneTop.Thx2GettinaJob.common.EndPoint;
 import KHOneTop.Thx2GettinaJob.common.response.CustomResponse;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -36,15 +40,46 @@ public class BookmarkController {
         return CustomResponse.success();
     }
 
+    @DeleteMapping("/public")
+    public CustomResponse deleteBookmarkPubExam(@RequestBody DeleteBookmarkPubExamRequest request) {
+        bookmarkService.deleteBookmarkPubExam(request);
+        return CustomResponse.success();
+    }
+
+    @ApiResponse(responseCode = "200", description = "즐겨찾기 리스트 조회(검색용)", content = @Content(schema = @Schema(implementation = BookmarkSummary.class)))
+    @GetMapping("/summary")
+    public CustomResponse getBookmarkSummary(GetBookmarkListRequest request) {
+        List<BookmarkSummary> data = bookmarkService.getBookmarkSummary(request);
+        return CustomResponse.success(data);
+    }
+
+    @ApiResponse(responseCode = "200", description = "메인화면 즐겨찾기 시험 조회", content = @Content(schema = @Schema(implementation = BookmarkInfo.class)))
     @GetMapping("/info")
     public CustomResponse getBookmarkInfo(@RequestBody GetBookmarkListRequest request) {
         List<BookmarkInfo> data = bookmarkService.getBookmarkInfo(request);
         return CustomResponse.success(data);
     }
 
+    @ApiResponse(responseCode = "200", description = "회차 있는 시험 일정 조회", content = @Content(schema = @Schema(implementation = BookmarkDetailOfTurn.class)))
     @GetMapping("/details/turns/{examId}")
     public CustomResponse getBookmarkDetailOfTurn(@PathVariable Long examId) {
         List<BookmarkDetailOfTurn> data = bookmarkService.getBookmarkDetailOfTurn(examId);
         return CustomResponse.success(data);
     }
+    @ApiResponse(responseCode = "200", description = "인기있는 자격증 조회 성공", content = @Content(schema = @Schema(implementation = Top5PopBookmark.class)))
+    @GetMapping("/pop")
+    public CustomResponse getTop5PopBookmarks() {
+        List<Top5PopBookmark> data = bookmarkService.getTop5PopBookmarks();
+        return CustomResponse.success(data);
+    }
+
+    @ApiResponse(responseCode = "200", description = "마감 얼마 안남은 시험 조회 성공", content = @Content(schema = @Schema(implementation = Top3NearBookmark.class)))
+    @GetMapping("/near")
+    public CustomResponse getTop3NearBookmarks(){
+        List<Top3NearBookmark> data = bookmarkService.getTop3NearBookmarks();
+        return CustomResponse.success(data);
+    }
+
+
+
 }

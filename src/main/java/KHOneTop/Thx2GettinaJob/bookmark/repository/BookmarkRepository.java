@@ -15,4 +15,6 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
 
     @Query("SELECT new KHOneTop.Thx2GettinaJob.bookmark.dto.BookmarkCount(b.examId, COUNT(b)) FROM Bookmark b GROUP BY b.examId ORDER BY COUNT(b) DESC")
     List<BookmarkCount> findTop5PopBookmarkCount(Pageable pageable);
+
+    Bookmark findByUserIdAndExamId(Long userId, Long examId);
 }

@@ -90,7 +90,7 @@ class AuthServiceImplTest {
                 .name(name)
                 .nickname(nickname)
                 .build();
-        Map<String, String> userInfo = new HashMap<>();
+        Map<String, Object> userInfo = new HashMap<>();
         userInfo.put("email", email);
         userInfo.put("name", name);
         userInfo.put("nickname", nickname);

@@ -33,6 +33,9 @@ public class AuthServiceImpl implements AuthService{
     @Override
     @Transactional
     public void SignUp(SignUpRequest request) {
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new CustomException(Codeset.ALREADY_NICKNAME, "이미 존재하는 이메일");
+        }
         if(userRepository.findByNickname(request.getNickname()).isPresent()) {
             throw new CustomException(Codeset.ALREADY_NICKNAME, "이미 존재하는 닉네임");
         } else if (!UserPasswordUtil.pwIsValid(request.getPassword())) {
@@ -54,7 +57,8 @@ public class AuthServiceImpl implements AuthService{
         return createTokens(findUser);
     }
     private LoginToken createTokens(User findUser) {
-        Map<String, String> userInfo = new HashMap<>();
+        Map<String, Object> userInfo = new HashMap<>();
+        userInfo.put("userId", findUser.getId());
         userInfo.put("email", findUser.getEmail());
         userInfo.put("name", findUser.getName());
         userInfo.put("nickname", findUser.getNickname());

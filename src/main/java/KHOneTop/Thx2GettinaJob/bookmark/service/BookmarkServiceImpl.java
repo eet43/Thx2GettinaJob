@@ -54,6 +54,15 @@ public class BookmarkServiceImpl implements BookmarkService {
     }
 
     @Override
+    public void deleteBookmarkPubExam(DeleteBookmarkPubExamRequest request) {
+        checkValidUserId(request.userId());
+        checkValidExam(request.examId());
+
+        Bookmark findBookmark = bookmarkRepository.findByUserIdAndExamId(request.userId(), request.examId());
+        bookmarkRepository.delete(findBookmark);
+    }
+
+    @Override
     public List<BookmarkSummary> getBookmarkSummary(GetBookmarkListRequest request) {
         checkValidUserId(request.userId());
 
