@@ -1,21 +1,32 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${db.url}
-    username: ${db.username}
-    password: ${db.password}
+    url: jdbc:mysql://database-1.cwfcck8wjkzj.ap-northeast-2.rds.amazonaws.com:3306/khonetop
+    username: admin
+    password: dreamseeker7!
   jpa:
     hibernate:
       ddl-auto: update
-    properties:
-      hibernate:
-        format_sql: true
-        highlight_sql: true
-        show_sql: true
   main:
     allow-bean-definition-overriding: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: dreamseeker7777@gmail.com
+    password: kzdmzluqvmwnpmra
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+logging:
+  level:
+    org.hibernate.SQL: debug
 
 secure:
   jwt:
-    secretKey: ${secure.jwt.secretKey}
-    issuer: ${secure.jwt.issuer}
+    secretKey: 2c0215c5b9c51091a1d200be0cd544bd6a4dbf7846f1b90827200ebae14ef941fc1a6d1b6a6ed5b0623c92ae9bfb390aaf582ad093cb200b7d5dc547e0e0c491
+    issuer: Thx2GettinaJob

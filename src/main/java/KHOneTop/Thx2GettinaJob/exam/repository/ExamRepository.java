@@ -32,4 +32,8 @@ public interface ExamRepository extends JpaRepository<Exam, Long> {
 
         @Query("SELECT e FROM Exam e JOIN e.examTimeStamp ets WHERE ets.regEndDate > CURRENT_TIMESTAMP OR ets.addRegEndDate > CURRENT_TIMESTAMP ORDER BY ets.addRegEndDate ASC, ets.addRegEndDate ASC")
         List<Exam> findTop3ByOrderByDateAsc(Pageable pageable);
+
+        @Query("SELECT e FROM Exam e JOIN FETCH e.examTimeStamp WHERE e.id IN :examIds")
+        List<Exam> findExamsWithAnySchedule(@Param("examIds") List<Long> examIds);
+
 }

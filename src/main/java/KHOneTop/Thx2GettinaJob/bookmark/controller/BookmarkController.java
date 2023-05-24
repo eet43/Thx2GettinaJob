@@ -48,7 +48,7 @@ public class BookmarkController {
 
     @ApiResponse(responseCode = "200", description = "즐겨찾기 리스트 조회(검색용)", content = @Content(schema = @Schema(implementation = BookmarkSummary.class)))
     @GetMapping("/summary")
-    public CustomResponse getBookmarkSummary(GetBookmarkListRequest request) {
+    public CustomResponse getBookmarkSummary(@RequestBody GetBookmarkListRequest request) {
         List<BookmarkSummary> data = bookmarkService.getBookmarkSummary(request);
         return CustomResponse.success(data);
     }
@@ -73,10 +73,17 @@ public class BookmarkController {
         return CustomResponse.success(data);
     }
 
-    @ApiResponse(responseCode = "200", description = "마감 얼마 안남은 시험 조회 성공", content = @Content(schema = @Schema(implementation = Top3NearBookmark.class)))
-    @GetMapping("/near")
+    @ApiResponse(responseCode = "200", description = "마감 얼마 안남은 즐겨찾기 시험 조회 성공", content = @Content(schema = @Schema(implementation = Top3NearBookmark.class)))
+    @GetMapping("/near") //수정필요
     public CustomResponse getTop3NearBookmarks(){
         List<Top3NearBookmark> data = bookmarkService.getTop3NearBookmarks();
+        return CustomResponse.success(data);
+    }
+
+    @ApiResponse(responseCode = "200", description = "캘린더 검색 즐겨찾기 리스트 조회", content = @Content(schema = @Schema(implementation = CalendarBookmarkSearch.class)))
+    @GetMapping("/calendar/info") //수정필요
+    public CustomResponse getCalendarBookmarkInfo(@RequestBody GetBookmarkListRequest request){
+        List<CalendarBookmarkSearch> data = bookmarkService.getCalendarBookmarkInfo(request);
         return CustomResponse.success(data);
     }
 

@@ -10,5 +10,4 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 public class PublicExam extends Exam{
-
 }

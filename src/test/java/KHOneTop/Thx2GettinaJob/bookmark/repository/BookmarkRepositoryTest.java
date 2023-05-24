@@ -22,18 +22,18 @@ class BookmarkRepositoryTest {
     @Test
     public void testFindByUserId() {
         // given
-        Bookmark bookmark1 = Bookmark.create(1L, "토익");
-        Bookmark bookmark2 = Bookmark.create(1L, "HSK");
-        Bookmark bookmark3 = Bookmark.create(2L, "토익");
+        Bookmark bookmark1 = Bookmark.create(1L, 1L, true);
+        Bookmark bookmark2 = Bookmark.create(1L, 2L, true);
+        Bookmark bookmark3 = Bookmark.create(2L, 3L, true);
         bookmarkRepository.save(bookmark1);
         bookmarkRepository.save(bookmark2);
         bookmarkRepository.save(bookmark3);
 
         // when
-        List<String> findNames = bookmarkRepository.findExamNamesByUserId(1L);
+        List<Long> findIds = bookmarkRepository.findExamIdByUserId(1L);
 
         // then
-        assertThat(findNames).hasSize(2);
-        assertThat(findNames).contains("토익", "HSK");
+        assertThat(findIds).hasSize(2);
+        assertThat(findIds).contains(1L, 2L);
     }
 }

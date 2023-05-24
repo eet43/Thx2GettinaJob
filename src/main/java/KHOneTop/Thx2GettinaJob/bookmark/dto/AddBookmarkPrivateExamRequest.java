@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public record AddBookmarkPrivateExamRequest(
         Long userId,
@@ -32,6 +33,7 @@ public record AddBookmarkPrivateExamRequest(
                         .issuer(this.issuer)
                         .url(this.url)
                         .isPublic(false)
+                        .examTimeStamp(new ArrayList<>())
                         .build();
 
                 ExamTimeStamp timeStamp = ExamTimeStamp.builder()

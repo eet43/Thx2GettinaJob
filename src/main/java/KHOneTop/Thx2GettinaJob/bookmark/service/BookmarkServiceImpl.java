@@ -39,7 +39,7 @@ public class BookmarkServiceImpl implements BookmarkService {
         PrivateExam newExam = request.toEntity();
         Long examId = saveAndReturnId(newExam);
 
-        Bookmark newBookmark = Bookmark.create(request.userId(), examId);
+        Bookmark newBookmark = Bookmark.create(request.userId(), examId, false);
         bookmarkRepository.save(newBookmark);
     }
 
@@ -49,11 +49,12 @@ public class BookmarkServiceImpl implements BookmarkService {
         checkValidUserId(request.userId());
         checkValidExam(request.examId());
 
-        Bookmark newBookmark = Bookmark.create(request.userId(), request.examId());
+        Bookmark newBookmark = Bookmark.create(request.userId(), request.examId(), true);
         bookmarkRepository.save(newBookmark);
     }
 
     @Override
+    @Transactional
     public void deleteBookmarkPubExam(DeleteBookmarkPubExamRequest request) {
         checkValidUserId(request.userId());
         checkValidExam(request.examId());
@@ -71,7 +72,7 @@ public class BookmarkServiceImpl implements BookmarkService {
         List<BookmarkSummary> result = new ArrayList<>();
 
         for (Exam exam : findExams) {
-            result.add(modelMapper.map(exam, BookmarkSummary.class));
+            result.add(BookmarkSummary.fromEntity(exam));
         }
         return result;
     }
@@ -144,15 +145,12 @@ public class BookmarkServiceImpl implements BookmarkService {
             LocalDateTime addRegEndDate = timeStamp.getAddRegEndDate();
             if (!regStartDate.isAfter(LocalDateTime.now())) {
                 bookmarkDtos.add(BookmarkDetailOfTurn.fromEntity(timeStamp, "접수예정", null));
-                break;
             } else if (regEndDate.isAfter(LocalDateTime.now())) {
                 Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), regEndDate.toLocalDate());
                 bookmarkDtos.add(BookmarkDetailOfTurn.fromEntity(timeStamp, "정기접수중", day));
-                break;
             } else if (addRegEndDate != null && addRegEndDate.isAfter(LocalDateTime.now())) {
                 Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), addRegEndDate.toLocalDate());
                 bookmarkDtos.add(BookmarkDetailOfTurn.fromEntity(timeStamp, "추가접수중", day));
-                break;
             } else {
                 bookmarkDtos.add(BookmarkDetailOfTurn.fromEntity(timeStamp, "접수마감", null));
             }
@@ -215,6 +213,20 @@ public class BookmarkServiceImpl implements BookmarkService {
                     break;
                 }
             }
+        }
+        return result;
+    }
+
+    @Override
+    public List<CalendarBookmarkSearch> getCalendarBookmarkInfo(GetBookmarkListRequest request) {
+        checkValidUserId(request.userId());
+
+        List<Long> findExamIds = bookmarkRepository.findExamIdByUserId(request.userId());
+        List<Exam> findExams = examRepository.findExamsWithAnySchedule(findExamIds);
+        List<CalendarBookmarkSearch> result = new ArrayList<>();
+
+        for (Exam exam : findExams) {
+            result.add(CalendarBookmarkSearch.toDto(exam));
         }
         return result;
     }

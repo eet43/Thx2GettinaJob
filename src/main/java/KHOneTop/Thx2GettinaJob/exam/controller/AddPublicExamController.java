@@ -3,7 +3,6 @@ package KHOneTop.Thx2GettinaJob.exam.controller;
 import KHOneTop.Thx2GettinaJob.common.EndPoint;
 import KHOneTop.Thx2GettinaJob.common.response.CustomResponse;
 import KHOneTop.Thx2GettinaJob.exam.dto.AddAlwaysPublicExamRequest;
-import KHOneTop.Thx2GettinaJob.exam.entity.Category;
 import KHOneTop.Thx2GettinaJob.exam.service.NewExamAddService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

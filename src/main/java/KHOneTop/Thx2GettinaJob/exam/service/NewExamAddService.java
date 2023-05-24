@@ -19,6 +19,7 @@ import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -53,6 +54,7 @@ public class NewExamAddService {
                     .issuer("한국 TOEIC 위원회")
                     .url("https://exam.toeic.co.kr/")
                     .isPublic(true)
+                    .examTimeStamp(new ArrayList<>())
                     .build();
 
             Document doc = Jsoup.connect("https://exam.toeic.co.kr/receipt/examSchList.php").get();
@@ -119,6 +121,7 @@ public class NewExamAddService {
                     .issuer("사단법인한국에프피에스비")
                     .url("https://www.fpsbkorea.org/?mnu_usn=29")
                     .isPublic(true)
+                    .examTimeStamp(new ArrayList<>())
                     .build();
 
             Document doc = Jsoup.connect("https://www.fpsbkorea.org/?mnu_usn=27").get();
@@ -181,12 +184,13 @@ public class NewExamAddService {
                     .issuer("국사편찬위원회")
                     .url("https://www.historyexam.go.kr/")
                     .isPublic(true)
+                    .examTimeStamp(new ArrayList<>())
                     .build();
 
             Document doc = Jsoup.connect("https://www.historyexam.go.kr/pageLink.do?link=examSchedule&netfunnel_key=8D5649CEF7116C29195BCF7E3334993C25C5E6FEB802CBA5F3021DFCC1A813528892C27C94799D0FE17CB8B45161D4464BFF3E2B9BA24F07978D55454B547C4F538248990C1EF8EF0EBCD0B243EBE61B4B16061CE3A7838A42C123D251D01EACA6473F2826BD6E38AB7A4693F370CC97302C382C312C302C30").get();
             Elements rows = doc.select("table tbody tr");
 
-            for (int i = 1; i < rows.size(); i++) {
+            for (int i = 1; i < 7; i++) {
                 Element row = rows.get(i);
                 String examName = row.select("td").get(0).text();
                 String regDate = row.select("td").get(1).text();
@@ -238,6 +242,7 @@ public class NewExamAddService {
                     .issuer("ETS")
                     .url("https://www.toeicswt.co.kr/")
                     .isPublic(true)
+                    .examTimeStamp(new ArrayList<>())
                     .build();
 
             Document doc = Jsoup.connect("https://www.toeicswt.co.kr/receipt/examSchList.php").get();
@@ -251,6 +256,7 @@ public class NewExamAddService {
                 String regDate = row.select("td").get(2).text();
 
                 examDate += " 오전 0시";
+                regDate = regDate.replace("밤", "오전");
                 resultDate = resultDate.replace("낮", "오후");
 
                 String[] splitInput = regDate.split("~");
@@ -291,6 +297,7 @@ public class NewExamAddService {
                     .issuer("HSK한국사무국")
                     .url("https://www.hsk-korea.co.kr/main/main.aspx")
                     .isPublic(true)
+                    .examTimeStamp(new ArrayList<>())
                     .build();
 
             Document doc = Jsoup.connect("https://www.hsk-korea.co.kr/about/schedule_hsk_ibt.aspx").get();

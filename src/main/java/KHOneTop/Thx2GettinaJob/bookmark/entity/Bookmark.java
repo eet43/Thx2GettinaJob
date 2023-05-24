@@ -25,11 +25,15 @@ public class Bookmark {
     @Column(nullable = false)
     private Long examId;
 
+    @Column(nullable = false)
+    private Boolean isPublic;
 
-    public static Bookmark create(Long userId, Long examId) {
+
+    public static Bookmark create(Long userId, Long examId, Boolean isPublic) {
         return Bookmark.builder()
                 .userId(userId)
                 .examId(examId)
+                .isPublic(isPublic)
                 .build();
     }
 

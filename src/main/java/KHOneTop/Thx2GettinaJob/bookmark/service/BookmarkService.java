@@ -20,4 +20,6 @@ public interface BookmarkService {
     List<Top5PopBookmark> getTop5PopBookmarks();
 
     List<Top3NearBookmark> getTop3NearBookmarks();
+
+    List<CalendarBookmarkSearch> getCalendarBookmarkInfo(GetBookmarkListRequest request);
 }
