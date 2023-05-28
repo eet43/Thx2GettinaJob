@@ -37,11 +37,15 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void changePassword(ChangePasswordRequest request) {
-        User findUser = checkEmail(request.getEmail());
-        if(UserPasswordUtil.pwIsValid(request.getPassword())) {
-            findUser.changePassword(passwordEncoder, request.getPassword());
+        User findUser = checkEmail(request.email());
+        if(passwordEncoder.matches(request.oldPassword(), findUser.getPassword())) {
+            if(UserPasswordUtil.pwIsValid(request.newPassword())) {
+                findUser.changePassword(passwordEncoder, request.newPassword());
+            } else {
+                throw new CustomException(Codeset.INVALID_PASSWORD_TYPE, "비밀번호 규격이 맞지 않습니다.");
+            }
         } else {
-            throw new CustomException(Codeset.INVALID_PASSWORD_TYPE, "비밀번호 타입이 맞지 않습니다.");
+            throw new CustomException(Codeset.INVALID_PASSWORD, "비밀번호가 일치하지 않습니다");
         }
     }
 
@@ -49,4 +53,5 @@ public class UserServiceImpl implements UserService{
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(Codeset.INVALID_USER, "해당 이메일의 사용자를 찾을 수 없습니다."));
     }
+
 }

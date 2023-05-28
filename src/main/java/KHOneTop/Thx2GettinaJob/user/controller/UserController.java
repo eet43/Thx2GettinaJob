@@ -4,6 +4,7 @@ import KHOneTop.Thx2GettinaJob.auth.dto.SendToEmailRequest;
 import KHOneTop.Thx2GettinaJob.common.EndPoint;
 import KHOneTop.Thx2GettinaJob.common.response.CustomResponse;
 import KHOneTop.Thx2GettinaJob.user.dto.ChangeNicknameRequest;
+import KHOneTop.Thx2GettinaJob.user.dto.ChangePasswordRequest;
 import KHOneTop.Thx2GettinaJob.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +19,15 @@ public class UserController {
 
     private UserService userService;
 
-    @PostMapping("/change")
+    @PostMapping("/change/info")
     public CustomResponse changeNickname(@RequestBody ChangeNicknameRequest request) {
         userService.changeNickname(request);
+        return CustomResponse.success();
+    }
+
+    @PostMapping("/change/password")
+    public CustomResponse changePassword(@RequestBody ChangePasswordRequest request) {
+        userService.changePassword(request);
         return CustomResponse.success();
     }
 }

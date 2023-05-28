@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-public class ChangePasswordRequest {
-    private String email;
-    private String password;
+
+public record ChangePasswordRequest(
+        String email,
+        String oldPassword,
+        String newPassword
+) {
 }
