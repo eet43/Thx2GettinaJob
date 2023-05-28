@@ -31,7 +31,8 @@ public class User {
         this.password = passwordEncoder.encode(password);
     }
 
-    public void changeNickname(String nickname) {
+    public void changeInfo(String name, String nickname) {
+        this.name = name;
         this.nickname = nickname;
     }
 

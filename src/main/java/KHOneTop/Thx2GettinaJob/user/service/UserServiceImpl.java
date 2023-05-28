@@ -23,9 +23,9 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void changeNickname(ChangeNicknameRequest request) {
-        if(checkNickname(request.getNickname())) {
-            User findUser = checkEmail(request.getEmail());
-            findUser.changeNickname(request.getNickname());
+        if(checkNickname(request.nickname())) {
+            User findUser = checkEmail(request.email());
+            findUser.changeInfo(request.name(), request.nickname());
         } else {
             throw new CustomException(Codeset.ALREADY_NICKNAME, "이미 존재하는 닉네임입니다.");
         }

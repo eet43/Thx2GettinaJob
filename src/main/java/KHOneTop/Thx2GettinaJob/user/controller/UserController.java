@@ -18,7 +18,7 @@ public class UserController {
 
     private UserService userService;
 
-    @PostMapping("/change/nickname")
+    @PostMapping("/change")
     public CustomResponse changeNickname(@RequestBody ChangeNicknameRequest request) {
         userService.changeNickname(request);
         return CustomResponse.success();
