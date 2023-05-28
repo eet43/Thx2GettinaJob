@@ -17,13 +17,13 @@ public class ExamTimeStamp {
 
     private String turn;
 
-    @Column(name = "examDate", nullable = false)
+    @Column(name = "examDate")
     private LocalDateTime examDate;
 
-    @Column(name = "regStartDate", nullable = false)
+    @Column(name = "regStartDate")
     private LocalDateTime regStartDate;
 
-    @Column(name = "regEndDate", nullable = false)
+    @Column(name = "regEndDate")
     private LocalDateTime regEndDate;
 
     @Column(name = "addRegStartDate")

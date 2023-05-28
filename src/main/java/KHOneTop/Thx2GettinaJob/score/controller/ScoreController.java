@@ -2,7 +2,6 @@ package KHOneTop.Thx2GettinaJob.score.controller;
 
 import KHOneTop.Thx2GettinaJob.common.EndPoint;
 import KHOneTop.Thx2GettinaJob.common.response.CustomResponse;
-import KHOneTop.Thx2GettinaJob.exam.dto.PublicExamInfo;
 import KHOneTop.Thx2GettinaJob.score.dto.CreateScoreRequest;
 import KHOneTop.Thx2GettinaJob.score.dto.GetScoreRequest;
 import KHOneTop.Thx2GettinaJob.score.dto.ModifyScoreRequest;
