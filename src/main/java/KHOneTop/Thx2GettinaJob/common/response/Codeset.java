@@ -32,6 +32,7 @@ public enum Codeset {
     INVALID_USER("1102", "해당 이메일에 해당하는 ID가 존재하지 않습니다."),
     INVALID_PASSWORD("1103", "비밀번호가 일치하지 않습니다."),
     INVALID_PASSWORD_TYPE("1104", "비밀번호가 8자 이하이거나, 특수문자를 포함하지 않습니다."),
+    INVALID_REFRESH_TOKEN("1110", "Refresh Token 이 만료되었습니다. 다시 로그인해주세요."),
     INVALID_EXAM("1202", "해당하는 시험 데이터가 존재하지 않습니다."),
     INVALID_SCORE("1302", "해당하는 자격증 점수 데이터가 존재하지 않습니다.");
 

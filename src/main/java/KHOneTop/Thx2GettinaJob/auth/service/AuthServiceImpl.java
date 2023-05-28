@@ -4,7 +4,7 @@ import KHOneTop.Thx2GettinaJob.auth.CustomUserDetails;
 import KHOneTop.Thx2GettinaJob.auth.JwtProvider;
 import KHOneTop.Thx2GettinaJob.auth.dto.LoginRequest;
 import KHOneTop.Thx2GettinaJob.auth.dto.LoginToken;
-import KHOneTop.Thx2GettinaJob.auth.dto.RefeshAccessTokenRequest;
+import KHOneTop.Thx2GettinaJob.auth.dto.RefreshAccessTokenRequest;
 import KHOneTop.Thx2GettinaJob.auth.dto.SignUpRequest;
 import KHOneTop.Thx2GettinaJob.common.response.Codeset;
 import KHOneTop.Thx2GettinaJob.common.response.CustomException;
@@ -69,11 +69,11 @@ public class AuthServiceImpl implements AuthService{
         return new LoginToken(accessToken, refreshToken);
     }
     @Override
-    public LoginToken refreshAccessToken(RefeshAccessTokenRequest request) {
-        if(!jwtProvider.isTokenExpired(request.getRefeshToken())) {
-
+    public LoginToken refreshAccessToken(RefreshAccessTokenRequest request) {
+        if(jwtProvider.isTokenExpired(request.refreshToken())) {
+            throw new CustomException(Codeset.INVALID_REFRESH_TOKEN, "유효기간이 만료된 Refresh Token 입니다.");
         }
-        return null;
+        return new LoginToken(jwtProvider.generateAccessTokenFromRefreshToken(request.refreshToken()), request.refreshToken());
     }
 
 
