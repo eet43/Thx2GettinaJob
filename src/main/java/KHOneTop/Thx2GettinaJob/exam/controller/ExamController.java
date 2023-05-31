@@ -29,4 +29,11 @@ public class ExamController {
         List<ExamInfo> data = examService.getExamList(request);
         return CustomResponse.success(data);
     }
+
+    @ApiResponse(responseCode = "200", description = "즐겨찾기 리스트 조회(검색용)", content = @Content(schema = @Schema(implementation = BookmarkSummary.class)))
+    @GetMapping("/summary")
+    public CustomResponse getExamList(@RequestBody GetExamListRequest request) {
+        List<ExamInfo> data = examService.getExamList(request);
+        return CustomResponse.success(data);
+    }
 }

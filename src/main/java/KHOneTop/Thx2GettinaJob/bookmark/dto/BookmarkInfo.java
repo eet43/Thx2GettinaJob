@@ -19,7 +19,7 @@ public record BookmarkInfo(
         Boolean isTurn,
         @Schema(description = "시험 접수 상태", nullable = false, example = "추가접수중")
         String status,
-        @Schema(description = "D-day", nullable = false, example = "3")
+        @Schema(description = "D-day", example = "3")
         Long day
 ) {
     public static BookmarkInfo fromEntity(Exam exam, Boolean isTurn, String status, Long day) {

@@ -4,7 +4,9 @@ import KHOneTop.Thx2GettinaJob.bookmark.repository.BookmarkRepository;
 import KHOneTop.Thx2GettinaJob.common.response.Codeset;
 import KHOneTop.Thx2GettinaJob.common.response.CustomException;
 import KHOneTop.Thx2GettinaJob.common.util.CheckUserUtil;
+import KHOneTop.Thx2GettinaJob.exam.dto.ExamDetail;
 import KHOneTop.Thx2GettinaJob.exam.dto.ExamInfo;
+import KHOneTop.Thx2GettinaJob.exam.dto.GetExamDetailRequest;
 import KHOneTop.Thx2GettinaJob.exam.dto.GetExamListRequest;
 import KHOneTop.Thx2GettinaJob.exam.entity.Exam;
 import KHOneTop.Thx2GettinaJob.exam.repository.ExamRepository;
@@ -37,5 +39,19 @@ public class ExamServiceImpl implements ExamService{
             result.add(ExamInfo.toDto(exam, isBookmark));
         }
         return result;
+    }
+
+    @Override
+    public ExamDetail getExamDetail(GetExamDetailRequest request) {
+        Exam findExam = examRepository.findByIdFetchJoin(request.examId())
+                .orElseThrow(() -> new CustomException(Codeset.INVALID_EXAM, "해당 시험이 존재하지 않습니다."));
+
+        return ExamDetail.toDto(findExam, findExam.getExamTimeStamp().get(0));
+    }
+
+    private void checkExam(Long examId) {
+        if(!examRepository.existsById(examId)) {
+            throw new CustomException(Codeset.INVALID_EXAM, "해당 시험이 존재하지 않습니다.");
+        }
     }
 }
