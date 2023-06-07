@@ -15,21 +15,21 @@ import java.util.List;
 public abstract class Exam {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    protected Long id;
 
     @Column(name = "name", nullable = false)
-    private String name;
+    protected String name;
 
     @Column(name = "issuer")
-    private String issuer;
+    protected String issuer;
 
     @Column(name = "url")
-    private String url;
+    protected String url;
 
-    private Boolean isPublic;
+    protected Boolean isPublic;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "exam", cascade = CascadeType.ALL)
-    private List<ExamTimeStamp> examTimeStamp;
+    protected List<ExamTimeStamp> examTimeStamp;
 
     public void addExamTime(ExamTimeStamp examTime) {
         this.examTimeStamp.add(examTime);

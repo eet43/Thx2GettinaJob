@@ -60,12 +60,6 @@ public class BookmarkController {
         return CustomResponse.success(data);
     }
 
-    @ApiResponse(responseCode = "200", description = "회차 있는 시험 일정 조회", content = @Content(schema = @Schema(implementation = BookmarkDetailOfTurn.class)))
-    @GetMapping("/details/turns/{examId}")
-    public CustomResponse getBookmarkDetailOfTurn(@PathVariable Long examId) {
-        List<BookmarkDetailOfTurn> data = bookmarkService.getBookmarkDetailOfTurn(examId);
-        return CustomResponse.success(data);
-    }
     @ApiResponse(responseCode = "200", description = "인기있는 자격증 조회 성공", content = @Content(schema = @Schema(implementation = Top5PopBookmark.class)))
     @GetMapping("/pop")
     public CustomResponse getTop5PopBookmarks() {

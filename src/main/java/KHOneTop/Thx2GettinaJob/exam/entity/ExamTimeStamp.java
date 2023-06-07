@@ -42,4 +42,14 @@ public class ExamTimeStamp {
     public void setExam(Exam exam) {
         this.exam = exam;
     }
+
+    public void modify(LocalDateTime examDate, LocalDateTime regStartDate, LocalDateTime regEndDate,
+                       LocalDateTime addRegStartDate, LocalDateTime addRegEndDate, LocalDateTime resultDate) {
+        this.examDate = examDate;
+        this.regStartDate = regStartDate;
+        this.regEndDate = regEndDate;
+        this.addRegStartDate = addRegStartDate;
+        this.addRegEndDate = addRegEndDate;
+        this.resultDate = resultDate;
+    }
 }

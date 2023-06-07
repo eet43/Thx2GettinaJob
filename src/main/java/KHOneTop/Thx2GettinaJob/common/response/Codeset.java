@@ -34,6 +34,8 @@ public enum Codeset {
     INVALID_PASSWORD_TYPE("1104", "비밀번호가 8자 이하이거나, 특수문자를 포함하지 않습니다."),
     INVALID_REFRESH_TOKEN("1110", "Refresh Token 이 만료되었습니다. 다시 로그인해주세요."),
     INVALID_EXAM("1202", "해당하는 시험 데이터가 존재하지 않습니다."),
+    INVALID_PRIEXAM_TIMESTAMP("1203", "직접추가한 자격증 일정 객체 개수에 문제가 있습니다. 개발팀에게 문의해주세요"),
+    INVALID_PRIEXAM("1204", "해당 시험은 직접 추가한 객체가 아닙니다. 개발팀에게 문의해주세요"),
     INVALID_SCORE("1302", "해당하는 자격증 점수 데이터가 존재하지 않습니다.");
 
 

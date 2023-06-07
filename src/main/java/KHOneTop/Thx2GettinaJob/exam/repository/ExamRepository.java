@@ -1,6 +1,7 @@
 package KHOneTop.Thx2GettinaJob.exam.repository;
 
 import KHOneTop.Thx2GettinaJob.exam.entity.Exam;
+import KHOneTop.Thx2GettinaJob.exam.entity.PrivateExam;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,6 +22,9 @@ public interface ExamRepository extends JpaRepository<Exam, Long> {
 
         @Query("SELECT e FROM Exam e JOIN FETCH e.examTimeStamp WHERE e.id = :id")
         Optional<Exam> findByIdFetchJoin(@Param("id") Long id);
+
+        @Query("SELECT e FROM Exam e JOIN FETCH e.examTimeStamp WHERE e.id = :id")
+        Optional<PrivateExam> findPriExamByIdFetchJoin(@Param("id") Long id);
 
         @Query("SELECT e FROM Exam e WHERE e.name IN :examNames")
         Optional<List<Exam>> findAllByExamNames(@Param("examNames") List<String> examNames);

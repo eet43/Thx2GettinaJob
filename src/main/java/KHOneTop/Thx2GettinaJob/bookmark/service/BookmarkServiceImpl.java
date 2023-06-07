@@ -135,32 +135,6 @@ public class BookmarkServiceImpl implements BookmarkService {
     }
 
     @Override
-    public List<BookmarkDetailOfTurn> getBookmarkDetailOfTurn(Long examId) {
-        Exam exam = examRepository.findByIdFetchJoin(examId).
-                orElseThrow(() -> new CustomException(Codeset.INVALID_EXAM, "해당하는 시험이 존재하지 않습니다."));
-        List<BookmarkDetailOfTurn> bookmarkDtos = new ArrayList<>();
-
-        for (ExamTimeStamp timeStamp : exam.getExamTimeStamp()) { //캐시 필
-            LocalDateTime regStartDate = timeStamp.getRegStartDate();
-            LocalDateTime regEndDate = timeStamp.getRegEndDate();
-            LocalDateTime addRegEndDate = timeStamp.getAddRegEndDate();
-            if (!regStartDate.isAfter(LocalDateTime.now())) {
-                bookmarkDtos.add(BookmarkDetailOfTurn.fromEntity(timeStamp, "접수예정", null));
-            } else if (regEndDate.isAfter(LocalDateTime.now())) {
-                Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), regEndDate.toLocalDate());
-                bookmarkDtos.add(BookmarkDetailOfTurn.fromEntity(timeStamp, "정기접수중", day));
-            } else if (addRegEndDate != null && addRegEndDate.isAfter(LocalDateTime.now())) {
-                Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), addRegEndDate.toLocalDate());
-                bookmarkDtos.add(BookmarkDetailOfTurn.fromEntity(timeStamp, "추가접수중", day));
-            } else {
-                bookmarkDtos.add(BookmarkDetailOfTurn.fromEntity(timeStamp, "접수마감", null));
-            }
-        }
-
-        return bookmarkDtos;
-    }
-
-    @Override
     public List<Top5PopBookmark> getTop5PopBookmarks() { //시간이 정해지면, 시간 단위로 카운트 해야함. Top5 북마크 가져오는 쿼리를 수정하면됨.
         List<Top5PopBookmark> result = new ArrayList<>();
         List<BookmarkCount> findTop5PopBookmarks = bookmarkRepository.findTop5PopBookmarkCount(PageRequest.of(0,5));
