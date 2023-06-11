@@ -41,6 +41,7 @@ public class ScoreServiceImpl implements ScoreService{
                 request.issuer(), request.acquisitionDate(), request.expirationDate());
     }
 
+    //캐시 필요
     @Override
     public List<ScoreDetail> getScoreDetails(Long userId) {
         List<ScoreDetail> result = new ArrayList<>();

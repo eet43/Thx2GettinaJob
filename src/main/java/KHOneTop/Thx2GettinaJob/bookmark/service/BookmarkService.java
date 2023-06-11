@@ -21,5 +21,6 @@ public interface BookmarkService {
 
     List<CalendarBookmarkSearch> getCalendarBookmarkInfo(GetBookmarkListRequest request);
 
+    List<CalendarBookmarkDetail> getCalendarBookmarkDetail(GetCalendarBookmarkRequest request);
 
 }

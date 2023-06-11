@@ -81,12 +81,12 @@ public class BookmarkController {
         return CustomResponse.success(data);
     }
 
-//    @ApiResponse(responseCode = "200", description = "캘린더 즐겨찾기 시험 스케줄 조회", content = @Content(schema = @Schema(implementation = CalendarBookmarkSearch.class)))
-//    @GetMapping("/calendar/detail") //수정필요
-//    public CustomResponse getCalendarBookmarkDetail(@RequestBody GetBookmarkListRequest request){
-//        List<CalendarBookmarkDetail> data = bookmarkService.getCalendarBookmarkDetail(request);
-//        return CustomResponse.success(data);
-//    }
+    @ApiResponse(responseCode = "200", description = "캘린더 즐겨찾기 시험 스케줄 조회", content = @Content(schema = @Schema(implementation = CalendarBookmarkSearch.class)))
+    @GetMapping("/calendar/detail") //수정필요
+    public CustomResponse getCalendarBookmarkDetail(@RequestBody GetCalendarBookmarkRequest request){
+        List<CalendarBookmarkDetail> data = bookmarkService.getCalendarBookmarkDetail(request);
+        return CustomResponse.success(data);
+    }
 
 
 

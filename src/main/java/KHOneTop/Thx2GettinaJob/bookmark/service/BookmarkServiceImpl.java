@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -203,6 +204,23 @@ public class BookmarkServiceImpl implements BookmarkService {
         for (Exam exam : findExams) {
             result.add(CalendarBookmarkSearch.toDto(exam));
         }
+        return result;
+    }
+
+    @Override
+    public List<CalendarBookmarkDetail> getCalendarBookmarkDetail(GetCalendarBookmarkRequest request) {
+        List<CalendarBookmarkDetail> result = new ArrayList<>();
+
+        for(GetCalenderDetailRequest detailRequest : request.exams()) {
+            checkValidExam(detailRequest.examId());
+            Optional<Exam> findExam = examRepository.findExamByExamTimeStampFields(request.startDate(), request.endDate(), detailRequest);
+
+            if(findExam.isPresent()) {
+                Exam data = findExam.get();
+                result.add(CalendarBookmarkDetail.toDto(data));
+            }
+        }
+
         return result;
     }
 
