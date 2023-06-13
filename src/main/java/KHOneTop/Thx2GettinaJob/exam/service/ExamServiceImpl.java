@@ -60,13 +60,14 @@ public class ExamServiceImpl implements ExamService{
         for (ExamTimeStamp timeStamp : findExam.getExamTimeStamp()) { //캐시 필
             LocalDateTime regStartDate = timeStamp.getRegStartDate();
             LocalDateTime regEndDate = timeStamp.getRegEndDate();
+            LocalDateTime addRegStartDate = timeStamp.getAddRegStartDate();
             LocalDateTime addRegEndDate = timeStamp.getAddRegEndDate();
-            if (!regStartDate.isAfter(LocalDateTime.now())) {
+            if (regStartDate.isAfter(LocalDateTime.now())) {
                 bookmarkDtos.add(BookmarkDetailOfTurn.fromEntity(timeStamp, "접수예정", null));
             } else if (regEndDate.isAfter(LocalDateTime.now())) {
                 Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), regEndDate.toLocalDate());
                 bookmarkDtos.add(BookmarkDetailOfTurn.fromEntity(timeStamp, "정기접수중", day));
-            } else if (addRegEndDate != null && addRegEndDate.isAfter(LocalDateTime.now())) {
+            } else if (addRegEndDate != null && addRegStartDate != null && addRegStartDate.isBefore(LocalDateTime.now()) && addRegEndDate.isAfter(LocalDateTime.now())) {
                 Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), addRegEndDate.toLocalDate());
                 bookmarkDtos.add(BookmarkDetailOfTurn.fromEntity(timeStamp, "추가접수중", day));
             } else {
