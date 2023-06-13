@@ -32,7 +32,7 @@ public class ExamTimeStamp {
     @Column(name = "addRegEndDate")
     private LocalDateTime addRegEndDate;
 
-    @Column(name = "resultDate", nullable = false)
+    @Column(name = "resultDate")
     private LocalDateTime resultDate;
 
     @ManyToOne(fetch = FetchType.LAZY)

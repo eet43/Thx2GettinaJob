@@ -44,7 +44,7 @@ class UserServiceImplTest {
     @Test
     void ChangeNicknameByAlreadyNickname() throws Exception {
         //given
-        ChangeNicknameRequest request = new ChangeNicknameRequest(email, nickname);
+        ChangeNicknameRequest request = new ChangeNicknameRequest(email, name, nickname);
         User user = User.builder().build();
         given(userRepository.findByNickname(nickname)).willReturn(Optional.of(user));
 
@@ -57,7 +57,7 @@ class UserServiceImplTest {
     @Test
     void validChangeNickname() throws Exception {
         //given
-        ChangeNicknameRequest request = new ChangeNicknameRequest(email, changeNickname);
+        ChangeNicknameRequest request = new ChangeNicknameRequest(email, name, changeNickname);
         User user = User.builder()
                 .email(email)
                 .password(encodePassword)
@@ -77,7 +77,7 @@ class UserServiceImplTest {
     @Test
     void changePwByValidPw() throws Exception {
         //given
-        ChangePasswordRequest request = new ChangePasswordRequest(email, validPassword);
+        ChangePasswordRequest request = new ChangePasswordRequest(email, name, validPassword);
         User user = User.builder()
                 .email(email)
                 .password(invalidPassword1)
