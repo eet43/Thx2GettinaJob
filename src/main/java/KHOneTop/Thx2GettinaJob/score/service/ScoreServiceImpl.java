@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -27,12 +28,14 @@ public class ScoreServiceImpl implements ScoreService{
     private final ModelMapper modelMapper;
 
     @Override
+    @Transactional
     public void createScore(CreateScoreRequest request) {
         Score score = request.toEntity();
         scoreRepository.save(score);
     }
 
     @Override
+    @Transactional
     public void modifyScore(ModifyScoreRequest request) {
         Score findScore = scoreRepository.findById(request.scoreId())
                 .orElseThrow(() -> new CustomException(Codeset.INVALID_SCORE, "해당하는 자격증 데이터를 찾을 수 없습니다."));
@@ -52,7 +55,7 @@ public class ScoreServiceImpl implements ScoreService{
             List<Score> getScores = findScores.get();
             for(Score score : getScores) {
                 ScoreDetail dto = modelMapper.map(score, ScoreDetail.class);
-                if(score.getExpirationDate() != null) {
+                if(score.getExpirationDate() != null && score.getIsEffective()) {
                     dto.setDay(ChronoUnit.DAYS.between(LocalDate.now(), score.getExpirationDate()));
                 }
                 result.add(dto);

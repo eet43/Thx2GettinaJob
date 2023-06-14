@@ -31,10 +31,13 @@ public class Score {
 
     public void modifyScore(String name, Long score, String studentCode, String issuer,
                             LocalDate acquisitionDate, LocalDate expirationDate) {
+        boolean isEffect = expirationDate.isAfter(LocalDate.now());
+
         this.name = name;
         this.score = score;
         this.studentCode = studentCode;
         this.issuer = issuer;
+        this.isEffective = isEffect;
         this.acquisitionDate = acquisitionDate;
         this.expirationDate = expirationDate;
     }

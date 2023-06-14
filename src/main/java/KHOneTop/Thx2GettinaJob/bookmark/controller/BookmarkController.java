@@ -40,7 +40,7 @@ public class BookmarkController {
         return CustomResponse.success();
     }
 
-    @DeleteMapping("/public")
+    @DeleteMapping("")
     public CustomResponse deleteBookmarkPubExam(@RequestBody DeleteBookmarkPubExamRequest request) {
         bookmarkService.deleteBookmarkPubExam(request);
         return CustomResponse.success();

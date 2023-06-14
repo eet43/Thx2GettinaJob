@@ -13,6 +13,7 @@ import KHOneTop.Thx2GettinaJob.exam.repository.ExamRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -79,6 +80,7 @@ public class ExamServiceImpl implements ExamService{
     }
 
     @Override
+    @Transactional
     public void modifyPriExam(ModifyPriExamRequest request) {
         PrivateExam findExam = examRepository.findPriExamByIdFetchJoin(request.examId()).
                 orElseThrow(() -> new CustomException(Codeset.INVALID_EXAM, "해당하는 시험이 존재하지 않습니다."));

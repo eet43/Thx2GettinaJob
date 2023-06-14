@@ -31,8 +31,6 @@ public class BookmarkServiceImpl implements BookmarkService {
     private final BookmarkRepository bookmarkRepository;
     private final ExamRepository examRepository;
 
-    private final ModelMapper modelMapper;
-
     @Override
     @Transactional
     public void addBookmarkPriExam(AddBookmarkPrivateExamRequest request) {
@@ -59,8 +57,9 @@ public class BookmarkServiceImpl implements BookmarkService {
     @Transactional
     public void deleteBookmarkPubExam(DeleteBookmarkPubExamRequest request) {
         checkUserUtil.checkValidUserId(request.userId());
-        checkValidExam(request.examId());
-
+        if(!isPubExam(request.examId())) {
+            examRepository.deleteById(request.examId());
+        }
         Bookmark findBookmark = bookmarkRepository.findByUserIdAndExamId(request.userId(), request.examId());
         bookmarkRepository.delete(findBookmark);
     }
@@ -227,6 +226,15 @@ public class BookmarkServiceImpl implements BookmarkService {
     private void checkValidExam(Long examId) {
         if (!examRepository.existsById(examId)) {
             throw new CustomException(Codeset.INVALID_EXAM, "해당 시험을 찾을 수 없습니다.");
+        }
+    }
+
+    private boolean isPubExam(Long examId) {
+        Boolean isPub = examRepository.isPublicExam(examId);
+        if(isPub == null) {
+            throw new CustomException(Codeset.INVALID_EXAM, "해당 시험을 찾을 수 없습니다.");
+        } else {
+            return isPub;
         }
     }
 

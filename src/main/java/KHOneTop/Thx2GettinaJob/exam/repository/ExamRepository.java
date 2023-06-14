@@ -14,6 +14,9 @@ public interface ExamRepository extends JpaRepository<Exam, Long>, ExamRepositor
         boolean existsById(Long Id);
         Optional<Exam> findByName(String name);
 
+        @Query("SELECT e.isPublic FROM Exam e WHERE e.id = :id")
+        Boolean isPublicExam(Long id);
+
         @Query("SELECT e FROM Exam e JOIN FETCH e.examTimeStamp WHERE e.id IN :examIds")
         List<Exam> findByIdInFetchJoin(@Param("examIds") List<Long> examIds);
 
