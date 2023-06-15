@@ -12,6 +12,7 @@ import KHOneTop.Thx2GettinaJob.exam.entity.PrivateExam;
 import KHOneTop.Thx2GettinaJob.exam.repository.ExamRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,6 +54,10 @@ public class ExamServiceImpl implements ExamService{
     }
 
     @Override
+    @Cacheable(
+            value = "BookmarkDetailOfTurn",
+            key = "#examId"
+    )
     public List<BookmarkDetailOfTurn> getBookmarkDetailOfTurn(Long examId) {
         Exam findExam = examRepository.findByIdFetchJoin(examId).
                 orElseThrow(() -> new CustomException(Codeset.INVALID_EXAM, "해당하는 시험이 존재하지 않습니다."));

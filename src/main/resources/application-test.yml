@@ -23,11 +23,13 @@ spring:
       mail.smtp.starttls.enable: true
   jackson:
     date-format: yyyy-mm-dd HH:mm
-
   data:
     redis:
       host: 127.0.0.1
       port: 6379
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
 logging:
   level:
     org.hibernate.SQL: debug
