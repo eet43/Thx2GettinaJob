@@ -10,6 +10,8 @@ import KHOneTop.Thx2GettinaJob.score.repository.ScoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +29,10 @@ public class ScoreServiceImpl implements ScoreService{
     private final ScoreRepository scoreRepository;
     private final ModelMapper modelMapper;
 
+    @CacheEvict(
+            value = "ScoreDetail",
+            key = "#request.userId()"
+    )
     @Override
     @Transactional
     public void createScore(CreateScoreRequest request) {
@@ -34,6 +40,10 @@ public class ScoreServiceImpl implements ScoreService{
         scoreRepository.save(score);
     }
 
+    @CacheEvict(
+            value = "ScoreDetail",
+            key = "#request.userId()"
+    )
     @Override
     @Transactional
     public void modifyScore(ModifyScoreRequest request) {
@@ -44,7 +54,10 @@ public class ScoreServiceImpl implements ScoreService{
                 request.issuer(), request.acquisitionDate(), request.expirationDate());
     }
 
-    //캐시 필요
+    @Cacheable(
+            value = "ScoreDetail",
+            key = "#userId"
+    )
     @Override
     public List<ScoreDetail> getScoreDetails(Long userId) {
         List<ScoreDetail> result = new ArrayList<>();

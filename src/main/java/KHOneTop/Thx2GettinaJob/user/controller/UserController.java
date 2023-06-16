@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(EndPoint.USER)
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     @PostMapping("/change/info")
     public CustomResponse changeNickname(@RequestBody ChangeNicknameRequest request) {

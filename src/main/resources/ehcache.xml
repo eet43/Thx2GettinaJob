@@ -14,7 +14,7 @@
 
         <!-- ttl 설정 -->
         <expiry>
-            <ttl unit="hours">4</ttl>
+            <ttl unit="hours">1</ttl>
         </expiry>
         <!-- unit은 days, hours, minutes, seconds, millis, micros, nanos 를 세팅할 수 있다. -->
 
@@ -34,6 +34,17 @@
             <!-- persistent="false" shutdown 되면 disk를 비워버립니다.-->
             <!-- persistent="true" shutdown 되도 disk에 보관되고 JVM이 다시 뜨면 load it back 합니다.-->
             <!-- <disk unit="MB" persistent="false">5</disk> -->
+        </resources>
+    </cache>
+
+    <cache alias="ScoreDetail">
+        <key-type>java.lang.Long</key-type>
+        <value-type>java.util.List</value-type>
+        <expiry>
+            <ttl unit="minutes">5</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">1000</heap>
         </resources>
     </cache>
 

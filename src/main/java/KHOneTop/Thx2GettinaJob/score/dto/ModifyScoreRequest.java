@@ -10,6 +10,8 @@ public record ModifyScoreRequest(
         @NotNull
         Long scoreId,
         @NotNull
+        Long userId,
+        @NotNull
         String name,
         @NotNull
         Long score,

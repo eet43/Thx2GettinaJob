@@ -41,7 +41,7 @@ public class ExamController {
     }
 
     @PutMapping("/private")
-    public CustomResponse getBookmarkDetailOfTurn(@RequestBody ModifyPriExamRequest request) {
+    public CustomResponse modifyPriExam(@RequestBody ModifyPriExamRequest request) {
         examService.modifyPriExam(request);
         return CustomResponse.success();
     }

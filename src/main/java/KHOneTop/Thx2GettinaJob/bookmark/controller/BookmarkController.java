@@ -53,7 +53,7 @@ public class BookmarkController {
         return CustomResponse.success(data);
     }
 
-    @ApiResponse(responseCode = "200", description = "메인화면 즐겨찾기 시험 조회", content = @Content(schema = @Schema(implementation = BookmarkInfo.class)))
+    @ApiResponse(responseCode = "200", description = "메인화면 즐겨찾기 시험 조회 성공", content = @Content(schema = @Schema(implementation = BookmarkInfo.class)))
     @GetMapping("/info")
     public CustomResponse getBookmarkInfo(@RequestBody GetBookmarkListRequest request) {
         List<BookmarkInfo> data = bookmarkService.getBookmarkInfo(request);

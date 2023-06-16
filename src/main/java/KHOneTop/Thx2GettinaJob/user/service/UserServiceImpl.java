@@ -11,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -22,10 +25,12 @@ public class UserServiceImpl implements UserService{
     private final PasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional
     public void changeNickname(ChangeNicknameRequest request) {
         if(checkNickname(request.nickname())) {
-            User findUser = checkEmail(request.email());
-            findUser.changeInfo(request.name(), request.nickname());
+            User findUser = userRepository.findById(request.userId())
+                    .orElseThrow(() -> new CustomException(Codeset.INVALID_USER, "해당 아이디의 사용자를 찾을 수 없습니다."));
+            findUser.changeInfo(request.nickname());
         } else {
             throw new CustomException(Codeset.ALREADY_NICKNAME, "이미 존재하는 닉네임입니다.");
         }

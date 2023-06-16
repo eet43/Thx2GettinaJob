@@ -5,8 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 public record ChangeNicknameRequest(
-        String email,
-        String name,
+        Long userId,
         String nickname
 ) {
 }
