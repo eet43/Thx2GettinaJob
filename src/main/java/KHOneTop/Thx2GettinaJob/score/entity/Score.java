@@ -20,7 +20,7 @@ public class Score {
 
     private Long userId;
     private String name;
-    private Long score;
+    private String score;
     private String studentCode;
     private String issuer;
     private Boolean isEffective;
@@ -29,7 +29,7 @@ public class Score {
     private LocalDate expirationDate;
 
 
-    public void modifyScore(String name, Long score, String studentCode, String issuer,
+    public void modifyScore(String name, String score, String studentCode, String issuer,
                             LocalDate acquisitionDate, LocalDate expirationDate) {
         boolean isEffect = expirationDate.isAfter(LocalDate.now());
 

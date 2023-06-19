@@ -1,5 +1,6 @@
 package KHOneTop.Thx2GettinaJob.exam.repository;
 
+import KHOneTop.Thx2GettinaJob.exam.dto.NearExamInfo;
 import KHOneTop.Thx2GettinaJob.exam.entity.Exam;
 import KHOneTop.Thx2GettinaJob.exam.entity.PrivateExam;
 import org.springframework.data.domain.Pageable;
@@ -35,8 +36,9 @@ public interface ExamRepository extends JpaRepository<Exam, Long>, ExamRepositor
         @Query(value = "SELECT * FROM exam e WHERE e.is_public = true OR (e.exam_type = 'private' AND e.user_id = :userId)", nativeQuery = true)
         List<Exam> findPublicOrOwnedExams(@Param("userId") Long userId);
 
-        @Query("SELECT e FROM Exam e JOIN e.examTimeStamp ets WHERE ets.regEndDate > CURRENT_TIMESTAMP OR ets.addRegEndDate > CURRENT_TIMESTAMP ORDER BY ets.addRegEndDate ASC, ets.addRegEndDate ASC")
-        List<Exam> findTop3ByOrderByDateAsc(Pageable pageable);
+        @Query("SELECT new KHOneTop.Thx2GettinaJob.exam.dto.NearExamInfo(e.id, e.name, e.issuer, MIN(ets.regEndDate), MIN(ets.addRegEndDate)) FROM Exam e JOIN e.examTimeStamp ets WHERE ets.regEndDate > CURRENT_TIMESTAMP OR ets.addRegEndDate > CURRENT_TIMESTAMP GROUP BY e.id ORDER BY MIN(LEAST(ets.regEndDate, ets.addRegEndDate)) ASC")
+        List<NearExamInfo> findTop3ByOrderByRegEndDateAsc(Pageable pageable);
+
 
         @Query("SELECT e FROM Exam e JOIN FETCH e.examTimeStamp WHERE e.id IN :examIds")
         List<Exam> findExamsWithAnySchedule(@Param("examIds") List<Long> examIds);

@@ -6,6 +6,7 @@ import KHOneTop.Thx2GettinaJob.bookmark.repository.BookmarkRepository;
 import KHOneTop.Thx2GettinaJob.common.response.Codeset;
 import KHOneTop.Thx2GettinaJob.common.response.CustomException;
 import KHOneTop.Thx2GettinaJob.common.util.CheckUserUtil;
+import KHOneTop.Thx2GettinaJob.exam.dto.NearExamInfo;
 import KHOneTop.Thx2GettinaJob.exam.entity.Exam;
 import KHOneTop.Thx2GettinaJob.exam.entity.ExamTimeStamp;
 import KHOneTop.Thx2GettinaJob.exam.entity.PrivateExam;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,7 +59,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     @Transactional
     public void deleteBookmarkPubExam(DeleteBookmarkPubExamRequest request) {
         checkUserUtil.checkValidUserId(request.userId());
-        if(!isPubExam(request.examId())) {
+        if (!isPubExam(request.examId())) {
             examRepository.deleteById(request.examId());
         }
         Bookmark findBookmark = bookmarkRepository.findByUserIdAndExamId(request.userId(), request.examId());
@@ -104,7 +106,7 @@ public class BookmarkServiceImpl implements BookmarkService {
                         break;
                     } else if (addRegEndDate != null && addRegEndDate.isAfter(LocalDateTime.now())) {
                         Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), addRegEndDate.toLocalDate());
-                        bookmarkDtos.add(BookmarkInfo.fromEntity(exam, isTurn,"추가접수중", day));
+                        bookmarkDtos.add(BookmarkInfo.fromEntity(exam, isTurn, "추가접수중", day));
                         flag = true;
                         break;
                     }
@@ -137,7 +139,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     @Override
     public List<Top5PopBookmark> getTop5PopBookmarks() { //시간이 정해지면, 시간 단위로 카운트 해야함. Top5 북마크 가져오는 쿼리를 수정하면됨.
         List<Top5PopBookmark> result = new ArrayList<>();
-        List<BookmarkCount> findTop5PopBookmarks = bookmarkRepository.findTop5PopBookmarkCount(PageRequest.of(0,5));
+        List<BookmarkCount> findTop5PopBookmarks = bookmarkRepository.findTop5PopBookmarkCount(PageRequest.of(0, 5));
 
         for (BookmarkCount findTop5PopBookmark : findTop5PopBookmarks) {
             Exam findExam = examRepository.findByIdFetchJoin(findTop5PopBookmark.getExamId())
@@ -172,23 +174,23 @@ public class BookmarkServiceImpl implements BookmarkService {
     @Override
     public List<Top3NearBookmark> getTop3NearBookmarks() {
         List<Top3NearBookmark> result = new ArrayList<>();
-        List<Exam> findExams = examRepository.findTop3ByOrderByDateAsc(PageRequest.of(0, 3)); //fetch 조인으로 바꿔야함
+        List<NearExamInfo> findExams = examRepository.findTop3ByOrderByRegEndDateAsc(PageRequest.of(0, 3)); //fetch 조인으로 바꿔야함
 
-        for(Exam exam : findExams) {
-            for (ExamTimeStamp timeStamp : exam.getExamTimeStamp()) {
-                LocalDateTime regEndDate = timeStamp.getRegEndDate();
-                LocalDateTime addRegEndDate = timeStamp.getAddRegEndDate();
-                if (regEndDate != null && regEndDate.isAfter(LocalDateTime.now())) {
-                    Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), regEndDate.toLocalDate());
-                    result.add(Top3NearBookmark.fromEntity(exam, "정기접수중", day));
-                    break;
-                } else if (addRegEndDate != null && addRegEndDate.isAfter(LocalDateTime.now())) {
-                    Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), addRegEndDate.toLocalDate());
-                    result.add(Top3NearBookmark.fromEntity(exam, "추가접수중", day));
-                    break;
-                }
+        for (NearExamInfo exam : findExams) {
+            LocalDateTime regEndDate = exam.getRegEndDate();
+            LocalDateTime addRegEndDate = exam.getAddRegEndDate();
+            if (regEndDate != null && regEndDate.isAfter(LocalDateTime.now())) {
+                Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), regEndDate.toLocalDate());
+                result.add(Top3NearBookmark.toDto(exam, "정기접수중", day));
+            } else if (addRegEndDate != null && addRegEndDate.isAfter(LocalDateTime.now())) {
+                Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), addRegEndDate.toLocalDate());
+                result.add(Top3NearBookmark.toDto(exam, "추가접수중", day));
+            } else {
+                throw new CustomException(Codeset.INVALID_NEAR_EXAM, "얼마남지 않은 자격증 조회에 문제가 발생했습니다.");
             }
         }
+
+        result.sort(Comparator.comparingLong(Top3NearBookmark::getDay));
         return result;
     }
 
@@ -210,11 +212,11 @@ public class BookmarkServiceImpl implements BookmarkService {
     public List<CalendarBookmarkDetail> getCalendarBookmarkDetail(GetCalendarBookmarkRequest request) {
         List<CalendarBookmarkDetail> result = new ArrayList<>();
 
-        for(GetCalenderDetailRequest detailRequest : request.exams()) {
+        for (GetCalenderDetailRequest detailRequest : request.exams()) {
             checkValidExam(detailRequest.examId());
             Optional<Exam> findExam = examRepository.findExamByExamTimeStampFields(request.startDate(), request.endDate(), detailRequest);
 
-            if(findExam.isPresent()) {
+            if (findExam.isPresent()) {
                 Exam data = findExam.get();
                 result.add(CalendarBookmarkDetail.toDto(data));
             }
@@ -231,7 +233,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 
     private boolean isPubExam(Long examId) {
         Boolean isPub = examRepository.isPublicExam(examId);
-        if(isPub == null) {
+        if (isPub == null) {
             throw new CustomException(Codeset.INVALID_EXAM, "해당 시험을 찾을 수 없습니다.");
         } else {
             return isPub;

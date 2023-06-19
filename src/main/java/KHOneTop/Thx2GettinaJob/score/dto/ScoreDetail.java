@@ -5,18 +5,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Data
 @Setter
 @Schema(description = "자격증 조회")
-public class ScoreDetail {
+public class ScoreDetail implements Serializable {
     @Schema(description = "자격증 점수 Id", nullable = false, example = "2L")
     private Long id;
     @Schema(description = "자격증 이름", nullable = false, example = "TOEIC")
     private String name;
     @Schema(description = "자격증 점수", nullable = false, example = "900")
-    private Long score;
+    private String score;
     @Schema(description = "수험번호", nullable = false, example = "15291BSA")
     private String studentCode;
     @Schema(description = "시험 발급처", nullable = false, example = "한국진흥원")

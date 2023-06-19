@@ -12,7 +12,7 @@ public record CreateScoreRequest(
         @NotNull
         String name,
         @NotNull
-        Long score,
+        String score,
         String studentCode,
         String issuer,
         @NotNull
