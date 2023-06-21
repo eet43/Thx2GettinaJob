@@ -11,11 +11,8 @@ import KHOneTop.Thx2GettinaJob.exam.entity.Exam;
 import KHOneTop.Thx2GettinaJob.exam.entity.ExamTimeStamp;
 import KHOneTop.Thx2GettinaJob.exam.entity.PrivateExam;
 import KHOneTop.Thx2GettinaJob.exam.repository.ExamRepository;
-import KHOneTop.Thx2GettinaJob.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +21,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -191,37 +187,6 @@ public class BookmarkServiceImpl implements BookmarkService {
         }
 
         result.sort(Comparator.comparingLong(Top3NearBookmark::getDay));
-        return result;
-    }
-
-    @Override
-    public List<CalendarBookmarkSearch> getCalendarBookmarkInfo(GetBookmarkListRequest request) {
-        checkUserUtil.checkValidUserId(request.userId());
-
-        List<Long> findExamIds = bookmarkRepository.findExamIdByUserId(request.userId());
-        List<Exam> findExams = examRepository.findExamsWithAnySchedule(findExamIds);
-        List<CalendarBookmarkSearch> result = new ArrayList<>();
-
-        for (Exam exam : findExams) {
-            result.add(CalendarBookmarkSearch.toDto(exam));
-        }
-        return result;
-    }
-
-    @Override
-    public List<CalendarBookmarkDetail> getCalendarBookmarkDetail(GetCalendarBookmarkRequest request) {
-        List<CalendarBookmarkDetail> result = new ArrayList<>();
-
-        for (GetCalenderDetailRequest detailRequest : request.exams()) {
-            checkValidExam(detailRequest.examId());
-            Optional<Exam> findExam = examRepository.findExamByExamTimeStampFields(request.startDate(), request.endDate(), detailRequest);
-
-            if (findExam.isPresent()) {
-                Exam data = findExam.get();
-                result.add(CalendarBookmarkDetail.toDto(data));
-            }
-        }
-
         return result;
     }
 

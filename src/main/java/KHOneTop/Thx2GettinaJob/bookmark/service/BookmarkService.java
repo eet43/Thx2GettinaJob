@@ -19,8 +19,4 @@ public interface BookmarkService {
 
     List<Top3NearBookmark> getTop3NearBookmarks();
 
-    List<CalendarBookmarkSearch> getCalendarBookmarkInfo(GetBookmarkListRequest request);
-
-    List<CalendarBookmarkDetail> getCalendarBookmarkDetail(GetCalendarBookmarkRequest request);
-
 }

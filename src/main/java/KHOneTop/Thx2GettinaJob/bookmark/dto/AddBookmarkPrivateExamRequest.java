@@ -2,8 +2,6 @@ package KHOneTop.Thx2GettinaJob.bookmark.dto;
 
 import KHOneTop.Thx2GettinaJob.exam.entity.ExamTimeStamp;
 import KHOneTop.Thx2GettinaJob.exam.entity.PrivateExam;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

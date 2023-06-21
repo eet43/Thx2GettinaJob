@@ -1,6 +1,5 @@
 package KHOneTop.Thx2GettinaJob.bookmark.dto;
 
-import KHOneTop.Thx2GettinaJob.common.Dday;
 import KHOneTop.Thx2GettinaJob.exam.entity.Exam;
 import io.swagger.v3.oas.annotations.media.Schema;
 

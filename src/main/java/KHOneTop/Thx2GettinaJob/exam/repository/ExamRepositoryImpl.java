@@ -1,18 +1,15 @@
 package KHOneTop.Thx2GettinaJob.exam.repository;
 
-import KHOneTop.Thx2GettinaJob.bookmark.dto.GetCalenderDetailRequest;
+import KHOneTop.Thx2GettinaJob.calendar.dto.GetCalenderDetailRequest;
 import KHOneTop.Thx2GettinaJob.exam.entity.Exam;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 import static KHOneTop.Thx2GettinaJob.exam.entity.QExam.*;

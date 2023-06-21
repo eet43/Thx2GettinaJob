@@ -1,6 +1,6 @@
 package KHOneTop.Thx2GettinaJob.exam.controller;
 
-import KHOneTop.Thx2GettinaJob.bookmark.dto.*;
+import KHOneTop.Thx2GettinaJob.bookmark.dto.BookmarkDetailOfTurn;
 import KHOneTop.Thx2GettinaJob.common.EndPoint;
 import KHOneTop.Thx2GettinaJob.common.response.CustomResponse;
 import KHOneTop.Thx2GettinaJob.exam.dto.*;

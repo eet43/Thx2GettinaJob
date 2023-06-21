@@ -1,11 +1,8 @@
 package KHOneTop.Thx2GettinaJob.bookmark.dto;
 
 import KHOneTop.Thx2GettinaJob.exam.dto.NearExamInfo;
-import KHOneTop.Thx2GettinaJob.exam.entity.Exam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Data
 @Schema(description = "마감 얼마 안 남은 자격증")

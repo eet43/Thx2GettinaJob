@@ -11,6 +11,7 @@ public class EndPoint {
     public static final String PUB_EXAM = "/pub-exam";
 
     public static final String BOOKMARK = "/bookmarks";
+    public static final String CALENDAR = "/calendars";
     public static final String SCORE = "/scores";
 
 

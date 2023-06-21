@@ -1,15 +1,15 @@
 package KHOneTop.Thx2GettinaJob.bookmark.controller;
 
-import KHOneTop.Thx2GettinaJob.auth.dto.LoginToken;
-import KHOneTop.Thx2GettinaJob.auth.dto.SendToEmailRequest;
 import KHOneTop.Thx2GettinaJob.bookmark.dto.*;
+import KHOneTop.Thx2GettinaJob.calendar.dto.CalendarBookmarkDetail;
+import KHOneTop.Thx2GettinaJob.calendar.dto.CalendarBookmarkSearch;
 import KHOneTop.Thx2GettinaJob.bookmark.service.BookmarkService;
+import KHOneTop.Thx2GettinaJob.calendar.dto.GetCalendarBookmarkRequest;
 import KHOneTop.Thx2GettinaJob.common.EndPoint;
 import KHOneTop.Thx2GettinaJob.common.response.CustomResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -73,21 +73,5 @@ public class BookmarkController {
         List<Top3NearBookmark> data = bookmarkService.getTop3NearBookmarks();
         return CustomResponse.success(data);
     }
-
-    @ApiResponse(responseCode = "200", description = "캘린더 검색 즐겨찾기 리스트 조회", content = @Content(schema = @Schema(implementation = CalendarBookmarkSearch.class)))
-    @GetMapping("/calendar/info") //수정필요
-    public CustomResponse getCalendarBookmarkInfo(@RequestBody GetBookmarkListRequest request){
-        List<CalendarBookmarkSearch> data = bookmarkService.getCalendarBookmarkInfo(request);
-        return CustomResponse.success(data);
-    }
-
-    @ApiResponse(responseCode = "200", description = "캘린더 즐겨찾기 시험 스케줄 조회", content = @Content(schema = @Schema(implementation = CalendarBookmarkSearch.class)))
-    @GetMapping("/calendar/detail") //수정필요
-    public CustomResponse getCalendarBookmarkDetail(@RequestBody GetCalendarBookmarkRequest request){
-        List<CalendarBookmarkDetail> data = bookmarkService.getCalendarBookmarkDetail(request);
-        return CustomResponse.success(data);
-    }
-
-
 
 }

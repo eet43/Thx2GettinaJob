@@ -1,4 +1,4 @@
-package KHOneTop.Thx2GettinaJob.bookmark.dto;
+package KHOneTop.Thx2GettinaJob.calendar.dto;
 
 import java.time.LocalDate;
 import java.util.List;

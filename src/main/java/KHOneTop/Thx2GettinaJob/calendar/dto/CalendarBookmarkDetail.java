@@ -1,5 +1,6 @@
-package KHOneTop.Thx2GettinaJob.bookmark.dto;
+package KHOneTop.Thx2GettinaJob.calendar.dto;
 
+import KHOneTop.Thx2GettinaJob.calendar.dto.CalendarBookmarkTimeDetail;
 import KHOneTop.Thx2GettinaJob.exam.entity.Exam;
 import KHOneTop.Thx2GettinaJob.exam.entity.ExamTimeStamp;
 import lombok.AllArgsConstructor;

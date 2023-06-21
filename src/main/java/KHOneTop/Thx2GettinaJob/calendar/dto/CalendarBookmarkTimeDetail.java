@@ -1,9 +1,7 @@
-package KHOneTop.Thx2GettinaJob.bookmark.dto;
+package KHOneTop.Thx2GettinaJob.calendar.dto;
 
 import KHOneTop.Thx2GettinaJob.exam.entity.ExamTimeStamp;
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 

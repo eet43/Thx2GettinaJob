@@ -1,4 +1,4 @@
-package KHOneTop.Thx2GettinaJob.bookmark.dto;
+package KHOneTop.Thx2GettinaJob.calendar.dto;
 
 public record GetCalenderDetailRequest(
         Long examId,
