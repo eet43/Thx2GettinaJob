@@ -4,7 +4,6 @@ import KHOneTop.Thx2GettinaJob.calendar.dto.CalendarBookmarkDetail;
 import KHOneTop.Thx2GettinaJob.calendar.dto.CalendarBookmarkSearch;
 import KHOneTop.Thx2GettinaJob.calendar.dto.GetCalendarBookmarkRequest;
 import KHOneTop.Thx2GettinaJob.calendar.dto.GetCalendarSearchRequest;
-import KHOneTop.Thx2GettinaJob.bookmark.dto.GetBookmarkListRequest;
 
 import java.util.List;
 
