@@ -26,7 +26,7 @@ public class CalendarController {
     private final CalendarService calendarService;
 
     @ApiResponse(responseCode = "200", description = "캘린더 검색 즐겨찾기 리스트 조회", content = @Content(schema = @Schema(implementation = CalendarBookmarkSearch.class)))
-    @GetMapping("/info") //수정필요
+    @GetMapping("/info")
     public CustomResponse getCalendarBookmarkInfo(@RequestBody GetCalendarSearchRequest request){
         List<CalendarBookmarkSearch> data = calendarService.getCalendarBookmarkInfo(request);
         return CustomResponse.success(data);
