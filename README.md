@@ -56,23 +56,26 @@
 
 <br>
 
-## 기술 스택
-
-| JavaScript | TypeScript |  React   |  Node   |
-| :--------: | :--------: | :------: | :-----: |
-|   ![java]    |   ![ts]    | ![react] | ![node] |
-
-<br>
-
+## 🌴 기술 스택
+### 🍊 SERVER
+- <b>Java 17</b>
+- <b>Spring boot 3.0.4</b>  
+  - 의존성 관리
+  - Auto Configuration
+  - record 타입 추가
+- <b>Spring Security</b>  
+  - JWT 기반 토큰을 활용한 인증
+- <b>Spring Data JPA</b>  
+  - 객체 중심의 ORM 쿼리 활용
+- <b>QueryDSL</b>
+  - 컴파일 단게에서 쿼리 에러 검출
+  - 필터링에 필요한 동적 쿼리를 효율적으로 작성
+### 🍎 DB
+- <b>MySQL 8.0.30</b>  
+  - 테이블의 성격을 고려한 객체 중심의 엔티티 설계
+  - 시스템 복잡도를 줄이기 위해 라이프사이클이 같은 엔티티만 연관관계로 설정
 
 ## 개선 과정
 
 
 <br>
-
-<!-- Stack Icon Refernces -->
-
-[js]: /images/stack/javascript.svg
-[ts]: /images/stack/typescript.svg
-[react]: /images/stack/react.svg
-[node]: /images/stack/node.svg
