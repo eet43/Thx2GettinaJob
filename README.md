@@ -4,10 +4,10 @@
   <br>
   <img src="https://github.com/eet43/Thx2GettinaJob/assets/59008469/1aa58117-14b3-4857-82cc-f3c989edfddb" height="400px" width="15.5%">
   <img src="https://github.com/eet43/Thx2GettinaJob/assets/59008469/28195698-bfc7-43ca-b28d-b53200199135" height="400px" width="15.5%">
-  <img src="https://github.com/eet43/Thx2GettinaJob/assets/59008469/2ad3af11-b959-4bd3-8ffe-1ff5c53f580d" height="400px" width="16.66%">
-  <img src="https://github.com/eet43/Thx2GettinaJob/assets/59008469/8a85d299-e9bb-4b81-9318-05310f6eb35d" height="400px" width="16.66%">
-  <img src="https://github.com/eet43/Thx2GettinaJob/assets/59008469/0071ea67-6108-49c3-a442-2edb43094ed0" height="400px" width="16.66%">
-  <img src="https://github.com/eet43/Thx2GettinaJob/assets/59008469/9f906ca2-fe37-4224-b8d1-12355c021220" height="400px" width="16.66%">
+  <img src="https://github.com/eet43/Thx2GettinaJob/assets/59008469/2ad3af11-b959-4bd3-8ffe-1ff5c53f580d" height="400px" width="16%">
+  <img src="https://github.com/eet43/Thx2GettinaJob/assets/59008469/8a85d299-e9bb-4b81-9318-05310f6eb35d" height="400px" width="16%">
+  <img src="https://github.com/eet43/Thx2GettinaJob/assets/59008469/0071ea67-6108-49c3-a442-2edb43094ed0" height="400px" width="16%">
+  <img src="https://github.com/eet43/Thx2GettinaJob/assets/59008469/9f906ca2-fe37-4224-b8d1-12355c021220" height="400px" width="16%">
   <br>
 </p>
 
