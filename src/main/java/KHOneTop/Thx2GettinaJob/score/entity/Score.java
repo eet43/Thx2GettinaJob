@@ -18,13 +18,17 @@ public class Score {
     @Column @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
+    @Column(nullable = false)
     private Long userId;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String score;
     private String studentCode;
     private String issuer;
     private Boolean isEffective;
 
+    @Column(nullable = false)
     private LocalDate acquisitionDate;
     private LocalDate expirationDate;
 

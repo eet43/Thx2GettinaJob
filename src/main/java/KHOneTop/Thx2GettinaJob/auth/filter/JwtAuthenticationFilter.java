@@ -37,6 +37,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         String jwt = resolveToken(httpServletRequest);
         String requestURI = httpServletRequest.getRequestURI();
+        log.debug("url : " + requestURI);
 
         if (StringUtils.hasText(jwt) && !jwtProvider.isTokenExpired(jwt)) {
             String emailFromToken = jwtProvider.getEmailFromToken(jwt);

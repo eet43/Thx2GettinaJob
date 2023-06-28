@@ -35,6 +35,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
+    private static final String[] WHITE_LIST = {
+            "/swagger-ui/**", "/v3/api-docs/**",
+            "/emails/**", "/auth/**", "/exams/add/**"
+    };
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {
@@ -67,27 +71,17 @@ public class SecurityConfig {
                 })
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider),
-                        UsernamePasswordAuthenticationFilter.class)
+                .authorizeHttpRequests()
+                .requestMatchers(WHITE_LIST).permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
-                .authenticationEntryPoint(new AuthenticationEntryPoint() {
-                    @Override
-                    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-                        // 인증문제가 발생했을 때 이 부분을 호출한다.
-                        response.setStatus(401);
-                        response.setCharacterEncoding("utf-8");
-                        response.setContentType("text/html; charset=UTF-8");
-                        response.getWriter().write("인증되지 않은 사용자입니다.");
-                    }
+                .authenticationEntryPoint((request, response, authException) -> {
+                    // 인증문제가 발생했을 때 이 부분을 호출한다.
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "인증되지 않은 사용자입니다.");
                 });
 
         return http.build();
-    }
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers(
-                "/swagger-ui/**", "/v3/api-docs/**",
-                "/emails/**", "/auth/**", "/exams/add/**");
     }
 }

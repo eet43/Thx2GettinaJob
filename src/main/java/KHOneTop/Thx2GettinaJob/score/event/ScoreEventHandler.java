@@ -1,4 +1,4 @@
-package KHOneTop.Thx2GettinaJob.score;
+package KHOneTop.Thx2GettinaJob.score.event;
 
 import KHOneTop.Thx2GettinaJob.common.response.Codeset;
 import KHOneTop.Thx2GettinaJob.common.response.CustomException;
