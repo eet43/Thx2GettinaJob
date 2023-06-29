@@ -45,21 +45,20 @@ public class CalendarServiceImpl implements CalendarService {
         List<CalendarBookmarkDetail> result = new ArrayList<>();
 
         if(isFilter(request)) {
-            checkValidRequest(request);
             for (GetCalenderDetailRequest detailRequest : request.exams()) {
                 checkValidExam(detailRequest.examId());
                 Optional<Exam> findExam = examRepository.findExamByExamTimeStampFields(request.startDate(), request.endDate(), detailRequest);
 
                 if (findExam.isPresent()) {
                     Exam data = findExam.get();
-                    result.add(CalendarBookmarkDetail.toDto(data));
+                    result.add(CalendarBookmarkDetail.toDtoFilter(data, detailRequest, request.startDate(), request.endDate()));
                 }
             }
         } else {
             List<Long> findExamIds = bookmarkRepository.findExamIdByUserId(request.userId());
-            List<Exam> findExams = examRepository.findByIdInFetchJoin(findExamIds);
+            List<Exam> findExams = examRepository.findExamWithoutBoolean(request.startDate(), request.endDate(), findExamIds);
             for (Exam findExam : findExams) {
-                result.add(CalendarBookmarkDetail.toDto(findExam));
+                result.add(CalendarBookmarkDetail.toDtoNonFilter(findExam, request.startDate(), request.endDate()));
             }
         }
 
@@ -68,14 +67,9 @@ public class CalendarServiceImpl implements CalendarService {
     }
 
     private boolean isFilter(GetCalendarBookmarkRequest request) {
-        return request.startDate() != null || request.endDate() != null || request.exams() != null;
+        return request.exams() != null;
     }
 
-    private void checkValidRequest(GetCalendarBookmarkRequest request) {
-        if (request.exams() == null) {
-            throw new CustomException(Codeset.INVALID_CALENDAR_FILTER_REQUEST, "필터링 데이터가 올바르지 않습니다.");
-        }
-    }
 
     private void checkValidExam(Long examId) {
         if (!examRepository.existsById(examId)) {
