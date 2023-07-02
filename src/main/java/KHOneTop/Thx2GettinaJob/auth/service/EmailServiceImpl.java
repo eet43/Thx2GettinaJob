@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,11 +28,15 @@ public class EmailServiceImpl implements EmailService{
     private final TempAuthGenerator tempPwGenerator;
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Override
     @Transactional
     public void authEmail(SendToEmailRequest request) {
         String subject = "회원가입 이메일 인증 코드입니다.";
-        sendToEmail(subject, request.getEmail(), tempPwGenerator.generateRandomNum());
+        String randNum = tempPwGenerator.generateRandomNum();
+        sendToEmail(subject, request.getEmail(), randNum);
+        redisUtil.setDataExpire(request.getEmail(), randNum, 60*5L);
     }
 
     @Override
@@ -42,7 +47,7 @@ public class EmailServiceImpl implements EmailService{
 
         String subject = "회원 임시 비밀번호입니다.";
         sendToEmail(subject, request.getEmail(), tempPw);
-        findUser.setPassword(tempPw);
+        findUser.changePassword(passwordEncoder, tempPw);
     }
 
     private User checkEmail(String email) {
@@ -67,8 +72,6 @@ public class EmailServiceImpl implements EmailService{
         } catch (MessagingException e) {
             throw new CustomException(Codeset.BAD_REQUEST, e.getMessage());
         }
-
-        redisUtil.setDataExpire(email, authKey, 60*5L);
     }
 
 
