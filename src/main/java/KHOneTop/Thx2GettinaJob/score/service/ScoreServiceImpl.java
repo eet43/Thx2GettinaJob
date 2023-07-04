@@ -3,10 +3,7 @@ package KHOneTop.Thx2GettinaJob.score.service;
 import KHOneTop.Thx2GettinaJob.common.response.Codeset;
 import KHOneTop.Thx2GettinaJob.common.response.CustomException;
 import KHOneTop.Thx2GettinaJob.common.util.CheckUserUtil;
-import KHOneTop.Thx2GettinaJob.score.dto.CreateScoreRequest;
-import KHOneTop.Thx2GettinaJob.score.dto.GetScoreRequest;
-import KHOneTop.Thx2GettinaJob.score.dto.ModifyScoreRequest;
-import KHOneTop.Thx2GettinaJob.score.dto.ScoreDetail;
+import KHOneTop.Thx2GettinaJob.score.dto.*;
 import KHOneTop.Thx2GettinaJob.score.entity.Score;
 import KHOneTop.Thx2GettinaJob.score.repository.ScoreRepository;
 import lombok.RequiredArgsConstructor;
@@ -75,7 +72,7 @@ public class ScoreServiceImpl implements ScoreService{
     }
 
     @Override
-    public List<ScoreDetail> getValidScoreDetails(GetScoreRequest request) {
+    public List<ScoreDetail> getValidScoreDetails(GetValidScoreRequest request) {
         if(request.userId() == null) {
             return Collections.emptyList();
         }

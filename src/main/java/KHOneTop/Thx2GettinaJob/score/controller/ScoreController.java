@@ -2,10 +2,7 @@ package KHOneTop.Thx2GettinaJob.score.controller;
 
 import KHOneTop.Thx2GettinaJob.common.EndPoint;
 import KHOneTop.Thx2GettinaJob.common.response.CustomResponse;
-import KHOneTop.Thx2GettinaJob.score.dto.CreateScoreRequest;
-import KHOneTop.Thx2GettinaJob.score.dto.GetScoreRequest;
-import KHOneTop.Thx2GettinaJob.score.dto.ModifyScoreRequest;
-import KHOneTop.Thx2GettinaJob.score.dto.ScoreDetail;
+import KHOneTop.Thx2GettinaJob.score.dto.*;
 import KHOneTop.Thx2GettinaJob.score.service.ScoreService;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -44,7 +41,7 @@ public class ScoreController {
 
     @ApiResponse(responseCode = "200", description = "유효한 자격증 조회", content = @Content(schema = @Schema(implementation = ScoreDetail.class)))
     @GetMapping("/valid")
-    public CustomResponse getValidScoreDetails(@RequestBody GetScoreRequest request) {
+    public CustomResponse getValidScoreDetails(@RequestBody GetValidScoreRequest request) {
         List<ScoreDetail> data = scoreService.getValidScoreDetails(request);
         return CustomResponse.success(data);
     }

@@ -1,9 +1,6 @@
 package KHOneTop.Thx2GettinaJob.score.service;
 
-import KHOneTop.Thx2GettinaJob.score.dto.CreateScoreRequest;
-import KHOneTop.Thx2GettinaJob.score.dto.GetScoreRequest;
-import KHOneTop.Thx2GettinaJob.score.dto.ModifyScoreRequest;
-import KHOneTop.Thx2GettinaJob.score.dto.ScoreDetail;
+import KHOneTop.Thx2GettinaJob.score.dto.*;
 
 import java.util.List;
 
@@ -14,6 +11,6 @@ public interface ScoreService {
 
     List<ScoreDetail> getScoreDetails(GetScoreRequest request);
 
-    List<ScoreDetail> getValidScoreDetails(GetScoreRequest request);
+    List<ScoreDetail> getValidScoreDetails(GetValidScoreRequest request);
 
 }
