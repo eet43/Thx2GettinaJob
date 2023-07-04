@@ -1,5 +1,7 @@
 package KHOneTop.Thx2GettinaJob.exam.service;
 
+import KHOneTop.Thx2GettinaJob.common.response.Codeset;
+import KHOneTop.Thx2GettinaJob.common.response.CustomException;
 import KHOneTop.Thx2GettinaJob.exam.dto.AddAlwaysPublicExamRequest;
 import KHOneTop.Thx2GettinaJob.exam.entity.PublicExam;
 import KHOneTop.Thx2GettinaJob.exam.entity.ExamTimeStamp;
@@ -33,17 +35,27 @@ public class NewExamAddService {
 
     @Transactional
     public void addAllTimesExam(AddAlwaysPublicExamRequest request) {
+        isExistByName(request.name());
+
+        ExamTimeStamp timeStamp = ExamTimeStamp.builder()
+                .turn("상시접수")
+                .build();
+
         PublicExam publicExam = PublicExam.builder()
                 .name(request.name() + "(상시접수)")
                 .issuer(request.issuer())
                 .url(request.url())
                 .isPublic(true)
                 .build();
+
+        publicExam.addExamTime(timeStamp);
         examRepository.save(publicExam);
     }
 
     @Transactional
     public void addToeicExam() {
+
+        isExistByName("토익");
 
         DateTimeFormatter timeMinformatter = DateTimeFormatter.ofPattern("yyyy.MM.dd (E) a h시m분", Locale.KOREA);
         DateTimeFormatter timeformatter = DateTimeFormatter.ofPattern("yyyy.MM.dd (E) a h시", Locale.KOREA);
@@ -108,6 +120,8 @@ public class NewExamAddService {
 
     @Transactional
     public void addAfpkExam() {
+
+        isExistByName("AFPK");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일 (E) a h:mm", Locale.KOREA);
         DateTimeFormatter formatter2 = new DateTimeFormatterBuilder()
                 .appendPattern("M월 d일 (E) a h:mm")
@@ -175,6 +189,9 @@ public class NewExamAddService {
 
     @Transactional
     public void addKoreanExam() {
+
+        isExistByName("한국사능력검정시험");
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일(E) H:mm", Locale.ENGLISH);
 
         try {
@@ -234,6 +251,8 @@ public class NewExamAddService {
 
     @Transactional
     public void addToeicSpeackingExam() {
+
+        isExistByName("토익 스피킹");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd (E) a h시", Locale.KOREA);
 
         try {
@@ -286,6 +305,8 @@ public class NewExamAddService {
 
     @Transactional
     public void addHskExam() {
+        isExistByName("HSK");
+
         DateTimeFormatter formatter = new DateTimeFormatterBuilder()
                 .appendPattern("M월 d일 (E) a h시")
                 .parseDefaulting(ChronoField.YEAR_OF_ERA, Year.now().getValue())
@@ -342,5 +363,11 @@ public class NewExamAddService {
 
     private String changeDateFormat(String text, String target, String value) {
         return text.contains(target) ? text.replace(target, value) : text;
+    }
+
+    private void isExistByName(String name) {
+        if(examRepository.existsByName(name)) {
+            throw new CustomException(Codeset.ALREADY_EXAM_NAME, "이미 존재하는 시험 데이터입니다.");
+        }
     }
 }

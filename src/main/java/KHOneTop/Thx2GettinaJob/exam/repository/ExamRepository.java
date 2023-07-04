@@ -13,6 +13,13 @@ import java.util.Optional;
 
 public interface ExamRepository extends JpaRepository<Exam, Long>, ExamRepositoryCustom {
         boolean existsById(Long Id);
+
+        boolean existsByName(String Name);
+
+        @Query(value = "SELECT CASE WHEN (COUNT(e) > 0) THEN true ELSE false END FROM exam e WHERE (e.name = :examName AND e.exam_type = 'public') OR (e.name = :examName AND e.exam_type = 'private' AND e.user_id = :userId)", nativeQuery = true)
+        boolean existsByNameAndUserId(@Param("examName") String examName, @Param("userId") Long userId);
+
+
         Optional<Exam> findByName(String name);
 
         @Query("SELECT e.isPublic FROM Exam e WHERE e.id = :id")

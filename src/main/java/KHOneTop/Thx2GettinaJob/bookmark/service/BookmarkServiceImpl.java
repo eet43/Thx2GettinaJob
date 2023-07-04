@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -33,6 +34,9 @@ public non-sealed class BookmarkServiceImpl implements BookmarkService {
     @Transactional
     public void addBookmarkPriExam(AddBookmarkPrivateExamRequest request) {
         checkUserUtil.checkValidUserId(request.userId());
+        if(examRepository.existsByNameAndUserId(request.name(), request.userId())) {
+            throw new CustomException(Codeset.ALREADY_EXAM_NAME, "이미 존재하는 시험 이름입니다.");
+        }
 
         PrivateExam newExam = request.toEntity();
         Long examId = saveAndReturnId(newExam);
@@ -169,8 +173,11 @@ public non-sealed class BookmarkServiceImpl implements BookmarkService {
 
     @Override
     public List<Top3NearBookmark> getTop3NearBookmarks(GetTop3NearBookmarkRequest request) {
-        List<Top3NearBookmark> result = new ArrayList<>();
+        if(request.userId() == null) {
+            return Collections.emptyList();
+        }
 
+        List<Top3NearBookmark> result = new ArrayList<>();
         List<Long> findExamIds = bookmarkRepository.findExamIdByUserId(request.userId());
         List<NearExamInfo> findExams = examRepository.findTop3ByOrderByRegEndDateAsc(findExamIds, PageRequest.of(0, 3)); //fetch 조인으로 바꿔야함
 
