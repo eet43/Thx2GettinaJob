@@ -12,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 @Getter @Setter
 @SuperBuilder
 @NoArgsConstructor
-public final class PrivateExam extends Exam{
+public non-sealed class PrivateExam extends Exam{
     private Long userId;
 
     public void modify(ModifyPriExamRequest request) {
