@@ -11,5 +11,7 @@ import java.util.Optional;
 public interface ScoreRepository extends JpaRepository<Score, Long> {
     Optional<List<Score>> findAllByUserId(Long userId);
 
+    Optional<List<Score>> findAllByUserIdAndIsEffective(Long userId);
+
     Optional<List<Score>> findByIsEffectiveTrueAndExpirationDateBefore(LocalDate date);
 }

@@ -38,7 +38,14 @@ public class ScoreController {
     @ApiResponse(responseCode = "200", description = "자격증 조회", content = @Content(schema = @Schema(implementation = ScoreDetail.class)))
     @GetMapping("")
     public CustomResponse getScoreDetails(@RequestBody GetScoreRequest request) {
-        List<ScoreDetail> data = scoreService.getScoreDetails(request.userId());
+        List<ScoreDetail> data = scoreService.getScoreDetails(request);
+        return CustomResponse.success(data);
+    }
+
+    @ApiResponse(responseCode = "200", description = "유효한 자격증 조회", content = @Content(schema = @Schema(implementation = ScoreDetail.class)))
+    @GetMapping("/valid")
+    public CustomResponse getValidScoreDetails(@RequestBody GetScoreRequest request) {
+        List<ScoreDetail> data = scoreService.getValidScoreDetails(request);
         return CustomResponse.success(data);
     }
 

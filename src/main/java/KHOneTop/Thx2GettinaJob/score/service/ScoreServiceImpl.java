@@ -2,7 +2,9 @@ package KHOneTop.Thx2GettinaJob.score.service;
 
 import KHOneTop.Thx2GettinaJob.common.response.Codeset;
 import KHOneTop.Thx2GettinaJob.common.response.CustomException;
+import KHOneTop.Thx2GettinaJob.common.util.CheckUserUtil;
 import KHOneTop.Thx2GettinaJob.score.dto.CreateScoreRequest;
+import KHOneTop.Thx2GettinaJob.score.dto.GetScoreRequest;
 import KHOneTop.Thx2GettinaJob.score.dto.ModifyScoreRequest;
 import KHOneTop.Thx2GettinaJob.score.dto.ScoreDetail;
 import KHOneTop.Thx2GettinaJob.score.entity.Score;
@@ -27,6 +29,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ScoreServiceImpl implements ScoreService{
     private final ScoreRepository scoreRepository;
+
+    private final CheckUserUtil checkUserUtil;
     private final ModelMapper modelMapper;
 
     @CacheEvict(
@@ -36,6 +40,8 @@ public class ScoreServiceImpl implements ScoreService{
     @Override
     @Transactional
     public void createScore(CreateScoreRequest request) {
+        checkUserUtil.checkValidUserId(request.userId());
+
         Score score = request.toEntity();
         scoreRepository.save(score);
     }
@@ -47,6 +53,8 @@ public class ScoreServiceImpl implements ScoreService{
     @Override
     @Transactional
     public void modifyScore(ModifyScoreRequest request) {
+        checkUserUtil.checkValidUserId(request.userId());
+
         Score findScore = scoreRepository.findById(request.scoreId())
                 .orElseThrow(() -> new CustomException(Codeset.INVALID_SCORE, "해당하는 자격증 데이터를 찾을 수 없습니다."));
 
@@ -59,9 +67,28 @@ public class ScoreServiceImpl implements ScoreService{
             key = "#userId"
     )
     @Override
-    public List<ScoreDetail> getScoreDetails(Long userId) {
+    public List<ScoreDetail> getScoreDetails(GetScoreRequest request) {
+        checkUserUtil.checkValidUserId(request.userId());
+
+        Optional<List<Score>> findScores = scoreRepository.findAllByUserId(request.userId());
+        return getScoresFormat(findScores);
+    }
+
+    @Override
+    public List<ScoreDetail> getValidScoreDetails(GetScoreRequest request) {
+        if(request.userId() == null) {
+            return Collections.emptyList();
+        }
+
+        checkUserUtil.checkValidUserId(request.userId());
+
+        Optional<List<Score>> findScores = scoreRepository.findAllByUserIdAndIsEffective(request.userId());
+        return getScoresFormat(findScores);
+    }
+
+    private List<ScoreDetail> getScoresFormat(Optional<List<Score>> findScores) {
         List<ScoreDetail> result = new ArrayList<>();
-        Optional<List<Score>> findScores = scoreRepository.findAllByUserId(userId);
+
         if(findScores.isEmpty()) {
             return Collections.emptyList();
         } else {

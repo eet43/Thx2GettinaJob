@@ -6,9 +6,12 @@ import KHOneTop.Thx2GettinaJob.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
-public class CheckUserUtil {
+public final class CheckUserUtil {
     private final UserRepository userRepository;
 
     public void checkValidUserId(Long userId) {
@@ -16,4 +19,6 @@ public class CheckUserUtil {
             throw new CustomException(Codeset.INVALID_USER, "해당 유저를 찾을 수 없습니다.");
         }
     }
+
+
 }
