@@ -18,9 +18,9 @@ public record ModifyScoreRequest(
         String studentCode,
         String issuer,
         @NotNull
-        @JsonFormat(pattern = "yyyy-MM-dd")
+        @JsonFormat(pattern = "yyyy.MM.dd")
         LocalDate acquisitionDate,
-        @JsonFormat(pattern = "yyyy-MM-dd")
+        @JsonFormat(pattern = "yyyy.MM.dd")
         LocalDate expirationDate
 ) {
 }

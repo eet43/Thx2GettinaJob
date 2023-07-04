@@ -17,8 +17,6 @@ spring:
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
-  jackson:
-    date-format: yyyy.mm.dd HH:mm
 
   data:
     redis:
