@@ -12,7 +12,8 @@ import java.util.List;
 @Getter @Setter
 @SuperBuilder
 @NoArgsConstructor
-public abstract class Exam {
+public sealed class Exam
+        permits PrivateExam, PublicExam {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;

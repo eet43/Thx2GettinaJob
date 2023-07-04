@@ -36,8 +36,8 @@ public interface ExamRepository extends JpaRepository<Exam, Long>, ExamRepositor
         @Query(value = "SELECT * FROM exam e WHERE e.is_public = true OR (e.exam_type = 'private' AND e.user_id = :userId)", nativeQuery = true)
         List<Exam> findPublicOrOwnedExams(@Param("userId") Long userId);
 
-        @Query("SELECT new KHOneTop.Thx2GettinaJob.exam.dto.NearExamInfo(e.id, e.name, e.issuer, MIN(ets.regEndDate), MIN(ets.addRegEndDate)) FROM Exam e JOIN e.examTimeStamp ets WHERE ets.regEndDate > CURRENT_TIMESTAMP OR ets.addRegEndDate > CURRENT_TIMESTAMP GROUP BY e.id ORDER BY MIN(LEAST(ets.regEndDate, ets.addRegEndDate)) ASC")
-        List<NearExamInfo> findTop3ByOrderByRegEndDateAsc(Pageable pageable);
+        @Query("SELECT new KHOneTop.Thx2GettinaJob.exam.dto.NearExamInfo(e.id, e.name, e.issuer, MIN(ets.regEndDate), MIN(ets.addRegEndDate)) FROM Exam e JOIN e.examTimeStamp ets WHERE (ets.regEndDate > CURRENT_TIMESTAMP OR ets.addRegEndDate > CURRENT_TIMESTAMP) AND e.id IN :examIds GROUP BY e.id ORDER BY MIN(LEAST(ets.regEndDate, ets.addRegEndDate)) ASC")
+        List<NearExamInfo> findTop3ByOrderByRegEndDateAsc(@Param("examIds") List<Long> examIds, Pageable pageable);
 
 
         @Query("SELECT e FROM Exam e JOIN FETCH e.examTimeStamp WHERE e.id IN :examIds")

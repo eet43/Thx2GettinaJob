@@ -24,7 +24,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class BookmarkServiceImpl implements BookmarkService {
+public non-sealed class BookmarkServiceImpl implements BookmarkService {
     private final CheckUserUtil checkUserUtil;
     private final BookmarkRepository bookmarkRepository;
     private final ExamRepository examRepository;
@@ -168,9 +168,11 @@ public class BookmarkServiceImpl implements BookmarkService {
     }
 
     @Override
-    public List<Top3NearBookmark> getTop3NearBookmarks() {
+    public List<Top3NearBookmark> getTop3NearBookmarks(GetTop3NearBookmarkRequest request) {
         List<Top3NearBookmark> result = new ArrayList<>();
-        List<NearExamInfo> findExams = examRepository.findTop3ByOrderByRegEndDateAsc(PageRequest.of(0, 3)); //fetch 조인으로 바꿔야함
+
+        List<Long> findExamIds = bookmarkRepository.findExamIdByUserId(request.userId());
+        List<NearExamInfo> findExams = examRepository.findTop3ByOrderByRegEndDateAsc(findExamIds, PageRequest.of(0, 3)); //fetch 조인으로 바꿔야함
 
         for (NearExamInfo exam : findExams) {
             LocalDateTime regEndDate = exam.getRegEndDate();

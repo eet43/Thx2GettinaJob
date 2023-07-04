@@ -13,7 +13,7 @@ public class JacksonConfig {
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
         return builder -> {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
             builder.deserializerByType(LocalDateTime.class, new LocalDateTimeDeserializer(formatter));
         };
     }

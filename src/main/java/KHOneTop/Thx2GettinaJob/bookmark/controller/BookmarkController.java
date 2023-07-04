@@ -69,8 +69,8 @@ public class BookmarkController {
 
     @ApiResponse(responseCode = "200", description = "마감 얼마 안남은 즐겨찾기 시험 조회 성공", content = @Content(schema = @Schema(implementation = Top3NearBookmark.class)))
     @GetMapping("/near") //수정필요
-    public CustomResponse getTop3NearBookmarks(){
-        List<Top3NearBookmark> data = bookmarkService.getTop3NearBookmarks();
+    public CustomResponse getTop3NearBookmarks(@RequestBody GetTop3NearBookmarkRequest request){
+        List<Top3NearBookmark> data = bookmarkService.getTop3NearBookmarks(request);
         return CustomResponse.success(data);
     }
 
