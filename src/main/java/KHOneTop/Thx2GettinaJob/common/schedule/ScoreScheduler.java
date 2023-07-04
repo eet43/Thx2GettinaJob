@@ -22,11 +22,11 @@ public class ScoreScheduler {
     @Scheduled(cron = "0 0 0 * * *")
     public void checkCertificateExpiration() {
         LocalDate today = LocalDate.now();
-        Optional<List<Score>> scoreList = scoreRepository.findByIsEffectiveTrueAndExpirationDateBefore(today);
-        scoreList.ifPresent(list -> {
-            List<Long> scoreIds = list.stream()
+        List<Score> scoreList = scoreRepository.findByIsEffectiveTrueAndExpirationDateBefore(today);
+        if (!scoreList.isEmpty()) {
+            List<Long> scoreIds = scoreList.stream()
                     .map(Score::getId).toList();
             applicationEventPublisher.publishEvent(new ScoreExpiredEvent(scoreIds));
-            });
+        }
     }
 }

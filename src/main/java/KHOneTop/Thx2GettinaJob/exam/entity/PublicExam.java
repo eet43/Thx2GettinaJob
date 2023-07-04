@@ -9,5 +9,5 @@ import lombok.experimental.SuperBuilder;
 @Getter @Setter
 @SuperBuilder
 @NoArgsConstructor
-public non-sealed class PublicExam extends Exam{
+public class PublicExam extends Exam{
 }

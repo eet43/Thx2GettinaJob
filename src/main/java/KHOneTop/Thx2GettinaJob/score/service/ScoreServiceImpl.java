@@ -67,7 +67,7 @@ public class ScoreServiceImpl implements ScoreService{
     public List<ScoreDetail> getScoreDetails(GetScoreRequest request) {
         checkUserUtil.checkValidUserId(request.userId());
 
-        Optional<List<Score>> findScores = scoreRepository.findAllByUserId(request.userId());
+        List<Score> findScores = scoreRepository.findAllByUserId(request.userId());
         return getScoresFormat(findScores);
     }
 
@@ -79,18 +79,17 @@ public class ScoreServiceImpl implements ScoreService{
 
         checkUserUtil.checkValidUserId(request.userId());
 
-        Optional<List<Score>> findScores = scoreRepository.findAllByUserIdAndIsEffective(request.userId());
+        List<Score> findScores = scoreRepository.findAllByUserIdAndIsEffectiveTrue(request.userId());
         return getScoresFormat(findScores);
     }
 
-    private List<ScoreDetail> getScoresFormat(Optional<List<Score>> findScores) {
+    private List<ScoreDetail> getScoresFormat(List<Score> findScores) {
         List<ScoreDetail> result = new ArrayList<>();
 
         if(findScores.isEmpty()) {
             return Collections.emptyList();
         } else {
-            List<Score> getScores = findScores.get();
-            for(Score score : getScores) {
+            for(Score score : findScores) {
                 ScoreDetail dto = modelMapper.map(score, ScoreDetail.class);
                 if(score.getExpirationDate() != null && score.getIsEffective()) {
                     dto.setDay(ChronoUnit.DAYS.between(LocalDate.now(), score.getExpirationDate()));

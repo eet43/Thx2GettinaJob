@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ScoreRepository extends JpaRepository<Score, Long> {
-    Optional<List<Score>> findAllByUserId(Long userId);
+    List<Score> findAllByUserId(Long userId);
 
-    Optional<List<Score>> findAllByUserIdAndIsEffective(Long userId);
+    List<Score> findAllByUserIdAndIsEffectiveTrue(Long userId);
 
-    Optional<List<Score>> findByIsEffectiveTrueAndExpirationDateBefore(LocalDate date);
+    List<Score> findByIsEffectiveTrueAndExpirationDateBefore(LocalDate date);
 }
