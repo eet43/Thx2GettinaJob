@@ -34,7 +34,7 @@ public non-sealed class BookmarkServiceImpl implements BookmarkService {
     @Transactional
     public void addBookmarkPriExam(AddBookmarkPrivateExamRequest request) {
         checkUserUtil.checkValidUserId(request.userId());
-        if(examRepository.existsByNameAndUserId(request.name(), request.userId())) {
+        if(examRepository.existsByNameAndUserId(request.name(), request.userId()) == 1) {
             throw new CustomException(Codeset.ALREADY_EXAM_NAME, "이미 존재하는 시험 이름입니다.");
         }
 
@@ -49,7 +49,7 @@ public non-sealed class BookmarkServiceImpl implements BookmarkService {
     @Transactional
     public void addBookmarkPubExam(AddBookmarkPubExamRequest request) {
         checkUserUtil.checkValidUserId(request.userId());
-        checkValidExam(request.examId());
+        checkValidBookmark(request.userId(), request.examId());
 
         Bookmark newBookmark = Bookmark.create(request.userId(), request.examId(), true);
         bookmarkRepository.save(newBookmark);
@@ -199,9 +199,9 @@ public non-sealed class BookmarkServiceImpl implements BookmarkService {
         return result;
     }
 
-    private void checkValidExam(Long examId) {
-        if (!examRepository.existsById(examId)) {
-            throw new CustomException(Codeset.INVALID_EXAM, "해당 시험을 찾을 수 없습니다.");
+    private void checkValidBookmark(Long userId, Long examId) {
+        if (bookmarkRepository.existsByUserIdAndExamId(userId, examId)) {
+            throw new CustomException(Codeset.ALREADY_BOOKMARK, "이미 즐겨찾기에 등록된 시험입니다.");
         }
     }
 

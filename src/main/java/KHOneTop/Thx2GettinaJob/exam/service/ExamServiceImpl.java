@@ -34,7 +34,7 @@ public class ExamServiceImpl implements ExamService{
     public List<ExamInfo> getExamList(GetExamListRequest request) {
         checkUserUtil.checkValidUserId(request.userId());
 
-        List<Exam> findExams = examRepository.findPublicOrOwnedExams(request.userId());
+        List<Exam> findExams = examRepository.findAllByIsPublicTrue();
         List<ExamInfo> result = new ArrayList<>();
 
         for (Exam exam : findExams) {

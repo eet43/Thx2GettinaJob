@@ -35,7 +35,10 @@ public class Score {
 
     public void modifyScore(String name, String score, String studentCode, String issuer,
                             LocalDate acquisitionDate, LocalDate expirationDate) {
-        boolean isEffect = expirationDate.isAfter(LocalDate.now());
+        boolean isEffect = true;
+        if(expirationDate != null) {
+            isEffect = expirationDate.isAfter(LocalDate.now());
+        }
 
         this.name = name;
         this.score = score;

@@ -22,7 +22,11 @@ public record CreateScoreRequest(
         LocalDate expirationDate
 ) {
     public Score toEntity() {
-        boolean isEffect = expirationDate.isAfter(LocalDate.now());
+        boolean isEffect = true;
+        if(expirationDate != null) {
+            isEffect = expirationDate.isAfter(LocalDate.now());
+        }
+
         return Score.builder()
                 .userId(userId)
                 .name(name)
