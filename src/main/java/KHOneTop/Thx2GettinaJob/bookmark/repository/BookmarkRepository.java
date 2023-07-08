@@ -4,6 +4,7 @@ import KHOneTop.Thx2GettinaJob.bookmark.dto.BookmarkCount;
 import KHOneTop.Thx2GettinaJob.bookmark.entity.Bookmark;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -18,4 +19,8 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
     List<BookmarkCount> findTop5PopBookmarkCount(Pageable pageable);
 
     Bookmark findByUserIdAndExamId(Long userId, Long examId);
+
+    @Modifying
+    @Query("DELETE FROM Bookmark b WHERE b.userId = :userId")
+    void deleteByUserId(@Param("userId") Long userId);
 }

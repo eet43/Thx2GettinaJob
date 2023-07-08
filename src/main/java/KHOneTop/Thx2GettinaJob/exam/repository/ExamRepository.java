@@ -5,6 +5,7 @@ import KHOneTop.Thx2GettinaJob.exam.entity.Exam;
 import KHOneTop.Thx2GettinaJob.exam.entity.PrivateExam;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -50,5 +51,9 @@ public interface ExamRepository extends JpaRepository<Exam, Long>, ExamRepositor
 
         @Query("SELECT e FROM Exam e JOIN FETCH e.examTimeStamp WHERE e.id IN :examIds")
         List<Exam> findExamsWithAnySchedule(@Param("examIds") List<Long> examIds);
+
+        @Modifying
+        @Query("DELETE FROM PrivateExam e WHERE e.userId = :userId")
+        void deleteByUserId(@Param("userId") Long userId);
 
 }
