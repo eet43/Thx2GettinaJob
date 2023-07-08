@@ -19,12 +19,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/change/info")
-    public CustomResponse changeNickname(@RequestBody ChangeNicknameRequest request) {
-        userService.changeNickname(request);
-        return CustomResponse.success();
-    }
-
     @PostMapping("/change/password")
     public CustomResponse changePassword(@RequestBody ChangePasswordRequest request) {
         userService.changePassword(request);

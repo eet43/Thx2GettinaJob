@@ -9,6 +9,7 @@ import KHOneTop.Thx2GettinaJob.auth.dto.SignUpRequest;
 import KHOneTop.Thx2GettinaJob.common.response.Codeset;
 import KHOneTop.Thx2GettinaJob.common.response.CustomException;
 import KHOneTop.Thx2GettinaJob.common.util.UserPasswordUtil;
+import KHOneTop.Thx2GettinaJob.user.dto.ChangeNicknameRequest;
 import KHOneTop.Thx2GettinaJob.user.entity.User;
 import KHOneTop.Thx2GettinaJob.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -76,5 +77,16 @@ public class AuthServiceImpl implements AuthService{
         return new LoginToken(jwtProvider.generateAccessTokenFromRefreshToken(request.refreshToken()), request.refreshToken());
     }
 
+    @Override
+    @Transactional
+    public LoginToken changeNickname(ChangeNicknameRequest request) {
+        if (userRepository.findByNickname(request.nickname()).isPresent()) {
+            throw new CustomException(Codeset.ALREADY_NICKNAME, "이미 존재하는 닉네임");
+        }
+        User findUser = userRepository.findById(request.userId())
+                .orElseThrow(() -> new CustomException(Codeset.INVALID_USER, "해당 아이디의 사용자를 찾을 수 없습니다."));
+        findUser.changeInfo(request.nickname());
 
+        return createTokens(findUser);
+    }
 }

@@ -8,6 +8,7 @@ import KHOneTop.Thx2GettinaJob.auth.service.AuthService;
 import KHOneTop.Thx2GettinaJob.common.EndPoint;
 import KHOneTop.Thx2GettinaJob.common.response.Codeset;
 import KHOneTop.Thx2GettinaJob.common.response.CustomResponse;
+import KHOneTop.Thx2GettinaJob.user.dto.ChangeNicknameRequest;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -46,6 +47,13 @@ public class AuthController {
     @PostMapping("/refesh")
     public CustomResponse refreshAccessToken(@RequestBody RefreshAccessTokenRequest request) {
         LoginToken authToken = authService.refreshAccessToken(request);
+        return CustomResponse.success(authToken);
+    }
+
+    @ApiResponse(responseCode = "200", description = "유저 닉네임 변경 성공", content = @Content(schema = @Schema(implementation = LoginToken.class)))
+    @PostMapping("/change/info")
+    public CustomResponse changeNickname(@RequestBody ChangeNicknameRequest request) {
+        LoginToken authToken = authService.changeNickname(request);
         return CustomResponse.success(authToken);
     }
 }

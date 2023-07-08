@@ -26,22 +26,6 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public void changeNickname(ChangeNicknameRequest request) {
-        if(checkNickname(request.nickname())) {
-            User findUser = userRepository.findById(request.userId())
-                    .orElseThrow(() -> new CustomException(Codeset.INVALID_USER, "해당 아이디의 사용자를 찾을 수 없습니다."));
-            findUser.changeInfo(request.nickname());
-        } else {
-            throw new CustomException(Codeset.ALREADY_NICKNAME, "이미 존재하는 닉네임입니다.");
-        }
-    }
-
-    private boolean checkNickname(String nickname) {
-        return userRepository.findByNickname(nickname).isEmpty();
-    }
-
-    @Override
-    @Transactional
     public void changePassword(ChangePasswordRequest request) {
         User findUser = checkEmail(request.email());
         if(passwordEncoder.matches(request.oldPassword(), findUser.getPassword())) {
