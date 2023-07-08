@@ -41,6 +41,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional
     public void changePassword(ChangePasswordRequest request) {
         User findUser = checkEmail(request.email());
         if(passwordEncoder.matches(request.oldPassword(), findUser.getPassword())) {

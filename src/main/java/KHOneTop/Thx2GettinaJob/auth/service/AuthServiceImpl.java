@@ -34,7 +34,7 @@ public class AuthServiceImpl implements AuthService{
     @Transactional
     public void SignUp(SignUpRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new CustomException(Codeset.ALREADY_NICKNAME, "이미 존재하는 이메일");
+            throw new CustomException(Codeset.ALREADY_EMAIL, "이미 존재하는 이메일");
         }
         if(userRepository.findByNickname(request.getNickname()).isPresent()) {
             throw new CustomException(Codeset.ALREADY_NICKNAME, "이미 존재하는 닉네임");

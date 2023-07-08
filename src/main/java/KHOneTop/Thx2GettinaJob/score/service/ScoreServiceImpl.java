@@ -61,7 +61,7 @@ public class ScoreServiceImpl implements ScoreService{
 
     @Cacheable(
             value = "ScoreDetail",
-            key = "#userId"
+            key = "#request.userId()"
     )
     @Override
     public List<ScoreDetail> getScoreDetails(GetScoreRequest request) {
