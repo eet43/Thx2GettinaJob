@@ -19,6 +19,13 @@ import java.util.List;
 public class ExamController {
     private final ExamService examService;
 
+    @ApiResponse(responseCode = "200", description = "홈 화면 리스트 조회(검색용)", content = @Content(schema = @Schema(implementation = HomeSearch.class)))
+    @GetMapping("/home/summary")
+    public CustomResponse getHomeSearchList(@RequestBody GetExamListRequest request) {
+        List<HomeSearch> data = examService.getHomeSearchList(request);
+        return CustomResponse.success(data);
+    }
+
     @ApiResponse(responseCode = "200", description = "즐겨찾기 리스트 조회(검색용)", content = @Content(schema = @Schema(implementation = ExamInfo.class)))
     @GetMapping("/summary")
     public CustomResponse getExamList(@RequestBody GetExamListRequest request) {

@@ -1,6 +1,8 @@
 package KHOneTop.Thx2GettinaJob.exam.service;
 
 import KHOneTop.Thx2GettinaJob.bookmark.dto.BookmarkDetailOfTurn;
+import KHOneTop.Thx2GettinaJob.bookmark.dto.BookmarkInfo;
+import KHOneTop.Thx2GettinaJob.bookmark.dto.GetBookmarkListRequest;
 import KHOneTop.Thx2GettinaJob.bookmark.repository.BookmarkRepository;
 import KHOneTop.Thx2GettinaJob.common.response.Codeset;
 import KHOneTop.Thx2GettinaJob.common.response.CustomException;
@@ -24,11 +26,49 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ExamServiceImpl implements ExamService{
+public class ExamServiceImpl implements ExamService {
 
     private final ExamRepository examRepository;
     private final BookmarkRepository bookmarkRepository;
     private final CheckUserUtil checkUserUtil;
+
+    @Override
+    public List<HomeSearch> getHomeSearchList(GetExamListRequest request) {
+        checkUserUtil.checkValidUserId(request.userId());
+
+        List<Exam> findExams = examRepository.findAllByIsPublicFetchJoin();
+        List<HomeSearch> result = new ArrayList<>();
+
+        for (Exam exam : findExams) {
+            boolean flag = false;
+            boolean isTurn = exam.getExamTimeStamp().size() != 1;
+            boolean isBookmark = bookmarkRepository.existsByUserIdAndExamId(request.userId(), exam.getId());
+            for (ExamTimeStamp timeStamp : exam.getExamTimeStamp()) {
+                LocalDateTime regEndDate = timeStamp.getRegEndDate();
+                LocalDateTime addRegEndDate = timeStamp.getAddRegEndDate();
+                if (regEndDate == null) {
+                    result.add(HomeSearch.fromEntity(exam, isBookmark, isTurn, "상시접수", null));
+                    flag = true;
+                    break;
+                } else if (regEndDate.isAfter(LocalDateTime.now())) {
+                    Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), regEndDate.toLocalDate());
+                    result.add(HomeSearch.fromEntity(exam, isBookmark, isTurn, "정기접수", day));
+                    flag = true;
+                    break;
+                } else if (addRegEndDate != null && addRegEndDate.isAfter(LocalDateTime.now())) {
+                    Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), addRegEndDate.toLocalDate());
+                    result.add(HomeSearch.fromEntity(exam, isBookmark, isTurn, "추가접수중", day));
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                result.add(HomeSearch.fromEntity(exam, isBookmark, isTurn, "접수마감", null));
+            }
+        }
+
+        return result;
+    }
 
     @Override
     public List<ExamInfo> getExamList(GetExamListRequest request) {
@@ -89,7 +129,7 @@ public class ExamServiceImpl implements ExamService{
         PrivateExam findExam = examRepository.findPriExamByIdFetchJoin(request.examId()).
                 orElseThrow(() -> new CustomException(Codeset.INVALID_EXAM, "해당하는 시험이 존재하지 않습니다."));
 
-        if(Boolean.TRUE.equals(findExam.getIsPublic())) {
+        if (Boolean.TRUE.equals(findExam.getIsPublic())) {
             throw new CustomException(Codeset.INVALID_PRIEXAM, "해당 시험은 직접 추가한 객체가 아닙니다. 개발팀에게 문의해주세요");
         } else {
             findExam.modify(request);
@@ -98,7 +138,7 @@ public class ExamServiceImpl implements ExamService{
 
 
     private void checkExam(Long examId) {
-        if(!examRepository.existsById(examId)) {
+        if (!examRepository.existsById(examId)) {
             throw new CustomException(Codeset.INVALID_EXAM, "해당 시험이 존재하지 않습니다.");
         }
     }
