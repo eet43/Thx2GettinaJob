@@ -83,6 +83,13 @@ public class ScoreServiceImpl implements ScoreService{
         return getScoresFormat(findScores);
     }
 
+    @Override
+    public void deleteScore(DeleteScoreRequest request) {
+        Score findScore = scoreRepository.findById(request.scoreId())
+                .orElseThrow(() -> new CustomException(Codeset.INVALID_SCORE, "해당하는 자격증 데이터를 찾을 수 없습니다."));
+        scoreRepository.delete(findScore);
+    }
+
     private List<ScoreDetail> getScoresFormat(List<Score> findScores) {
         List<ScoreDetail> result = new ArrayList<>();
 

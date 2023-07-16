@@ -13,4 +13,6 @@ public interface ScoreService {
 
     List<ScoreDetail> getValidScoreDetails(GetValidScoreRequest request);
 
+    void deleteScore(DeleteScoreRequest request);
+
 }

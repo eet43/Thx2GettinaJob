@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 public record HomeSearch(
         @Schema(description = "시험 Id", nullable = false, example = "2L")
         Long id,

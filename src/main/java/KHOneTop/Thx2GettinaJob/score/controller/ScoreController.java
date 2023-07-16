@@ -46,4 +46,10 @@ public class ScoreController {
         return CustomResponse.success(data);
     }
 
+    @DeleteMapping("")
+    public CustomResponse deleteScore(@RequestBody DeleteScoreRequest request) {
+        scoreService.deleteScore(request);
+        return CustomResponse.success();
+    }
+
 }

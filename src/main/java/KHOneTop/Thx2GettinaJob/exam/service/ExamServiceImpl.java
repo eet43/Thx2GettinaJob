@@ -32,6 +32,7 @@ public class ExamServiceImpl implements ExamService {
     private final BookmarkRepository bookmarkRepository;
     private final CheckUserUtil checkUserUtil;
 
+
     @Override
     public List<HomeSearch> getHomeSearchList(GetExamListRequest request) {
         checkUserUtil.checkValidUserId(request.userId());
