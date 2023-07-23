@@ -48,23 +48,23 @@ public class ExamServiceImpl implements ExamService {
                 LocalDateTime regEndDate = timeStamp.getRegEndDate();
                 LocalDateTime addRegEndDate = timeStamp.getAddRegEndDate();
                 if (regEndDate == null) {
-                    result.add(HomeSearch.fromEntity(exam, isBookmark, isTurn, "상시접수", null));
+                    result.add(HomeSearch.fromEntity(exam, isTurn, isBookmark, "상시접수", null));
                     flag = true;
                     break;
                 } else if (regEndDate.isAfter(LocalDateTime.now())) {
                     Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), regEndDate.toLocalDate());
-                    result.add(HomeSearch.fromEntity(exam, isBookmark, isTurn, "정기접수", day));
+                    result.add(HomeSearch.fromEntity(exam, isTurn, isBookmark, "정기접수", day));
                     flag = true;
                     break;
                 } else if (addRegEndDate != null && addRegEndDate.isAfter(LocalDateTime.now())) {
                     Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), addRegEndDate.toLocalDate());
-                    result.add(HomeSearch.fromEntity(exam, isBookmark, isTurn, "추가접수중", day));
+                    result.add(HomeSearch.fromEntity(exam, isTurn, isBookmark, "추가접수중", day));
                     flag = true;
                     break;
                 }
             }
             if (!flag) {
-                result.add(HomeSearch.fromEntity(exam, isBookmark, isTurn, "접수마감", null));
+                result.add(HomeSearch.fromEntity(exam, isTurn, isBookmark, "접수마감", null));
             }
         }
 

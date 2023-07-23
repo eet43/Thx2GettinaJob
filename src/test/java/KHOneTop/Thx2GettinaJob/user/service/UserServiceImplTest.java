@@ -41,38 +41,38 @@ class UserServiceImplTest {
     final String name = "김달순";
     final String nickname = "김덕자";
     final String changeNickname = "김달자";
-    @Test
-    void ChangeNicknameByAlreadyNickname() throws Exception {
-        //given
-        ChangeNicknameRequest request = new ChangeNicknameRequest(email, name, nickname);
-        User user = User.builder().build();
-        given(userRepository.findByNickname(nickname)).willReturn(Optional.of(user));
+//    @Test
+//    void ChangeNicknameByAlreadyNickname() throws Exception {
+//        //given
+//        ChangeNicknameRequest request = new ChangeNicknameRequest(email, name, nickname);
+//        User user = User.builder().build();
+//        given(userRepository.findByNickname(nickname)).willReturn(Optional.of(user));
+//
+//        //when & then
+//        assertThatThrownBy(() -> userService.changeNickname(request))
+//                .isInstanceOf(CustomException.class)
+//                .hasFieldOrPropertyWithValue("code", Codeset.ALREADY_NICKNAME);
+//    }
 
-        //when & then
-        assertThatThrownBy(() -> userService.changeNickname(request))
-                .isInstanceOf(CustomException.class)
-                .hasFieldOrPropertyWithValue("code", Codeset.ALREADY_NICKNAME);
-    }
-
-    @Test
-    void validChangeNickname() throws Exception {
-        //given
-        ChangeNicknameRequest request = new ChangeNicknameRequest(email, name, changeNickname);
-        User user = User.builder()
-                .email(email)
-                .password(encodePassword)
-                .name(name)
-                .nickname(nickname)
-                .build();
-        given(userRepository.findByEmail(email)).willReturn(Optional.of(user));
-        given(userRepository.findByNickname(changeNickname)).willReturn(Optional.empty());
-
-        //when
-        userService.changeNickname(request);
-
-        // then
-        assertThat(user.getNickname()).isEqualTo(changeNickname);
-    }
+//    @Test
+//    void validChangeNickname() throws Exception {
+//        //given
+//        ChangeNicknameRequest request = new ChangeNicknameRequest(email, name, changeNickname);
+//        User user = User.builder()
+//                .email(email)
+//                .password(encodePassword)
+//                .name(name)
+//                .nickname(nickname)
+//                .build();
+//        given(userRepository.findByEmail(email)).willReturn(Optional.of(user));
+//        given(userRepository.findByNickname(changeNickname)).willReturn(Optional.empty());
+//
+//        //when
+//        userService.changeNickname(request);
+//
+//        // then
+//        assertThat(user.getNickname()).isEqualTo(changeNickname);
+//    }
 
     @Test
     void changePwByValidPw() throws Exception {

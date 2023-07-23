@@ -83,6 +83,10 @@ public class ScoreServiceImpl implements ScoreService{
         return getScoresFormat(findScores);
     }
 
+    @CacheEvict(
+            value = "ScoreDetail",
+            key = "#request.userId()"
+    )
     @Override
     public void deleteScore(DeleteScoreRequest request) {
         Score findScore = scoreRepository.findById(request.scoreId())

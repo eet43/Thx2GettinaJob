@@ -90,7 +90,6 @@ public class NewExamAddService {
                 String[] addRegDateInput = addRegDate.split("~");
 
 
-
                 LocalDateTime examDateTime = LocalDateTime.parse(examDate, timeMinformatter);
                 LocalDateTime resultDateTime = LocalDateTime.parse(resultDate, timeformatter);
                 LocalDateTime regStartDateTime = LocalDateTime.parse(regDateInput[0].substring(regDateInput[0].indexOf(":") + 2), timeformatter);
@@ -139,8 +138,8 @@ public class NewExamAddService {
                     .build();
 
             Document doc = Jsoup.connect("https://www.fpsbkorea.org/?mnu_usn=27").get();
-            Elements titles = doc.select("dl dt");
-            Elements dates = doc.select("dl dd");
+            Elements titles = doc.select("dl.eduList dt");
+            Elements dates = doc.select("dl.eduList dd");
             Pattern pattern = Pattern.compile("\\d+회");
 
             int count = 0;
@@ -150,7 +149,6 @@ public class NewExamAddService {
                 String examDate = date.select("strong").get(0).text();
                 String regDate = date.select("li").get(0).text();
                 String resultDate = date.select("li").get(4).text();
-
 
                 Matcher matcher = pattern.matcher(examName);
                 if (matcher.find()) {
@@ -165,7 +163,7 @@ public class NewExamAddService {
                 resultDate = resultDate.substring(startResultIndex + 2).trim();
 
                 LocalDateTime examDateTime = LocalDateTime.parse(examDate, formatter);
-                LocalDateTime regStartDateTime = LocalDateTime.parse(parts[0].substring(parts[0].indexOf("2")).trim(), formatter2);
+                LocalDateTime regStartDateTime = LocalDateTime.parse(parts[0].substring(5).trim(), formatter2);
                 LocalDateTime regEndDateTime = LocalDateTime.parse(parts[1].trim(), formatter2);
                 LocalDateTime resultDateTime = LocalDateTime.parse(resultDate, formatter2);
 
@@ -178,6 +176,7 @@ public class NewExamAddService {
                         .build();
 
                 afpkPublicExam.addExamTime(examTimeStamp);
+                count++;
             }
 
             examRepository.save(afpkPublicExam);
@@ -269,7 +268,7 @@ public class NewExamAddService {
 
             int count = 1;
             for (Element row : rows) {
-                String examName = "제" + count +"회";
+                String examName = "제" + count + "회";
                 String examDate = row.select("td").get(0).text();
                 String resultDate = row.select("td").get(1).text();
                 String regDate = row.select("td").get(2).text();
@@ -293,7 +292,7 @@ public class NewExamAddService {
                         .build();
 
                 toeicSpeakingPublicExam.addExamTime(examTimeStamp);
-                count ++;
+                count++;
             }
 
             examRepository.save(toeicSpeakingPublicExam);
@@ -366,7 +365,7 @@ public class NewExamAddService {
     }
 
     private void isExistByName(String name) {
-        if(examRepository.existsByName(name)) {
+        if (examRepository.existsByName(name)) {
             throw new CustomException(Codeset.ALREADY_EXAM_NAME, "이미 존재하는 시험 데이터입니다.");
         }
     }

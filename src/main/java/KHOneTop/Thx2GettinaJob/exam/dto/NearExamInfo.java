@@ -9,6 +9,7 @@ public class NearExamInfo {
     private final Long id;
     private final String name;
     private final String issuer;
+    private final String url;
     private final LocalDateTime regEndDate;
     private final LocalDateTime addRegEndDate;
 }

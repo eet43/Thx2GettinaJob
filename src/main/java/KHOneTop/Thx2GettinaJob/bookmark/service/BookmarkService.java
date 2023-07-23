@@ -5,7 +5,7 @@ import KHOneTop.Thx2GettinaJob.bookmark.dto.*;
 import java.util.List;
 
 public sealed interface BookmarkService
-        permits BookmarkServiceImpl{
+        permits BookmarkServiceImpl {
 
     void addBookmarkPriExam(AddBookmarkPrivateExamRequest request);
 
@@ -17,7 +17,10 @@ public sealed interface BookmarkService
 
     List<BookmarkInfo> getBookmarkInfo(GetBookmarkListRequest request);
 
-    List<Top5PopBookmark> getTop5PopBookmarks();
+    List<Top5PopBookmark> getTop5PopBookmarksNoAuth();
+
+    List<Top5PopBookmark> getTop5PopBookmarks(GetBookmarkListRequest request);
+
 
     List<Top3NearBookmark> getTop3NearBookmarks(GetTop3NearBookmarkRequest request);
 

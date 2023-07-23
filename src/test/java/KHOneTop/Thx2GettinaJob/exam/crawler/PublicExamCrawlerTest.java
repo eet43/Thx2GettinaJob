@@ -79,8 +79,8 @@ class PublicExamCrawlerTest {
 
         //when
         Document doc = Jsoup.connect("https://www.fpsbkorea.org/?mnu_usn=27").get();
-        Elements titles = doc.select("dl dt");
-        Elements dates = doc.select("dl dd");
+        Elements titles = doc.select("dl.eduList dt");
+        Elements dates = doc.select("dl.eduList dd");
 
         Pattern pattern = Pattern.compile("\\d+회");
 
@@ -114,12 +114,13 @@ class PublicExamCrawlerTest {
             examDateTime = LocalDateTime.parse(examDate, formatter);
 
             parts = text1.split("부터|까지");
-            startDateTime = LocalDateTime.parse(parts[0].substring(parts[0].indexOf("2")).trim(), formatter2);
+            startDateTime = LocalDateTime.parse(parts[0].substring(5).trim(), formatter2);
             endDateTime = LocalDateTime.parse(parts[1].trim(), formatter2);
             startIndex = text2.indexOf("발표");
             result2 = text2.substring(startIndex + 2).trim();
             resultDate = LocalDateTime.parse(result2, formatter2);
 
+            count++;
         }
 
 

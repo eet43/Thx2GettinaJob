@@ -33,6 +33,9 @@ public class EmailServiceImpl implements EmailService{
     @Override
     @Transactional
     public void authEmail(SendToEmailRequest request) {
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new CustomException(Codeset.ALREADY_EMAIL, "이미 존재하는 이메일");
+        }
         String subject = "회원가입 이메일 인증 코드입니다.";
         String randNum = tempPwGenerator.generateRandomNum();
         sendToEmail(subject, request.getEmail(), randNum);
@@ -49,6 +52,8 @@ public class EmailServiceImpl implements EmailService{
         sendToEmail(subject, request.getEmail(), tempPw);
         findUser.changePassword(passwordEncoder, tempPw);
     }
+
+
 
     private User checkEmail(String email) {
         return userRepository.findByEmail(email)

@@ -60,10 +60,17 @@ public class BookmarkController {
         return CustomResponse.success(data);
     }
 
-    @ApiResponse(responseCode = "200", description = "인기있는 자격증 조회 성공", content = @Content(schema = @Schema(implementation = Top5PopBookmark.class)))
-    @GetMapping("/pop")
+    @ApiResponse(responseCode = "200", description = "인기있는 자격증 조회 성공(비로그인)", content = @Content(schema = @Schema(implementation = Top5PopBookmark.class)))
+    @GetMapping("/pop/less")
     public CustomResponse getTop5PopBookmarks() {
-        List<Top5PopBookmark> data = bookmarkService.getTop5PopBookmarks();
+        List<Top5PopBookmark> data = bookmarkService.getTop5PopBookmarksNoAuth();
+        return CustomResponse.success(data);
+    }
+
+    @ApiResponse(responseCode = "200", description = "인기있는 자격증 조회 성공(로그인)", content = @Content(schema = @Schema(implementation = Top5PopBookmark.class)))
+    @GetMapping("/pop")
+    public CustomResponse getTop5PopBookmarks(@RequestBody GetBookmarkListRequest request) {
+        List<Top5PopBookmark> data = bookmarkService.getTop5PopBookmarks(request);
         return CustomResponse.success(data);
     }
 
