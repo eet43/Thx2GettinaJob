@@ -84,8 +84,8 @@ public non-sealed class BookmarkServiceImpl implements BookmarkService {
     public List<BookmarkInfo> getBookmarkInfo(GetBookmarkListRequest request) {
         checkUserUtil.checkValidUserId(request.userId());
 
-        List<Long> findExamIds = bookmarkRepository.findExamIdByUserId(request.userId());
-        List<Exam> findExams = examRepository.findByIdInFetchJoin(findExamIds);
+        List<Long> findExamIds = bookmarkRepository.findExamIdByUserId(request.userId()); //즐겨찾기 exam ID 추출
+        List<Exam> findExams = examRepository.findByIdInFetchJoin(findExamIds); //즐겨찾기된 exam 추출
         List<BookmarkInfo> bookmarkDtos = new ArrayList<>();
 
         for (Exam exam : findExams) {

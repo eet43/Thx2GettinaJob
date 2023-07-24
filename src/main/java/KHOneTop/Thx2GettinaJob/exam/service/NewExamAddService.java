@@ -45,6 +45,7 @@ public class NewExamAddService {
                 .name(request.name() + "(상시접수)")
                 .issuer(request.issuer())
                 .url(request.url())
+                .examTimeStamp(new ArrayList<>())
                 .isPublic(true)
                 .build();
 

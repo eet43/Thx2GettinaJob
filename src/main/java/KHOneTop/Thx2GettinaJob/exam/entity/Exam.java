@@ -31,6 +31,10 @@ public abstract class Exam {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "exam", cascade = CascadeType.ALL)
     protected List<ExamTimeStamp> examTimeStamp;
 
+    public boolean checkIsTurn() {
+        return this.getExamTimeStamp().size() == 1;
+    }
+
     public void addExamTime(ExamTimeStamp examTime) {
         this.examTimeStamp.add(examTime);
         examTime.setExam(this);
