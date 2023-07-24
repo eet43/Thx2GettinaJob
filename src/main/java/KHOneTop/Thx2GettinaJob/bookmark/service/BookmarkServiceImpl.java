@@ -3,6 +3,8 @@ package KHOneTop.Thx2GettinaJob.bookmark.service;
 import KHOneTop.Thx2GettinaJob.bookmark.dto.*;
 import KHOneTop.Thx2GettinaJob.bookmark.entity.Bookmark;
 import KHOneTop.Thx2GettinaJob.bookmark.repository.BookmarkRepository;
+import KHOneTop.Thx2GettinaJob.common.checkDday.CheckExamDday;
+import KHOneTop.Thx2GettinaJob.common.checkDday.dto.ExamDdayInfo;
 import KHOneTop.Thx2GettinaJob.common.response.Codeset;
 import KHOneTop.Thx2GettinaJob.common.response.CustomException;
 import KHOneTop.Thx2GettinaJob.common.util.CheckUserUtil;
@@ -29,6 +31,8 @@ public non-sealed class BookmarkServiceImpl implements BookmarkService {
     private final CheckUserUtil checkUserUtil;
     private final BookmarkRepository bookmarkRepository;
     private final ExamRepository examRepository;
+
+    private final CheckExamDday checkExamDday;
 
     @Override
     @Transactional
@@ -137,74 +141,31 @@ public non-sealed class BookmarkServiceImpl implements BookmarkService {
     }
 
     @Override
-    public List<Top5PopBookmark> getTop5PopBookmarksNoAuth() { //시간이 정해지면, 시간 단위로 카운트 해야함. Top5 북마크 가져오는 쿼리를 수정하면됨.
-        List<Top5PopBookmark> result = new ArrayList<>();
+    public List<ExamDdayInfo> getTop5PopBookmarksNoAuth() { //시간이 정해지면, 시간 단위로 카운트 해야함. Top5 북마크 가져오는 쿼리를 수정하면됨.
         List<BookmarkCount> findTop5PopBookmarks = bookmarkRepository.findTop5PopBookmarkCount(PageRequest.of(0, 5));
+        List<ExamDdayInfo> result = new ArrayList<>();
 
         for (BookmarkCount findTop5PopBookmark : findTop5PopBookmarks) {
             Exam findExam = examRepository.findByIdFetchJoin(findTop5PopBookmark.getExamId())
                     .orElseThrow(() -> new CustomException(Codeset.INVALID_EXAM, "해당하는 시험이 존재하지 않습니다."));
-            boolean isTurn = findExam.getExamTimeStamp().size() != 1;
-            boolean flag = false;
-            for (ExamTimeStamp timeStamp : findExam.getExamTimeStamp()) {
-                LocalDateTime regEndDate = timeStamp.getRegEndDate();
-                LocalDateTime addRegEndDate = timeStamp.getAddRegEndDate();
-                if (regEndDate == null) {
-                    result.add(Top5PopBookmark.fromEntity(findExam, isTurn, false,"상시접수", null, findTop5PopBookmark.getCount()));
-                    flag = true;
-                    break;
-                } else if (regEndDate.isAfter(LocalDateTime.now())) {
-                    Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), regEndDate.toLocalDate());
-                    result.add(Top5PopBookmark.fromEntity(findExam, isTurn, false,"정기접수중", day, findTop5PopBookmark.getCount()));
-                    flag = true;
-                    break;
-                } else if (addRegEndDate != null && addRegEndDate.isAfter(LocalDateTime.now())) {
-                    Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), addRegEndDate.toLocalDate());
-                    result.add(Top5PopBookmark.fromEntity(findExam, isTurn, false,"추가접수중", day, findTop5PopBookmark.getCount()));
-                    flag = true;
-                    break;
-                }
-            }
-            if (!flag) {
-                result.add(Top5PopBookmark.fromEntity(findExam, isTurn, false,"접수마감", null, findTop5PopBookmark.getCount()));
-            }
+            ExamDdayInfo examInfo = checkExamDday.checkWithNoAuth(findExam);
+            result.add(examInfo);
         }
         return result;
     }
 
     @Override
-    public List<Top5PopBookmark> getTop5PopBookmarks(GetBookmarkListRequest request) { //시간이 정해지면, 시간 단위로 카운트 해야함. Top5 북마크 가져오는 쿼리를 수정하면됨.
-        List<Top5PopBookmark> result = new ArrayList<>();
+    public List<ExamDdayInfo> getTop5PopBookmarks(GetBookmarkListRequest request) { //시간이 정해지면, 시간 단위로 카운트 해야함. Top5 북마크 가져오는 쿼리를 수정하면됨.
         List<BookmarkCount> findTop5PopBookmarks = bookmarkRepository.findTop5PopBookmarkCount(PageRequest.of(0, 5));
+        List<ExamDdayInfo> result = new ArrayList<>();
+
 
         for (BookmarkCount findTop5PopBookmark : findTop5PopBookmarks) {
             Exam findExam = examRepository.findByIdFetchJoin(findTop5PopBookmark.getExamId())
                     .orElseThrow(() -> new CustomException(Codeset.INVALID_EXAM, "해당하는 시험이 존재하지 않습니다."));
-            boolean isTurn = findExam.getExamTimeStamp().size() != 1;
-            boolean isBookmark = bookmarkRepository.existsByUserIdAndExamId(request.userId(), findExam.getId());
-            boolean flag = false;
-            for (ExamTimeStamp timeStamp : findExam.getExamTimeStamp()) {
-                LocalDateTime regEndDate = timeStamp.getRegEndDate();
-                LocalDateTime addRegEndDate = timeStamp.getAddRegEndDate();
-                if (regEndDate == null) {
-                    result.add(Top5PopBookmark.fromEntity(findExam, isTurn, isBookmark,"상시접수", null, findTop5PopBookmark.getCount()));
-                    flag = true;
-                    break;
-                } else if (regEndDate.isAfter(LocalDateTime.now())) {
-                    Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), regEndDate.toLocalDate());
-                    result.add(Top5PopBookmark.fromEntity(findExam, isTurn, isBookmark,"정기접수중", day, findTop5PopBookmark.getCount()));
-                    flag = true;
-                    break;
-                } else if (addRegEndDate != null && addRegEndDate.isAfter(LocalDateTime.now())) {
-                    Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), addRegEndDate.toLocalDate());
-                    result.add(Top5PopBookmark.fromEntity(findExam, isTurn, isBookmark,"추가접수중", day, findTop5PopBookmark.getCount()));
-                    flag = true;
-                    break;
-                }
-            }
-            if (!flag) {
-                result.add(Top5PopBookmark.fromEntity(findExam, isTurn, isBookmark,"접수마감", null, findTop5PopBookmark.getCount()));
-            }
+
+            ExamDdayInfo examInfo = checkExamDday.checkPubExam(findExam, request.userId());
+            result.add(examInfo);
         }
         return result;
     }

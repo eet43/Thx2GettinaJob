@@ -6,6 +6,7 @@ import KHOneTop.Thx2GettinaJob.calendar.dto.CalendarBookmarkSearch;
 import KHOneTop.Thx2GettinaJob.bookmark.service.BookmarkService;
 import KHOneTop.Thx2GettinaJob.calendar.dto.GetCalendarBookmarkRequest;
 import KHOneTop.Thx2GettinaJob.common.EndPoint;
+import KHOneTop.Thx2GettinaJob.common.checkDday.dto.ExamDdayInfo;
 import KHOneTop.Thx2GettinaJob.common.response.CustomResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -63,14 +64,14 @@ public class BookmarkController {
     @ApiResponse(responseCode = "200", description = "인기있는 자격증 조회 성공(비로그인)", content = @Content(schema = @Schema(implementation = Top5PopBookmark.class)))
     @GetMapping("/pop/less")
     public CustomResponse getTop5PopBookmarks() {
-        List<Top5PopBookmark> data = bookmarkService.getTop5PopBookmarksNoAuth();
+        List<ExamDdayInfo> data = bookmarkService.getTop5PopBookmarksNoAuth();
         return CustomResponse.success(data);
     }
 
     @ApiResponse(responseCode = "200", description = "인기있는 자격증 조회 성공(로그인)", content = @Content(schema = @Schema(implementation = Top5PopBookmark.class)))
     @GetMapping("/pop")
     public CustomResponse getTop5PopBookmarks(@RequestBody GetBookmarkListRequest request) {
-        List<Top5PopBookmark> data = bookmarkService.getTop5PopBookmarks(request);
+        List<ExamDdayInfo> data = bookmarkService.getTop5PopBookmarks(request);
         return CustomResponse.success(data);
     }
 

@@ -36,6 +36,7 @@ public class ExamDdayInfo {
         dto.url = exam.getUrl();
         dto.isPublic = exam.getIsPublic();
         dto.isTurn = exam.checkIsTurn();
+        dto.isBookmark = false; //false 로 초기화
         return dto;
     }
 

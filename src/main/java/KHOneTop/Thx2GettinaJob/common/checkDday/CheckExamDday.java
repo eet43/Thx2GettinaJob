@@ -18,9 +18,22 @@ public class CheckExamDday {
 
     private final BookmarkRepository bookmarkRepository;
 
-    public ExamDdayInfo checkExam(Exam exam, Long userId) {
+    public ExamDdayInfo checkPubExam(Exam exam, Long userId) {
         ExamDdayInfo examInfo = ExamDdayInfo.create(exam);
         checkIsBookmark(examInfo, userId);
+
+        for (ExamTimeStamp timeStamp : exam.getExamTimeStamp()) {
+            if(checkExamTime(examInfo, timeStamp)) {
+                return examInfo;
+            }
+        }
+
+        examInfo.setDday("접수마감", null);
+        return examInfo;
+    }
+
+    public ExamDdayInfo checkWithNoAuth(Exam exam) {
+        ExamDdayInfo examInfo = ExamDdayInfo.create(exam);
 
         for (ExamTimeStamp timeStamp : exam.getExamTimeStamp()) {
             if(checkExamTime(examInfo, timeStamp)) {
