@@ -57,7 +57,7 @@ public class BookmarkController {
     @ApiResponse(responseCode = "200", description = "메인화면 즐겨찾기 시험 조회 성공", content = @Content(schema = @Schema(implementation = BookmarkInfo.class)))
     @GetMapping("/info")
     public CustomResponse getBookmarkInfo(@RequestBody GetBookmarkListRequest request) {
-        List<BookmarkInfo> data = bookmarkService.getBookmarkInfo(request);
+        List<ExamDdayInfo> data = bookmarkService.getBookmarkInfo(request);
         return CustomResponse.success(data);
     }
 

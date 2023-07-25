@@ -16,7 +16,7 @@ public sealed interface BookmarkService
 
     List<BookmarkSummary> getBookmarkSummary(GetBookmarkListRequest request);
 
-    List<BookmarkInfo> getBookmarkInfo(GetBookmarkListRequest request);
+    List<ExamDdayInfo> getBookmarkInfo(GetBookmarkListRequest request);
 
     List<ExamDdayInfo> getTop5PopBookmarksNoAuth();
 

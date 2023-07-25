@@ -23,7 +23,20 @@ public class CheckExamDday {
         checkIsBookmark(examInfo, userId);
 
         for (ExamTimeStamp timeStamp : exam.getExamTimeStamp()) {
-            if(checkExamTime(examInfo, timeStamp)) {
+            if(checkPubExam(examInfo, timeStamp)) {
+                return examInfo;
+            }
+        }
+
+        examInfo.setDday("접수마감", null);
+        return examInfo;
+    }
+
+    public ExamDdayInfo checkPriExam(Exam exam, Long userId) {
+        ExamDdayInfo examInfo = ExamDdayInfo.create(exam);
+
+        for (ExamTimeStamp timeStamp : exam.getExamTimeStamp()) {
+            if(checkPriDday(examInfo, timeStamp)) {
                 return examInfo;
             }
         }
@@ -36,7 +49,7 @@ public class CheckExamDday {
         ExamDdayInfo examInfo = ExamDdayInfo.create(exam);
 
         for (ExamTimeStamp timeStamp : exam.getExamTimeStamp()) {
-            if(checkExamTime(examInfo, timeStamp)) {
+            if(checkPubExam(examInfo, timeStamp)) {
                 return examInfo;
             }
         }
@@ -50,9 +63,21 @@ public class CheckExamDday {
         examInfo.setIsBookmark(isBookmark);
     }
 
+    private boolean checkPriDday(ExamDdayInfo examInfo, ExamTimeStamp examTimeStamp) {
+        LocalDateTime regStartDate = examTimeStamp.getRegStartDate();
+        LocalDateTime regEndDate = examTimeStamp.getRegEndDate();
+        LocalDateTime addRegStartDate = examTimeStamp.getAddRegStartDate();
+        LocalDateTime addRegEndDate = examTimeStamp.getAddRegEndDate();
 
-    private boolean checkExamTime(ExamDdayInfo examInfo, ExamTimeStamp examTimeStamp) {
-        LocalDateTime reStartDate = examTimeStamp.getRegStartDate();
+        if (regStartDate == null || regEndDate == null) {
+            examInfo.setDday("기간미입력", null);
+            return true;
+        }
+        return checkCommonDday(examInfo, regStartDate, regEndDate, addRegStartDate, addRegEndDate);
+    }
+
+    private boolean checkPubExam(ExamDdayInfo examInfo, ExamTimeStamp examTimeStamp) {
+        LocalDateTime regStartDate = examTimeStamp.getRegStartDate();
         LocalDateTime regEndDate = examTimeStamp.getRegEndDate();
         LocalDateTime addRegStartDate = examTimeStamp.getAddRegStartDate();
         LocalDateTime addRegEndDate = examTimeStamp.getAddRegEndDate();
@@ -60,17 +85,21 @@ public class CheckExamDday {
         if (regEndDate == null) {
             examInfo.setDday("상시접수", null);
             return true;
-        } else if (reStartDate.isAfter(LocalDateTime.now())) {
-            examInfo.setDday("접수예정", calculateDday(reStartDate.toLocalDate()));
+        }
+        return checkCommonDday(examInfo, regStartDate, regEndDate, addRegStartDate, addRegEndDate);
+    }
+
+    private boolean checkCommonDday(ExamDdayInfo examInfo, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime addRegStartDate, LocalDateTime addRegEndDate) {
+        if (startDate.isAfter(LocalDateTime.now())) {
+            examInfo.setDday("접수예정", calculateDday(startDate.toLocalDate()));
             return true;
-        } else if (regEndDate.isAfter(LocalDateTime.now())) {
-            examInfo.setDday("정기접수", calculateDday(regEndDate.toLocalDate()));
+        } else if (endDate.isAfter(LocalDateTime.now())) {
+            examInfo.setDday("정기접수", calculateDday(endDate.toLocalDate()));
             return true;
         } else if (addRegStartDate != null && addRegStartDate.isAfter(LocalDateTime.now())) {
             examInfo.setDday("추가접수예정", calculateDday(addRegStartDate.toLocalDate()));
             return true;
-        }
-        else if (addRegEndDate != null && addRegEndDate.isAfter(LocalDateTime.now())) {
+        } else if (addRegEndDate != null && addRegEndDate.isAfter(LocalDateTime.now())) {
             examInfo.setDday("추가접수중", calculateDday(addRegEndDate.toLocalDate()));
             return true;
         }
