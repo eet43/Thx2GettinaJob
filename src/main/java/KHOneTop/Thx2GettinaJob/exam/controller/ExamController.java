@@ -2,6 +2,8 @@ package KHOneTop.Thx2GettinaJob.exam.controller;
 
 import KHOneTop.Thx2GettinaJob.bookmark.dto.BookmarkDetailOfTurn;
 import KHOneTop.Thx2GettinaJob.common.EndPoint;
+import KHOneTop.Thx2GettinaJob.common.checkDday.dto.ExamDdayInfo;
+import KHOneTop.Thx2GettinaJob.common.checkDday.dto.ExamDdayTimeInfo;
 import KHOneTop.Thx2GettinaJob.common.response.CustomResponse;
 import KHOneTop.Thx2GettinaJob.exam.dto.*;
 import KHOneTop.Thx2GettinaJob.exam.service.ExamService;
@@ -22,7 +24,7 @@ public class ExamController {
     @ApiResponse(responseCode = "200", description = "홈 화면 리스트 조회(검색용)", content = @Content(schema = @Schema(implementation = HomeSearch.class)))
     @GetMapping("/home/summary")
     public CustomResponse getHomeSearchList(@RequestBody GetExamListRequest request) {
-        List<HomeSearch> data = examService.getHomeSearchList(request);
+        List<ExamDdayInfo> data = examService.getHomeSearchList(request);
         return CustomResponse.success(data);
     }
 
@@ -43,7 +45,7 @@ public class ExamController {
     @ApiResponse(responseCode = "200", description = "회차 있는 시험 일정 조회", content = @Content(schema = @Schema(implementation = BookmarkDetailOfTurn.class)))
     @GetMapping("/detail/turn/{examId}")
     public CustomResponse getBookmarkDetailOfTurn(@PathVariable Long examId) {
-        List<BookmarkDetailOfTurn> data = examService.getBookmarkDetailOfTurn(examId);
+        List<ExamDdayTimeInfo> data = examService.getBookmarkDetailOfTurn(examId);
         return CustomResponse.success(data);
     }
 

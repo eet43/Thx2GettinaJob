@@ -2,6 +2,7 @@ package KHOneTop.Thx2GettinaJob.common.checkDday;
 
 import KHOneTop.Thx2GettinaJob.bookmark.repository.BookmarkRepository;
 import KHOneTop.Thx2GettinaJob.common.checkDday.dto.ExamDdayInfo;
+import KHOneTop.Thx2GettinaJob.common.checkDday.dto.ExamDdayTimeInfo;
 import KHOneTop.Thx2GettinaJob.exam.dto.HomeSearch;
 import KHOneTop.Thx2GettinaJob.exam.entity.Exam;
 import KHOneTop.Thx2GettinaJob.exam.entity.ExamTimeStamp;
@@ -23,7 +24,20 @@ public class CheckExamDday {
         checkIsBookmark(examInfo, userId);
 
         for (ExamTimeStamp timeStamp : exam.getExamTimeStamp()) {
-            if(checkPubExam(examInfo, timeStamp)) {
+            if(checkPubDday(examInfo, timeStamp)) {
+                return examInfo;
+            }
+        }
+
+        examInfo.setDday("접수마감", null);
+        return examInfo;
+    }
+    public ExamDdayInfo checkBookmarkExam(Exam exam) {
+        ExamDdayInfo examInfo = ExamDdayInfo.create(exam);
+        examInfo.setIsBookmark(true);
+
+        for (ExamTimeStamp timeStamp : exam.getExamTimeStamp()) {
+            if(checkPubDday(examInfo, timeStamp)) {
                 return examInfo;
             }
         }
@@ -32,9 +46,9 @@ public class CheckExamDday {
         return examInfo;
     }
 
-    public ExamDdayInfo checkPriExam(Exam exam, Long userId) {
+    public ExamDdayInfo checkPriExam(Exam exam) {
         ExamDdayInfo examInfo = ExamDdayInfo.create(exam);
-
+        examInfo.setIsBookmark(true);
         for (ExamTimeStamp timeStamp : exam.getExamTimeStamp()) {
             if(checkPriDday(examInfo, timeStamp)) {
                 return examInfo;
@@ -49,7 +63,7 @@ public class CheckExamDday {
         ExamDdayInfo examInfo = ExamDdayInfo.create(exam);
 
         for (ExamTimeStamp timeStamp : exam.getExamTimeStamp()) {
-            if(checkPubExam(examInfo, timeStamp)) {
+            if(checkPubDday(examInfo, timeStamp)) {
                 return examInfo;
             }
         }
@@ -58,9 +72,47 @@ public class CheckExamDday {
         return examInfo;
     }
 
+    public ExamDdayTimeInfo checkExamTime(ExamTimeStamp examTimeStamp) {
+        ExamDdayTimeInfo examTimeInfo = ExamDdayTimeInfo.create(examTimeStamp);
+
+        LocalDateTime regStartDate = examTimeStamp.getRegStartDate();
+        LocalDateTime regEndDate = examTimeStamp.getRegEndDate();
+        LocalDateTime addRegStartDate = examTimeStamp.getAddRegStartDate();
+        LocalDateTime addRegEndDate = examTimeStamp.getAddRegEndDate();
+
+        if (regStartDate.isAfter(LocalDateTime.now())) {
+            examTimeInfo.setDday("접수예정", calculateDday(regStartDate.toLocalDate()));
+        } else if (regEndDate.isAfter(LocalDateTime.now())) {
+            examTimeInfo.setDday("정기접수", calculateDday(regEndDate.toLocalDate()));
+
+        } else if (addRegStartDate != null && addRegStartDate.isAfter(LocalDateTime.now())) {
+            examTimeInfo.setDday("추가접수예정", calculateDday(addRegStartDate.toLocalDate()));
+        } else if (addRegEndDate != null && addRegEndDate.isAfter(LocalDateTime.now())) {
+            examTimeInfo.setDday("추가접수중", calculateDday(addRegEndDate.toLocalDate()));
+        } else if(regEndDate.isBefore(LocalDateTime.now())) {
+            examTimeInfo.setDday("접수마감", null);
+        }
+
+        return examTimeInfo;
+    }
+
     private void checkIsBookmark(ExamDdayInfo examInfo, Long userId) {
         boolean isBookmark = bookmarkRepository.existsByUserIdAndExamId(userId, examInfo.getId());
         examInfo.setIsBookmark(isBookmark);
+    }
+
+
+    private boolean checkPubDday(ExamDdayInfo examInfo, ExamTimeStamp examTimeStamp) {
+        LocalDateTime regStartDate = examTimeStamp.getRegStartDate();
+        LocalDateTime regEndDate = examTimeStamp.getRegEndDate();
+        LocalDateTime addRegStartDate = examTimeStamp.getAddRegStartDate();
+        LocalDateTime addRegEndDate = examTimeStamp.getAddRegEndDate();
+
+        if (regEndDate == null) {
+            examInfo.setDday("상시접수", null);
+            return true;
+        }
+        return checkCommonDday(examInfo, regStartDate, regEndDate, addRegStartDate, addRegEndDate);
     }
 
     private boolean checkPriDday(ExamDdayInfo examInfo, ExamTimeStamp examTimeStamp) {
@@ -71,19 +123,6 @@ public class CheckExamDday {
 
         if (regStartDate == null || regEndDate == null) {
             examInfo.setDday("기간미입력", null);
-            return true;
-        }
-        return checkCommonDday(examInfo, regStartDate, regEndDate, addRegStartDate, addRegEndDate);
-    }
-
-    private boolean checkPubExam(ExamDdayInfo examInfo, ExamTimeStamp examTimeStamp) {
-        LocalDateTime regStartDate = examTimeStamp.getRegStartDate();
-        LocalDateTime regEndDate = examTimeStamp.getRegEndDate();
-        LocalDateTime addRegStartDate = examTimeStamp.getAddRegStartDate();
-        LocalDateTime addRegEndDate = examTimeStamp.getAddRegEndDate();
-
-        if (regEndDate == null) {
-            examInfo.setDday("상시접수", null);
             return true;
         }
         return checkCommonDday(examInfo, regStartDate, regEndDate, addRegStartDate, addRegEndDate);
@@ -105,6 +144,7 @@ public class CheckExamDday {
         }
         return false;
     }
+
 
     private Long calculateDday(LocalDate targetTime) {
         return ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), targetTime);

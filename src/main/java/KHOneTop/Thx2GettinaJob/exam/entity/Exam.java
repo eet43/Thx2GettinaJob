@@ -32,7 +32,7 @@ public abstract class Exam {
     protected List<ExamTimeStamp> examTimeStamp;
 
     public boolean checkIsTurn() {
-        return this.getExamTimeStamp().size() == 1;
+        return this.getExamTimeStamp().size() > 1;
     }
 
     public void addExamTime(ExamTimeStamp examTime) {

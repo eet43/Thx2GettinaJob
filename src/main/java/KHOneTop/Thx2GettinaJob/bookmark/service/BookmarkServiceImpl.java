@@ -92,11 +92,13 @@ public non-sealed class BookmarkServiceImpl implements BookmarkService {
         List<Exam> findExams = examRepository.findByIdInFetchJoin(findExamIds); //즐겨찾기된 exam 추출
         List<ExamDdayInfo> result = new ArrayList<>();
 
+
+        //이미 isBookmark == ture임
         for (Exam exam : findExams) {
             if (Boolean.TRUE.equals(exam.getIsPublic())) {
-                result.add(checkExamDday.checkPubExam(exam, request.userId()));
+                result.add(checkExamDday.checkBookmarkExam(exam));
             } else {
-                result.add(checkExamDday.checkPubExam(exam, request.userId()));
+                result.add(checkExamDday.checkPriExam(exam));
             }
         }
 

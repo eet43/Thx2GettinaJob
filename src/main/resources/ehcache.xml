@@ -7,14 +7,14 @@
             http://www.ehcache.org/v3/jsr107 http://www.ehcache.org/schema/ehcache-107-ext-3.0.xsd">
 
     <!-- 캐시 설정 시작 -->
-    <cache alias="BookmarkDetailOfTurn"> <!-- @Cacheable의 value, 캐시 이름 -->
+    <cache alias="ExamDdayTimeInfo"> <!-- @Cacheable의 value, 캐시 이름 -->
         <key-type>java.lang.Long</key-type> <!-- @Cacheable의 key, 캐시 키 타입, 기본 값은 java.lang.Object -->
         <!-- @Cacheable의 return 타입 class 위치, 기본 값은 java.lang.Object -->
         <value-type>java.util.List</value-type>
 
         <!-- ttl 설정 -->
         <expiry>
-            <ttl unit="hours">1</ttl>
+            <ttl unit="minutes">10</ttl>
         </expiry>
         <!-- unit은 days, hours, minutes, seconds, millis, micros, nanos 를 세팅할 수 있다. -->
 
