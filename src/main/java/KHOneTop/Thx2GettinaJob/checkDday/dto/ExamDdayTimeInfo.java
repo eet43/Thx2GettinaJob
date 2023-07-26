@@ -1,6 +1,5 @@
-package KHOneTop.Thx2GettinaJob.common.checkDday.dto;
+package KHOneTop.Thx2GettinaJob.checkDday.dto;
 
-import KHOneTop.Thx2GettinaJob.exam.entity.Exam;
 import KHOneTop.Thx2GettinaJob.exam.entity.ExamTimeStamp;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;

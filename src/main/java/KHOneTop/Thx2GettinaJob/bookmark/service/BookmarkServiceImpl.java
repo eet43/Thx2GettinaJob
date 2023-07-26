@@ -3,14 +3,14 @@ package KHOneTop.Thx2GettinaJob.bookmark.service;
 import KHOneTop.Thx2GettinaJob.bookmark.dto.*;
 import KHOneTop.Thx2GettinaJob.bookmark.entity.Bookmark;
 import KHOneTop.Thx2GettinaJob.bookmark.repository.BookmarkRepository;
-import KHOneTop.Thx2GettinaJob.common.checkDday.CheckExamDday;
-import KHOneTop.Thx2GettinaJob.common.checkDday.dto.ExamDdayInfo;
+import KHOneTop.Thx2GettinaJob.checkDday.CheckExamDday;
+import KHOneTop.Thx2GettinaJob.checkDday.dto.ExamDdayInfo;
+import KHOneTop.Thx2GettinaJob.checkDday.dto.PopExamDdayInfo;
 import KHOneTop.Thx2GettinaJob.common.response.Codeset;
 import KHOneTop.Thx2GettinaJob.common.response.CustomException;
 import KHOneTop.Thx2GettinaJob.common.util.CheckUserUtil;
 import KHOneTop.Thx2GettinaJob.exam.dto.NearExamInfo;
 import KHOneTop.Thx2GettinaJob.exam.entity.Exam;
-import KHOneTop.Thx2GettinaJob.exam.entity.ExamTimeStamp;
 import KHOneTop.Thx2GettinaJob.exam.entity.PrivateExam;
 import KHOneTop.Thx2GettinaJob.exam.repository.ExamRepository;
 import lombok.RequiredArgsConstructor;
@@ -106,7 +106,7 @@ public non-sealed class BookmarkServiceImpl implements BookmarkService {
 
     }
 
-    @Override
+    @Override //어떻게 될까
     public List<ExamDdayInfo> getTop5PopBookmarksNoAuth() { //시간이 정해지면, 시간 단위로 카운트 해야함. Top5 북마크 가져오는 쿼리를 수정하면됨.
         List<BookmarkCount> findTop5PopBookmarks = bookmarkRepository.findTop5PopBookmarkCount(PageRequest.of(0, 5));
         List<ExamDdayInfo> result = new ArrayList<>();
@@ -114,13 +114,13 @@ public non-sealed class BookmarkServiceImpl implements BookmarkService {
         for (BookmarkCount findTop5PopBookmark : findTop5PopBookmarks) {
             Exam findExam = examRepository.findByIdFetchJoin(findTop5PopBookmark.getExamId())
                     .orElseThrow(() -> new CustomException(Codeset.INVALID_EXAM, "해당하는 시험이 존재하지 않습니다."));
-            ExamDdayInfo examInfo = checkExamDday.checkWithNoAuth(findExam);
+            PopExamDdayInfo examInfo = checkExamDday.checkPopExamAuthLess(findExam, findTop5PopBookmark.getCount());
             result.add(examInfo);
         }
         return result;
     }
 
-    @Override
+    @Override //어떻게 될까
     public List<ExamDdayInfo> getTop5PopBookmarks(GetBookmarkListRequest request) { //시간이 정해지면, 시간 단위로 카운트 해야함. Top5 북마크 가져오는 쿼리를 수정하면됨.
         List<BookmarkCount> findTop5PopBookmarks = bookmarkRepository.findTop5PopBookmarkCount(PageRequest.of(0, 5));
         List<ExamDdayInfo> result = new ArrayList<>();
@@ -130,7 +130,7 @@ public non-sealed class BookmarkServiceImpl implements BookmarkService {
             Exam findExam = examRepository.findByIdFetchJoin(findTop5PopBookmark.getExamId())
                     .orElseThrow(() -> new CustomException(Codeset.INVALID_EXAM, "해당하는 시험이 존재하지 않습니다."));
 
-            ExamDdayInfo examInfo = checkExamDday.checkPubExam(findExam, request.userId());
+            ExamDdayInfo examInfo = checkExamDday.checkPopExamAuth(findExam, findTop5PopBookmark.getCount(), request.userId());
             result.add(examInfo);
         }
         return result;

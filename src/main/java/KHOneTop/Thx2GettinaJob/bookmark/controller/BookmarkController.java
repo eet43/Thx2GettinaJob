@@ -1,12 +1,9 @@
 package KHOneTop.Thx2GettinaJob.bookmark.controller;
 
 import KHOneTop.Thx2GettinaJob.bookmark.dto.*;
-import KHOneTop.Thx2GettinaJob.calendar.dto.CalendarBookmarkDetail;
-import KHOneTop.Thx2GettinaJob.calendar.dto.CalendarBookmarkSearch;
 import KHOneTop.Thx2GettinaJob.bookmark.service.BookmarkService;
-import KHOneTop.Thx2GettinaJob.calendar.dto.GetCalendarBookmarkRequest;
 import KHOneTop.Thx2GettinaJob.common.EndPoint;
-import KHOneTop.Thx2GettinaJob.common.checkDday.dto.ExamDdayInfo;
+import KHOneTop.Thx2GettinaJob.checkDday.dto.ExamDdayInfo;
 import KHOneTop.Thx2GettinaJob.common.response.CustomResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

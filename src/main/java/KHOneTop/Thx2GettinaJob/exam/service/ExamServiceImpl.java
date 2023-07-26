@@ -1,12 +1,9 @@
 package KHOneTop.Thx2GettinaJob.exam.service;
 
-import KHOneTop.Thx2GettinaJob.bookmark.dto.BookmarkDetailOfTurn;
-import KHOneTop.Thx2GettinaJob.bookmark.dto.BookmarkInfo;
-import KHOneTop.Thx2GettinaJob.bookmark.dto.GetBookmarkListRequest;
 import KHOneTop.Thx2GettinaJob.bookmark.repository.BookmarkRepository;
-import KHOneTop.Thx2GettinaJob.common.checkDday.CheckExamDday;
-import KHOneTop.Thx2GettinaJob.common.checkDday.dto.ExamDdayInfo;
-import KHOneTop.Thx2GettinaJob.common.checkDday.dto.ExamDdayTimeInfo;
+import KHOneTop.Thx2GettinaJob.checkDday.CheckExamDday;
+import KHOneTop.Thx2GettinaJob.checkDday.dto.ExamDdayInfo;
+import KHOneTop.Thx2GettinaJob.checkDday.dto.ExamDdayTimeInfo;
 import KHOneTop.Thx2GettinaJob.common.response.Codeset;
 import KHOneTop.Thx2GettinaJob.common.response.CustomException;
 import KHOneTop.Thx2GettinaJob.common.util.CheckUserUtil;
@@ -21,8 +18,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 

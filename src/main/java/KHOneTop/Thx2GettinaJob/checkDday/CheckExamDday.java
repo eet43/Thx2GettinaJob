@@ -1,9 +1,9 @@
-package KHOneTop.Thx2GettinaJob.common.checkDday;
+package KHOneTop.Thx2GettinaJob.checkDday;
 
 import KHOneTop.Thx2GettinaJob.bookmark.repository.BookmarkRepository;
-import KHOneTop.Thx2GettinaJob.common.checkDday.dto.ExamDdayInfo;
-import KHOneTop.Thx2GettinaJob.common.checkDday.dto.ExamDdayTimeInfo;
-import KHOneTop.Thx2GettinaJob.exam.dto.HomeSearch;
+import KHOneTop.Thx2GettinaJob.checkDday.dto.ExamDdayInfo;
+import KHOneTop.Thx2GettinaJob.checkDday.dto.ExamDdayTimeInfo;
+import KHOneTop.Thx2GettinaJob.checkDday.dto.PopExamDdayInfo;
 import KHOneTop.Thx2GettinaJob.exam.entity.Exam;
 import KHOneTop.Thx2GettinaJob.exam.entity.ExamTimeStamp;
 import lombok.RequiredArgsConstructor;
@@ -59,8 +59,22 @@ public class CheckExamDday {
         return examInfo;
     }
 
-    public ExamDdayInfo checkWithNoAuth(Exam exam) {
-        ExamDdayInfo examInfo = ExamDdayInfo.create(exam);
+    public PopExamDdayInfo checkPopExamAuth(Exam exam, Long count, Long userId) {
+        PopExamDdayInfo examInfo = PopExamDdayInfo.create(exam, count);
+        checkIsBookmark(examInfo, userId);
+
+        for (ExamTimeStamp timeStamp : exam.getExamTimeStamp()) {
+            if(checkPubDday(examInfo, timeStamp)) {
+                return examInfo;
+            }
+        }
+
+        examInfo.setDday("접수마감", null);
+        return examInfo;
+    }
+
+    public PopExamDdayInfo checkPopExamAuthLess(Exam exam, Long count) {
+        PopExamDdayInfo examInfo = PopExamDdayInfo.create(exam, count);
 
         for (ExamTimeStamp timeStamp : exam.getExamTimeStamp()) {
             if(checkPubDday(examInfo, timeStamp)) {
@@ -97,7 +111,7 @@ public class CheckExamDday {
     }
 
     private void checkIsBookmark(ExamDdayInfo examInfo, Long userId) {
-        boolean isBookmark = bookmarkRepository.existsByUserIdAndExamId(userId, examInfo.getId());
+        boolean isBookmark = bookmarkRepository.existsByUserIdAndExamId(userId, examInfo.getExamId());
         examInfo.setIsBookmark(isBookmark);
     }
 

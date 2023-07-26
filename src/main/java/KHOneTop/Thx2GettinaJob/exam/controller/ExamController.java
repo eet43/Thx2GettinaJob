@@ -2,8 +2,8 @@ package KHOneTop.Thx2GettinaJob.exam.controller;
 
 import KHOneTop.Thx2GettinaJob.bookmark.dto.BookmarkDetailOfTurn;
 import KHOneTop.Thx2GettinaJob.common.EndPoint;
-import KHOneTop.Thx2GettinaJob.common.checkDday.dto.ExamDdayInfo;
-import KHOneTop.Thx2GettinaJob.common.checkDday.dto.ExamDdayTimeInfo;
+import KHOneTop.Thx2GettinaJob.checkDday.dto.ExamDdayInfo;
+import KHOneTop.Thx2GettinaJob.checkDday.dto.ExamDdayTimeInfo;
 import KHOneTop.Thx2GettinaJob.common.response.CustomResponse;
 import KHOneTop.Thx2GettinaJob.exam.dto.*;
 import KHOneTop.Thx2GettinaJob.exam.service.ExamService;

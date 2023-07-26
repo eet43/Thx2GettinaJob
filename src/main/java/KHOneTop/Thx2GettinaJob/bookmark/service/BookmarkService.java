@@ -1,7 +1,7 @@
 package KHOneTop.Thx2GettinaJob.bookmark.service;
 
 import KHOneTop.Thx2GettinaJob.bookmark.dto.*;
-import KHOneTop.Thx2GettinaJob.common.checkDday.dto.ExamDdayInfo;
+import KHOneTop.Thx2GettinaJob.checkDday.dto.ExamDdayInfo;
 
 import java.util.List;
 
