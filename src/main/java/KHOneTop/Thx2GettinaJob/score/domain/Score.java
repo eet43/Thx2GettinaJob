@@ -1,34 +1,20 @@
-package KHOneTop.Thx2GettinaJob.score.entity;
+package KHOneTop.Thx2GettinaJob.score.domain;
 
-import KHOneTop.Thx2GettinaJob.score.dto.ModifyScoreRequest;
-import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.SuperBuilder;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.time.LocalDate;
 
-@Entity
-@Getter
-@Setter
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
 public class Score {
-    @Id
-    @Column @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
-
-    @Column(nullable = false)
+    private Long id;
     private Long userId;
-    @Column(nullable = false)
     private String name;
-    @Column(nullable = false)
     private String score;
     private String studentCode;
     private String issuer;
     private Boolean isEffective;
-
-    @Column(nullable = false)
     private LocalDate acquisitionDate;
     private LocalDate expirationDate;
 

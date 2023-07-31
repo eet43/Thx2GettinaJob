@@ -1,6 +1,6 @@
-package KHOneTop.Thx2GettinaJob.score.dto;
+package KHOneTop.Thx2GettinaJob.score.adapter.in.web.dto;
 
-import KHOneTop.Thx2GettinaJob.score.entity.Score;
+import KHOneTop.Thx2GettinaJob.score.domain.Score;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 
@@ -21,7 +21,7 @@ public record CreateScoreRequest(
         @JsonFormat(pattern = "yyyy.MM.dd")
         LocalDate expirationDate
 ) {
-    public Score toEntity() {
+    public Score toDomain() {
         boolean isEffect = true;
         if(expirationDate != null) {
             isEffect = expirationDate.isAfter(LocalDate.now());

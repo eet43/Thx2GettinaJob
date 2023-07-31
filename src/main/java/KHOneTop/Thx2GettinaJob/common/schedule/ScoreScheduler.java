@@ -1,8 +1,8 @@
 package KHOneTop.Thx2GettinaJob.common.schedule;
 
-import KHOneTop.Thx2GettinaJob.score.entity.Score;
-import KHOneTop.Thx2GettinaJob.score.event.ScoreExpiredEvent;
-import KHOneTop.Thx2GettinaJob.score.repository.ScoreRepository;
+import KHOneTop.Thx2GettinaJob.score.adapter.out.persistence.ScoreEntity;
+import KHOneTop.Thx2GettinaJob.score.adapter.out.persistence.ScoreRepository;
+import KHOneTop.Thx2GettinaJob.score.application.event.ScoreExpiredEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class ScoreScheduler {
@@ -22,10 +21,10 @@ public class ScoreScheduler {
     @Scheduled(cron = "0 0 0 * * *")
     public void checkCertificateExpiration() {
         LocalDate today = LocalDate.now();
-        List<Score> scoreList = scoreRepository.findByIsEffectiveTrueAndExpirationDateBefore(today);
+        List<ScoreEntity> scoreList = scoreRepository.findByIsEffectiveTrueAndExpirationDateBefore(today);
         if (!scoreList.isEmpty()) {
             List<Long> scoreIds = scoreList.stream()
-                    .map(Score::getId).toList();
+                    .map(ScoreEntity::getId).toList();
             applicationEventPublisher.publishEvent(new ScoreExpiredEvent(scoreIds));
         }
     }

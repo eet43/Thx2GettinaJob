@@ -1,6 +1,5 @@
-package KHOneTop.Thx2GettinaJob.score.dto;
+package KHOneTop.Thx2GettinaJob.score.adapter.in.web.dto;
 
-import KHOneTop.Thx2GettinaJob.score.entity.Score;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 

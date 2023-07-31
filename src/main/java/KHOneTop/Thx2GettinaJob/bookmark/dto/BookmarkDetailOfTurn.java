@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Schema(description = "회차 자격증 일정")
 @Data
-public class BookmarkDetailOfTurn implements Serializable {
+public class BookmarkDetailOfTurn {
     @Schema(description = "일정 Id", nullable = false, example = "2L")
     private final Long id;
     @Schema(description = "회차", nullable = false, example = "300회차")

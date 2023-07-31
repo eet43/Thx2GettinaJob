@@ -1,6 +1,5 @@
 package KHOneTop.Thx2GettinaJob.exam.controller;
 
-import KHOneTop.Thx2GettinaJob.bookmark.dto.BookmarkDetailOfTurn;
 import KHOneTop.Thx2GettinaJob.common.EndPoint;
 import KHOneTop.Thx2GettinaJob.checkDday.dto.ExamDdayInfo;
 import KHOneTop.Thx2GettinaJob.checkDday.dto.ExamDdayTimeInfo;
@@ -42,7 +41,7 @@ public class ExamController {
         return CustomResponse.success(data);
     }
 
-    @ApiResponse(responseCode = "200", description = "회차 있는 시험 일정 조회", content = @Content(schema = @Schema(implementation = BookmarkDetailOfTurn.class)))
+    @ApiResponse(responseCode = "200", description = "회차 있는 시험 일정 조회", content = @Content(schema = @Schema(implementation = ExamDdayTimeInfo.class)))
     @GetMapping("/detail/turn/{examId}")
     public CustomResponse getBookmarkDetailOfTurn(@PathVariable Long examId) {
         List<ExamDdayTimeInfo> data = examService.getBookmarkDetailOfTurn(examId);

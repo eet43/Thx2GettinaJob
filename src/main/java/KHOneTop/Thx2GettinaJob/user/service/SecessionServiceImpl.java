@@ -5,7 +5,8 @@ import KHOneTop.Thx2GettinaJob.bookmark.service.BookmarkService;
 import KHOneTop.Thx2GettinaJob.common.util.CheckUserUtil;
 import KHOneTop.Thx2GettinaJob.exam.repository.ExamRepository;
 import KHOneTop.Thx2GettinaJob.exam.service.ExamService;
-import KHOneTop.Thx2GettinaJob.score.repository.ScoreRepository;
+import KHOneTop.Thx2GettinaJob.score.application.port.out.ChangeScorePort;
+import KHOneTop.Thx2GettinaJob.score.application.port.out.LoadScorePort;
 import KHOneTop.Thx2GettinaJob.user.dto.DeleteUserRequest;
 import KHOneTop.Thx2GettinaJob.user.entity.Secession;
 import KHOneTop.Thx2GettinaJob.user.repository.SecessionRepository;
@@ -23,7 +24,7 @@ public class SecessionServiceImpl implements SecessionService{
     private final UserRepository userRepository;
     private final ExamRepository examRepository;
     private final BookmarkRepository bookmarkRepository;
-    private final ScoreRepository scoreRepository;
+    private final ChangeScorePort changeScorePort;
     private final SecessionRepository secessionRepository;
     private final CheckUserUtil checkUserUtil;
 
@@ -60,6 +61,6 @@ public class SecessionServiceImpl implements SecessionService{
     }
 
     private void deleteScore(Long userId) {
-        scoreRepository.deleteByUserId(userId);
+        changeScorePort.deleteAllByUserId(userId);
     }
 }

@@ -1,4 +1,4 @@
-package KHOneTop.Thx2GettinaJob.score.event;
+package KHOneTop.Thx2GettinaJob.score.application.event;
 
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;

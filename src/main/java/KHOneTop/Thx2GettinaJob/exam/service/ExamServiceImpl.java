@@ -69,11 +69,11 @@ public class ExamServiceImpl implements ExamService {
         return ExamDetail.toDto(findExam, findExam.getExamTimeStamp().get(0));
     }
 
-    @Override
-    @Cacheable(
-            value = "ExamDdayTimeInfo",
-            key = "#examId"
-    )
+//    @Override
+//    @Cacheable(
+//            value = "ExamDdayTimeInfo",
+//            key = "#examId"
+//    )
     public List<ExamDdayTimeInfo> getBookmarkDetailOfTurn(Long examId) {
         Exam findExam = examRepository.findByIdFetchJoin(examId).
                 orElseThrow(() -> new CustomException(Codeset.INVALID_EXAM, "해당하는 시험이 존재하지 않습니다."));

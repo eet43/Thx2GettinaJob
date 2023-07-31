@@ -1,9 +1,10 @@
-package KHOneTop.Thx2GettinaJob.score.controller;
+package KHOneTop.Thx2GettinaJob.score.adapter.in.web;
 
 import KHOneTop.Thx2GettinaJob.common.EndPoint;
 import KHOneTop.Thx2GettinaJob.common.response.CustomResponse;
-import KHOneTop.Thx2GettinaJob.score.dto.*;
-import KHOneTop.Thx2GettinaJob.score.service.ScoreService;
+import KHOneTop.Thx2GettinaJob.score.adapter.in.web.dto.*;
+import KHOneTop.Thx2GettinaJob.score.application.dto.ScoreDetail;
+import KHOneTop.Thx2GettinaJob.score.application.service.ScoreService;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -22,33 +23,33 @@ public class ScoreController {
 
     @PostMapping("")
     public CustomResponse createScore(@RequestBody CreateScoreRequest request) {
-        scoreService.createScore(request);
+        scoreService.create(request);
         return CustomResponse.success();
     }
 
     @PutMapping("")
     public CustomResponse modifyScore(@RequestBody ModifyScoreRequest request) {
-        scoreService.modifyScore(request);
+        scoreService.modify(request);
         return CustomResponse.success();
     }
 
     @ApiResponse(responseCode = "200", description = "자격증 조회", content = @Content(schema = @Schema(implementation = ScoreDetail.class)))
     @GetMapping("")
     public CustomResponse getScoreDetails(@RequestBody GetScoreRequest request) {
-        List<ScoreDetail> data = scoreService.getScoreDetails(request);
+        List<ScoreDetail> data = scoreService.getScores(request);
         return CustomResponse.success(data);
     }
 
     @ApiResponse(responseCode = "200", description = "유효한 자격증 조회", content = @Content(schema = @Schema(implementation = ScoreDetail.class)))
     @GetMapping("/valid")
     public CustomResponse getValidScoreDetails(@RequestBody GetValidScoreRequest request) {
-        List<ScoreDetail> data = scoreService.getValidScoreDetails(request);
+        List<ScoreDetail> data = scoreService.getValidScores(request);
         return CustomResponse.success(data);
     }
 
     @DeleteMapping("")
     public CustomResponse deleteScore(@RequestBody DeleteScoreRequest request) {
-        scoreService.deleteScore(request);
+        scoreService.delete(request);
         return CustomResponse.success();
     }
 

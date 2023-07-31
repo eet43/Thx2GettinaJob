@@ -1,11 +1,13 @@
-package KHOneTop.Thx2GettinaJob.score.service;
+package KHOneTop.Thx2GettinaJob.score.application.service;
 
-import KHOneTop.Thx2GettinaJob.common.response.Codeset;
-import KHOneTop.Thx2GettinaJob.common.response.CustomException;
 import KHOneTop.Thx2GettinaJob.common.util.CheckUserUtil;
-import KHOneTop.Thx2GettinaJob.score.dto.*;
-import KHOneTop.Thx2GettinaJob.score.entity.Score;
-import KHOneTop.Thx2GettinaJob.score.repository.ScoreRepository;
+import KHOneTop.Thx2GettinaJob.score.adapter.in.web.dto.*;
+import KHOneTop.Thx2GettinaJob.score.application.port.in.ChangeScoreUseCase;
+import KHOneTop.Thx2GettinaJob.score.application.port.in.ViewScoreUseCase;
+import KHOneTop.Thx2GettinaJob.score.application.port.out.ChangeScorePort;
+import KHOneTop.Thx2GettinaJob.score.application.port.out.LoadScorePort;
+import KHOneTop.Thx2GettinaJob.score.application.dto.ScoreDetail;
+import KHOneTop.Thx2GettinaJob.score.domain.Score;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -19,14 +21,13 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ScoreServiceImpl implements ScoreService{
-    private final ScoreRepository scoreRepository;
-
+public class ScoreService implements ViewScoreUseCase, ChangeScoreUseCase {
+    private final LoadScorePort loadScorePort;
+    private final ChangeScorePort changeScorePort;
     private final CheckUserUtil checkUserUtil;
     private final ModelMapper modelMapper;
 
@@ -36,11 +37,11 @@ public class ScoreServiceImpl implements ScoreService{
     )
     @Override
     @Transactional
-    public void createScore(CreateScoreRequest request) {
+    public void create(CreateScoreRequest request) {
         checkUserUtil.checkValidUserId(request.userId());
 
-        Score score = request.toEntity();
-        scoreRepository.save(score);
+        Score score = request.toDomain();
+        changeScorePort.save(score);
     }
 
     @CacheEvict(
@@ -49,38 +50,14 @@ public class ScoreServiceImpl implements ScoreService{
     )
     @Override
     @Transactional
-    public void modifyScore(ModifyScoreRequest request) {
+    public void modify(ModifyScoreRequest request) {
         checkUserUtil.checkValidUserId(request.userId());
-
-        Score findScore = scoreRepository.findById(request.scoreId())
-                .orElseThrow(() -> new CustomException(Codeset.INVALID_SCORE, "해당하는 자격증 데이터를 찾을 수 없습니다."));
+        Score findScore = loadScorePort.load(request.scoreId());
 
         findScore.modifyScore(request.name(), request.score(), request.studentCode(),
                 request.issuer(), request.acquisitionDate(), request.expirationDate());
-    }
 
-    @Cacheable(
-            value = "ScoreDetail",
-            key = "#request.userId()"
-    )
-    @Override
-    public List<ScoreDetail> getScoreDetails(GetScoreRequest request) {
-        checkUserUtil.checkValidUserId(request.userId());
-
-        List<Score> findScores = scoreRepository.findAllByUserId(request.userId());
-        return getScoresFormat(findScores);
-    }
-
-    @Override
-    public List<ScoreDetail> getValidScoreDetails(GetValidScoreRequest request) {
-        if(request.userId() == null) {
-            return Collections.emptyList();
-        }
-
-        checkUserUtil.checkValidUserId(request.userId());
-
-        List<Score> findScores = scoreRepository.findAllByUserIdAndIsEffectiveTrue(request.userId());
-        return getScoresFormat(findScores);
+        changeScorePort.save(findScore);
     }
 
     @CacheEvict(
@@ -88,10 +65,32 @@ public class ScoreServiceImpl implements ScoreService{
             key = "#request.userId()"
     )
     @Override
-    public void deleteScore(DeleteScoreRequest request) {
-        Score findScore = scoreRepository.findById(request.scoreId())
-                .orElseThrow(() -> new CustomException(Codeset.INVALID_SCORE, "해당하는 자격증 데이터를 찾을 수 없습니다."));
-        scoreRepository.delete(findScore);
+    public void delete(DeleteScoreRequest request) {
+        Score findScore = loadScorePort.load(request.scoreId());
+        changeScorePort.delete(findScore);
+    }
+
+    @Cacheable(
+            value = "ScoreDetail",
+            key = "#request.userId()"
+    )
+    @Override
+    public List<ScoreDetail> getScores(GetScoreRequest request) {
+        checkUserUtil.checkValidUserId(request.userId());
+        List<Score> findScores = loadScorePort.loadAll(request.userId());
+
+        return getScoresFormat(findScores);
+    }
+
+    @Override
+    public List<ScoreDetail> getValidScores(GetValidScoreRequest request) {
+        if(request.userId() == null) {
+            return Collections.emptyList(); //메인화면 비로그인 대비
+        }
+        checkUserUtil.checkValidUserId(request.userId());
+
+        List<Score> findScores = loadScorePort.loadValidAll(request.userId());
+        return getScoresFormat(findScores);
     }
 
     private List<ScoreDetail> getScoresFormat(List<Score> findScores) {

@@ -1,6 +1,5 @@
-package KHOneTop.Thx2GettinaJob.score.dto;
+package KHOneTop.Thx2GettinaJob.score.application.dto;
 
-import KHOneTop.Thx2GettinaJob.score.entity.Score;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.Setter;

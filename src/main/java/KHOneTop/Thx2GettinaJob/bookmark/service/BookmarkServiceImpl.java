@@ -151,10 +151,10 @@ public non-sealed class BookmarkServiceImpl implements BookmarkService {
             LocalDateTime addRegEndDate = exam.getAddRegEndDate();
             if (regEndDate != null && regEndDate.isAfter(LocalDateTime.now())) {
                 Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), regEndDate.toLocalDate());
-                result.add(Top3NearBookmark.toDto(exam, "정기접수중", day));
+                result.add(Top3NearBookmark.toDto(exam, "정기접수", day));
             } else if (addRegEndDate != null && addRegEndDate.isAfter(LocalDateTime.now())) {
                 Long day = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), addRegEndDate.toLocalDate());
-                result.add(Top3NearBookmark.toDto(exam, "추가접수중", day));
+                result.add(Top3NearBookmark.toDto(exam, "추가접수", day));
             } else {
                 throw new CustomException(Codeset.INVALID_NEAR_EXAM, "얼마남지 않은 자격증 조회에 문제가 발생했습니다.");
             }
