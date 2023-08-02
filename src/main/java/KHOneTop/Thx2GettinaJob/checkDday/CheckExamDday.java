@@ -32,6 +32,20 @@ public class CheckExamDday {
         examInfo.setDday("접수마감", null);
         return examInfo;
     }
+
+    public ExamDdayInfo checkPubExamNoAuth(Exam exam) {
+        ExamDdayInfo examInfo = ExamDdayInfo.create(exam);
+
+        for (ExamTimeStamp timeStamp : exam.getExamTimeStamp()) {
+            if(checkPubDday(examInfo, timeStamp)) {
+                return examInfo;
+            }
+        }
+
+        examInfo.setDday("접수마감", null);
+        return examInfo;
+    }
+
     public ExamDdayInfo checkBookmarkExam(Exam exam) {
         ExamDdayInfo examInfo = ExamDdayInfo.create(exam);
         examInfo.setIsBookmark(true);

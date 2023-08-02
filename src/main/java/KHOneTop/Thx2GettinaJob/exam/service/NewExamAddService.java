@@ -56,14 +56,14 @@ public class NewExamAddService {
     @Transactional
     public void addToeicExam() {
 
-        isExistByName("TOEIC");
+        isExistByName("TOEIC(토익)");
 
         DateTimeFormatter timeMinformatter = DateTimeFormatter.ofPattern("yyyy.MM.dd (E) a h시m분", Locale.KOREA);
         DateTimeFormatter timeformatter = DateTimeFormatter.ofPattern("yyyy.MM.dd (E) a h시", Locale.KOREA);
         try {
 
             PublicExam toeicPublicExam = PublicExam.builder()
-                    .name("TOEIC")
+                    .name("TOEIC(토익)")
                     .issuer("한국 TOEIC 위원회")
                     .url("https://exam.toeic.co.kr/")
                     .isPublic(true)
@@ -252,12 +252,12 @@ public class NewExamAddService {
     @Transactional
     public void addToeicSpeackingExam() {
 
-        isExistByName("TOEIC SPEAKING");
+        isExistByName("TOEIC SPEAKING(토익 스피킹)");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd (E) a h시", Locale.KOREA);
 
         try {
             PublicExam toeicSpeakingPublicExam = PublicExam.builder()
-                    .name("TOEIC SPEAKING")
+                    .name("TOEIC SPEAKING(토익 스피킹)")
                     .issuer("ETS")
                     .url("https://www.toeicswt.co.kr/")
                     .isPublic(true)

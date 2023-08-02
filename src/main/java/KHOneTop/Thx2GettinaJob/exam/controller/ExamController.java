@@ -20,6 +20,13 @@ import java.util.List;
 public class ExamController {
     private final ExamService examService;
 
+    @ApiResponse(responseCode = "200", description = "홈 화면 리스트 비회원 조회(검색용)", content = @Content(schema = @Schema(implementation = HomeSearch.class)))
+    @GetMapping("/home/summary/less")
+    public CustomResponse getHomeSearchList() {
+        List<ExamDdayInfo> data = examService.getHomeSearchListNoAuth();
+        return CustomResponse.success(data);
+    }
+
     @ApiResponse(responseCode = "200", description = "홈 화면 리스트 조회(검색용)", content = @Content(schema = @Schema(implementation = HomeSearch.class)))
     @GetMapping("/home/summary")
     public CustomResponse getHomeSearchList(@RequestBody GetExamListRequest request) {

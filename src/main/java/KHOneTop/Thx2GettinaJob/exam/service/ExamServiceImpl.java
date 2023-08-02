@@ -42,6 +42,20 @@ public class ExamServiceImpl implements ExamService {
 
         for (Exam exam : findExams) {
             result.add(checkExamDday.checkPubExam(exam, request.userId()));
+
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<ExamDdayInfo> getHomeSearchListNoAuth() {
+
+        List<Exam> findExams = examRepository.findAllByIsPublicFetchJoin();
+        List<ExamDdayInfo> result = new ArrayList<>();
+
+        for (Exam exam : findExams) {
+            result.add(checkExamDday.checkPubExamNoAuth(exam));
         }
 
         return result;
@@ -51,7 +65,7 @@ public class ExamServiceImpl implements ExamService {
     public List<ExamInfo> getExamList(GetExamListRequest request) {
         checkUserUtil.checkValidUserId(request.userId());
 
-        List<Exam> findExams = examRepository.findAllByIsPublicTrue();
+        List<Exam> findExams = examRepository.findPublicOrOwnedExams(request.userId());
         List<ExamInfo> result = new ArrayList<>();
 
         for (Exam exam : findExams) {
@@ -69,7 +83,7 @@ public class ExamServiceImpl implements ExamService {
         return ExamDetail.toDto(findExam, findExam.getExamTimeStamp().get(0));
     }
 
-//    @Override
+    //    @Override
 //    @Cacheable(
 //            value = "ExamDdayTimeInfo",
 //            key = "#examId"

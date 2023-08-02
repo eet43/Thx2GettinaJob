@@ -8,8 +8,14 @@ import java.util.List;
 
 public interface ExamService {
     List<ExamDdayInfo> getHomeSearchList(GetExamListRequest request);
+
+    List<ExamDdayInfo> getHomeSearchListNoAuth();
+
     List<ExamInfo> getExamList(GetExamListRequest request);
+
     ExamDetail getSingleExamDetail(Long examId);
+
     List<ExamDdayTimeInfo> getBookmarkDetailOfTurn(Long examId);
+
     void modifyPriExam(ModifyPriExamRequest request);
 }
